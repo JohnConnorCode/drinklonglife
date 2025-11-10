@@ -111,6 +111,27 @@ async function seedData() {
       'hero-slide-3-turmeric.jpg'
     );
 
+    // Process step images
+    const processSourceImage = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80',
+      'process-sourcing-farm.jpg'
+    );
+
+    const processPressImage = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80',
+      'process-cold-press.jpg'
+    );
+
+    const processFreezeImage = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=800&q=80',
+      'process-freeze.jpg'
+    );
+
+    const processShipImage = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800&q=80',
+      'process-shipping.jpg'
+    );
+
     // 1. Site Settings (Singleton)
     await upsertDoc({
       _id: 'siteSettings',
@@ -203,6 +224,7 @@ async function seedData() {
           children: [{ _type: 'span', text: 'Partner with regenerative organic farms. Every ingredient traced to origin.' }],
         },
       ],
+      image: processSourceImage,
       order: 1,
     });
 
@@ -216,6 +238,7 @@ async function seedData() {
           children: [{ _type: 'span', text: 'Hydraulic press extracts maximum nutrients without heat or oxidation.' }],
         },
       ],
+      image: processPressImage,
       order: 2,
     });
 
@@ -229,6 +252,7 @@ async function seedData() {
           children: [{ _type: 'span', text: 'Flash-frozen to lock in peak freshness and enzyme activity.' }],
         },
       ],
+      image: processFreezeImage,
       order: 3,
     });
 
@@ -242,6 +266,7 @@ async function seedData() {
           children: [{ _type: 'span', text: 'Delivered frozen to your door. No preservatives, ever.' }],
         },
       ],
+      image: processShipImage,
       order: 4,
     });
 
@@ -1032,56 +1057,96 @@ async function seedData() {
       _id: 'faq-1',
       _type: 'faq',
       question: 'How should I store Long Life juice?',
-      answer: 'Keep frozen until ready to use. Once thawed, refrigerate and consume within 3 days for optimal freshness.',
+      answer: [
+        {
+          _type: 'block',
+          children: [{ _type: 'span', text: 'Keep frozen until ready to use. Once thawed, refrigerate and consume within 3 days for optimal freshness.' }],
+        },
+      ],
     });
 
     await upsertDoc({
       _id: 'faq-2',
       _type: 'faq',
       question: "What's the recommended serving size?",
-      answer: '2 oz daily, preferably on an empty stomach in the morning. You can scale up to 4 oz for pre-workout or extra immune support.',
+      answer: [
+        {
+          _type: 'block',
+          children: [{ _type: 'span', text: '2 oz daily, preferably on an empty stomach in the morning. You can scale up to 4 oz for pre-workout or extra immune support.' }],
+        },
+      ],
     });
 
     await upsertDoc({
       _id: 'faq-3',
       _type: 'faq',
       question: 'Do you ship nationwide?',
-      answer: 'Currently shipping to CA, OR, WA, AZ, NV. Nationwide expansion coming soon—join our waitlist.',
+      answer: [
+        {
+          _type: 'block',
+          children: [{ _type: 'span', text: 'Currently shipping to CA, OR, WA, AZ, NV. Nationwide expansion coming soon—join our waitlist.' }],
+        },
+      ],
     });
 
     await upsertDoc({
       _id: 'faq-4',
       _type: 'faq',
       question: 'Are your juices organic?',
-      answer: 'Yes. All ingredients are certified organic or sourced from regenerative farms exceeding organic standards.',
+      answer: [
+        {
+          _type: 'block',
+          children: [{ _type: 'span', text: 'Yes. All ingredients are certified organic or sourced from regenerative farms exceeding organic standards.' }],
+        },
+      ],
     });
 
     await upsertDoc({
       _id: 'faq-5',
       _type: 'faq',
       question: 'What does "cold-pressed" mean?',
-      answer: 'We use a hydraulic press that extracts juice slowly, without heat or high-speed blades. This preserves enzymes and nutrients.',
+      answer: [
+        {
+          _type: 'block',
+          children: [{ _type: 'span', text: 'We use a hydraulic press that extracts juice slowly, without heat or high-speed blades. This preserves enzymes and nutrients.' }],
+        },
+      ],
     });
 
     await upsertDoc({
       _id: 'faq-6',
       _type: 'faq',
       question: 'Can I cancel my subscription anytime?',
-      answer: 'Yes. Cancel or pause anytime from your account dashboard. No commitments, no fees.',
+      answer: [
+        {
+          _type: 'block',
+          children: [{ _type: 'span', text: 'Yes. Cancel or pause anytime from your account dashboard. No commitments, no fees.' }],
+        },
+      ],
     });
 
     await upsertDoc({
       _id: 'faq-7',
       _type: 'faq',
       question: 'Do you offer wholesale pricing?',
-      answer: 'Yes! We work with gyms, cafes, and wellness centers. Fill out our wholesale inquiry form for pricing.',
+      answer: [
+        {
+          _type: 'block',
+          children: [{ _type: 'span', text: 'Yes! We work with gyms, cafes, and wellness centers. Fill out our wholesale inquiry form for pricing.' }],
+        },
+      ],
     });
 
     await upsertDoc({
       _id: 'faq-8',
       _type: 'faq',
       question: 'What makes Long Life different from other juice brands?',
-      answer: 'Three things: regenerative sourcing (we trace every farm), true cold-press (no HPP shortcuts), and frozen delivery (no preservatives needed).',
+      answer: [
+        {
+          _type: 'block',
+          children: [{ _type: 'span', text: 'Three things: regenerative sourcing (we trace every farm), true cold-press (no HPP shortcuts), and frozen delivery (no preservatives needed).' }],
+        },
+      ],
     });
 
     // 12. Testimonials

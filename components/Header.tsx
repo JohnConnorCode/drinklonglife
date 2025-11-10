@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { urlFor } from '@/lib/image';
 import { Logo } from './Logo';
 
 interface HeaderProps {

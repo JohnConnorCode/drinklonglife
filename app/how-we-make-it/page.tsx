@@ -5,6 +5,8 @@ import { processPageQuery } from '@/lib/sanity.queries';
 import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
 import { urlFor } from '@/lib/image';
+import { FloatingElement } from '@/components/animations/FloatingElement';
+import { FadeIn } from '@/components/animations/FadeIn';
 
 export const revalidate = 60;
 
@@ -68,7 +70,7 @@ export default async function HowWeMakeItPage() {
       {/* Process Steps */}
       {processSteps && processSteps.length > 0 && (
         <Section>
-          <div className="max-w-4xl mx-auto space-y-16">
+          <div className="max-w-4xl mx-auto space-y-24">
             {processSteps.map((step: any, idx: number) => (
               <div
                 key={step._id}
@@ -76,28 +78,36 @@ export default async function HowWeMakeItPage() {
                   idx % 2 === 1 ? 'md:grid-flow-dense' : ''
                 }`}
               >
-                <div className={idx % 2 === 1 ? 'md:order-2' : ''}>
-                  <div className={`inline-block px-4 py-2 ${stepColors[idx % stepColors.length]} rounded-full text-sm font-bold mb-4`}>
-                    STEP {idx + 1}
+                <FadeIn direction={idx % 2 === 0 ? 'right' : 'left'} delay={0.2}>
+                  <div className={idx % 2 === 1 ? 'md:order-2' : ''}>
+                    <div className={`inline-block px-4 py-2 ${stepColors[idx % stepColors.length]} rounded-full text-sm font-bold mb-4`}>
+                      STEP {idx + 1}
+                    </div>
+                    <h2 className="font-heading text-3xl font-bold mb-4">
+                      {step.title}
+                    </h2>
+                    {step.body && <RichText value={step.body} />}
                   </div>
-                  <h2 className="font-heading text-3xl font-bold mb-4">
-                    {step.title}
-                  </h2>
-                  {step.body && <RichText value={step.body} />}
-                </div>
+                </FadeIn>
                 {step.image ? (
-                  <div className={`relative h-64 rounded-lg overflow-hidden ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
-                    <Image
-                      src={urlFor(step.image).url()}
-                      alt={step.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                  <FloatingElement yOffset={20} duration={5 + idx}>
+                    <FadeIn direction={idx % 2 === 0 ? 'left' : 'right'} delay={0.4}>
+                      <div className={`relative h-80 rounded-lg overflow-hidden shadow-xl ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
+                        <Image
+                          src={urlFor(step.image).url()}
+                          alt={step.title}
+                          fill
+                          className="object-cover hover:scale-105 transition-transform duration-700"
+                        />
+                      </div>
+                    </FadeIn>
+                  </FloatingElement>
                 ) : (
-                  <div className={`bg-gray-100 rounded-lg aspect-square flex items-center justify-center text-muted ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
-                    [{step.title} image]
-                  </div>
+                  <FadeIn direction={idx % 2 === 0 ? 'left' : 'right'} delay={0.4}>
+                    <div className={`bg-gray-100 rounded-lg aspect-square flex items-center justify-center text-muted ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
+                      [{step.title} image]
+                    </div>
+                  </FadeIn>
                 )}
               </div>
             ))}
