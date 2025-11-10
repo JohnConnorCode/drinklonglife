@@ -73,6 +73,18 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'featuredBlendsHeading',
+      title: 'Featured Blends Heading',
+      type: 'string',
+      initialValue: 'Featured Blends',
+    }),
+    defineField({
+      name: 'featuredBlendsSubheading',
+      title: 'Featured Blends Subheading',
+      type: 'string',
+      initialValue: 'Sold in weekly drops. Reserve early.',
+    }),
+    defineField({
       name: 'featuredBlends',
       title: 'Featured Blends',
       type: 'array',
@@ -84,6 +96,48 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'featuredBlendsCtaText',
+      title: 'Featured Blends CTA Text',
+      type: 'string',
+      initialValue: 'Reserve This Week',
+    }),
+    defineField({
+      name: 'statsHeading',
+      title: 'Stats Section Heading',
+      type: 'string',
+      initialValue: 'By the Numbers',
+    }),
+    defineField({
+      name: 'testimonialsHeading',
+      title: 'Testimonials Heading',
+      type: 'string',
+      initialValue: 'What People Say',
+    }),
+    defineField({
+      name: 'testimonialsSubheading',
+      title: 'Testimonials Subheading',
+      type: 'string',
+      initialValue: 'Real results from real humans.',
+    }),
+    defineField({
+      name: 'pricingHeading',
+      title: 'Pricing Section Heading',
+      type: 'string',
+      initialValue: 'Sizing & Pricing',
+    }),
+    defineField({
+      name: 'featuredBlendsSizingText',
+      title: 'Featured Blends Sizing Text',
+      type: 'string',
+      initialValue: 'Sizes: 1-Gallon $50 • ½-Gallon $35 • Shot $5',
+    }),
+    defineField({
+      name: 'featuredBlendsDeliveryText',
+      title: 'Featured Blends Delivery Text',
+      type: 'string',
+      initialValue: 'Pickup or local delivery during weekly windows. Shipments coming soon.',
+    }),
+    defineField({
       name: 'sizesPricing',
       title: 'Sizes & Pricing',
       type: 'array',
@@ -93,6 +147,12 @@ export default defineType({
           to: { type: 'sizePrice' },
         },
       ],
+    }),
+    defineField({
+      name: 'processHeading',
+      title: 'Process Section Heading',
+      type: 'string',
+      initialValue: 'How We Make It',
     }),
     defineField({
       name: 'processIntro',
@@ -111,6 +171,12 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'sourcingHeading',
+      title: 'Sourcing Section Heading',
+      type: 'string',
+      initialValue: 'Ingredients & Sourcing',
+    }),
+    defineField({
       name: 'sourcingIntro',
       title: 'Sourcing Section Intro',
       type: 'string',
@@ -127,10 +193,42 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'newsletterHeading',
+      title: 'Newsletter Section Heading',
+      type: 'string',
+      initialValue: 'Get first access to drops and new blends',
+    }),
+    defineField({
+      name: 'newsletterSubheading',
+      title: 'Newsletter Subheading',
+      type: 'text',
+      rows: 2,
+      initialValue: 'Enter your email to reserve before batches sell out.',
+    }),
+    defineField({
+      name: 'newsletterPlaceholder',
+      title: 'Email Input Placeholder',
+      type: 'string',
+      initialValue: 'Enter your email',
+    }),
+    defineField({
+      name: 'newsletterButtonText',
+      title: 'Newsletter Button Text',
+      type: 'string',
+      initialValue: 'Notify Me',
+    }),
+    defineField({
       name: 'communityBlurb',
       title: 'Community Blurb',
       type: 'text',
       rows: 3,
+      initialValue: 'We grow by word of mouth. Taste it. Share it. Bring a friend to pickup day.',
+    }),
+    defineField({
+      name: 'communityHashtagText',
+      title: 'Community Hashtag Text',
+      type: 'string',
+      initialValue: 'Tag #DrinkLongLife to join a community that chooses nature over noise.',
     }),
     defineField({
       name: 'newsletterCta',

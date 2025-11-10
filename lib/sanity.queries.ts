@@ -92,14 +92,24 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
     body,
     "icon": icon ${imageFragment}
   },
+  featuredBlendsHeading,
+  featuredBlendsSubheading,
   "featuredBlends": featuredBlends[]->{
     _id,
     name,
     slug { current },
     tagline,
     image ${imageFragment},
-    labelColor
+    labelColor,
+    functionList
   },
+  featuredBlendsCtaText,
+  featuredBlendsSizingText,
+  featuredBlendsDeliveryText,
+  statsHeading,
+  testimonialsHeading,
+  testimonialsSubheading,
+  pricingHeading,
   "sizesPricing": sizesPricing[]->{
     _id,
     label,
@@ -107,6 +117,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
     sku,
     isActive
   },
+  processHeading,
   processIntro,
   "processSteps": processSteps[]-> {
     _id,
@@ -115,6 +126,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
     "image": image ${imageFragment},
     order
   } | order(order asc),
+  sourcingHeading,
   sourcingIntro,
   "standards": standards[]->{
     _id,
@@ -122,7 +134,12 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
     body,
     "icon": icon ${imageFragment}
   },
+  newsletterHeading,
+  newsletterSubheading,
+  newsletterPlaceholder,
+  newsletterButtonText,
   communityBlurb,
+  communityHashtagText,
   "newsletterCta": newsletterCta-> ${ctaFragment},
   "socialProof": *[_type == "socialProof"][0]{
     stats,

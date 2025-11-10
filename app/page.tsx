@@ -32,7 +32,34 @@ export default async function Home() {
     );
   }
 
-  const { hero, valueProps, featuredBlends, sizesPricing, processIntro, processSteps, sourcingIntro, standards, communityBlurb, socialProof } = homePage;
+  const {
+    hero,
+    valueProps,
+    featuredBlendsHeading,
+    featuredBlendsSubheading,
+    featuredBlends,
+    featuredBlendsCtaText,
+    featuredBlendsSizingText,
+    featuredBlendsDeliveryText,
+    statsHeading,
+    testimonialsHeading,
+    testimonialsSubheading,
+    pricingHeading,
+    sizesPricing,
+    processHeading,
+    processIntro,
+    processSteps,
+    sourcingHeading,
+    sourcingIntro,
+    standards,
+    newsletterHeading,
+    newsletterSubheading,
+    newsletterPlaceholder,
+    newsletterButtonText,
+    communityBlurb,
+    communityHashtagText,
+    socialProof
+  } = homePage;
 
   return (
     <>
@@ -158,10 +185,10 @@ export default async function Home() {
         <Section className="bg-gray-50">
           <FadeIn direction="up" className="text-center mb-12">
             <h2 className="font-heading text-4xl font-bold mb-4" style={{lineHeight: "0.9"}}>
-              Featured Blends
+              {featuredBlendsHeading || 'Featured Blends'}
             </h2>
             <p className="text-lg text-muted italic">
-              Sold in weekly drops. Reserve early.
+              {featuredBlendsSubheading || 'Sold in weekly drops. Reserve early.'}
             </p>
           </FadeIn>
           <div className="grid md:grid-cols-3 gap-8">
@@ -170,17 +197,21 @@ export default async function Home() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <p className="text-muted mb-4">
-              <strong>Sizes:</strong> 1-Gallon $50 • ½-Gallon $35 • Shot $5
-            </p>
-            <p className="text-sm text-muted mb-6">
-              Pickup or local delivery during weekly windows. Shipments coming soon.
-            </p>
+            {featuredBlendsSizingText && (
+              <p className="text-muted mb-4">
+                {featuredBlendsSizingText}
+              </p>
+            )}
+            {featuredBlendsDeliveryText && (
+              <p className="text-sm text-muted mb-6">
+                {featuredBlendsDeliveryText}
+              </p>
+            )}
             <Link
               href="/blends"
               className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity inline-block"
             >
-              Reserve This Week
+              {featuredBlendsCtaText || 'Reserve This Week'}
             </Link>
           </div>
         </Section>
@@ -189,6 +220,13 @@ export default async function Home() {
       {/* Stats Section */}
       {socialProof?.stats && (
         <Section>
+          {statsHeading && (
+            <FadeIn direction="up" className="text-center mb-12">
+              <h2 className="font-heading text-4xl font-bold" style={{lineHeight: "0.9"}}>
+                {statsHeading}
+              </h2>
+            </FadeIn>
+          )}
           <StatsSection stats={[
             { label: 'Customers Served', value: socialProof.stats.customersServed || 0, suffix: '+' },
             { label: 'Batches Made', value: socialProof.stats.batchesMade || 0, suffix: '+' },
@@ -203,10 +241,10 @@ export default async function Home() {
         <Section className="bg-gray-50">
           <FadeIn direction="up" className="text-center mb-12">
             <h2 className="font-heading text-4xl font-bold mb-4" style={{lineHeight: "0.9"}}>
-              What People Say
+              {testimonialsHeading || 'What People Say'}
             </h2>
             <p className="text-lg text-muted">
-              Real results from real humans.
+              {testimonialsSubheading || 'Real results from real humans.'}
             </p>
           </FadeIn>
           <TestimonialCarousel testimonials={socialProof.featuredTestimonials} />
@@ -217,7 +255,7 @@ export default async function Home() {
       {sizesPricing && sizesPricing.length > 0 && (
         <Section>
           <h2 className="font-heading text-4xl font-bold text-center mb-12" style={{lineHeight: "0.9"}}>
-            Sizing & Pricing
+            {pricingHeading || 'Sizing & Pricing'}
           </h2>
           <div className="grid md:grid-cols-3 gap-6 max-w-2xl mx-auto">
             {sizesPricing
@@ -249,7 +287,7 @@ export default async function Home() {
       {processSteps && processSteps.length > 0 && (
         <Section className="bg-gray-50">
           <h2 className="font-heading text-4xl font-bold text-center mb-8" style={{lineHeight: "0.9"}}>
-            How We Make It
+            {processHeading || 'How We Make It'}
           </h2>
           {processIntro && (
             <p className="text-center text-lg text-muted mb-12">
@@ -290,7 +328,7 @@ export default async function Home() {
       {standards && standards.length > 0 && (
         <Section>
           <h2 className="font-heading text-4xl font-bold text-center mb-8" style={{lineHeight: "0.9"}}>
-            Ingredients & Sourcing
+            {sourcingHeading || 'Ingredients & Sourcing'}
           </h2>
           {sourcingIntro ? (
             <p className="text-center text-lg text-muted mb-12">
@@ -318,15 +356,15 @@ export default async function Home() {
       <Section className="bg-accent-yellow/10" id="newsletter">
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="font-heading text-3xl font-bold mb-6">
-            Get first access to drops and new blends
+            {newsletterHeading || 'Get first access to drops and new blends'}
           </h2>
           <p className="text-lg text-muted mb-8">
-            {communityBlurb || "Enter your email to reserve before batches sell out."}
+            {newsletterSubheading || 'Enter your email to reserve before batches sell out.'}
           </p>
           <form className="flex gap-3 mb-8">
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder={newsletterPlaceholder || 'Enter your email'}
               className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-yellow"
               required
             />
@@ -334,15 +372,19 @@ export default async function Home() {
               type="submit"
               className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
             >
-              Notify Me
+              {newsletterButtonText || 'Notify Me'}
             </button>
           </form>
-          <p className="text-sm text-muted mb-6">
-            We grow by word of mouth. Taste it. Share it. Bring a friend to pickup day.
-          </p>
-          <p className="text-sm text-muted">
-            Tag <strong>#DrinkLongLife</strong> to join a community that chooses nature over noise.
-          </p>
+          {communityBlurb && (
+            <p className="text-sm text-muted mb-6">
+              {communityBlurb}
+            </p>
+          )}
+          {communityHashtagText && (
+            <p className="text-sm text-muted">
+              {communityHashtagText}
+            </p>
+          )}
         </div>
       </Section>
     </>

@@ -485,16 +485,26 @@ async function seedData() {
           body: 'Made in limited runs. First come, first served.',
         },
       ],
+      featuredBlendsHeading: 'Featured Blends',
+      featuredBlendsSubheading: 'Sold in weekly drops. Reserve early.',
       featuredBlends: [
         { _ref: 'blend-yellow-bomb', _type: 'reference' },
         { _ref: 'blend-red-bomb', _type: 'reference' },
         { _ref: 'blend-green-bomb', _type: 'reference' },
       ],
+      featuredBlendsCtaText: 'Reserve This Week',
+      featuredBlendsSizingText: 'Sizes: 1-Gallon $50 • ½-Gallon $35 • Shot $5',
+      featuredBlendsDeliveryText: 'Pickup or local delivery during weekly windows. Shipments coming soon.',
+      statsHeading: 'By the Numbers',
+      testimonialsHeading: 'What People Say',
+      testimonialsSubheading: 'Real results from real humans.',
+      pricingHeading: 'Sizing & Pricing',
       sizesPricing: [
         { _ref: sizeGallon._id, _type: 'reference' },
         { _ref: sizeHalfGallon._id, _type: 'reference' },
         { _ref: sizeShot._id, _type: 'reference' },
       ],
+      processHeading: 'How We Make It',
       processIntro: 'We care about every detail, from farm to bottle. Here\'s our process.',
       processSteps: [
         { _ref: 'process-1', _type: 'reference' },
@@ -502,13 +512,19 @@ async function seedData() {
         { _ref: 'process-3', _type: 'reference' },
         { _ref: 'process-4', _type: 'reference' },
       ],
+      sourcingHeading: 'Ingredients & Sourcing',
       sourcingIntro: 'We work with farms that share our commitment to regenerative agriculture and soil health.',
       standards: [
         { _ref: 'standard-1', _type: 'reference' },
         { _ref: 'standard-2', _type: 'reference' },
         { _ref: 'standard-3', _type: 'reference' },
       ],
-      communityBlurb: 'Join the Long Life movement. Daily rituals. Performance metrics. Real results from real people.',
+      newsletterHeading: 'Get first access to drops and new blends',
+      newsletterSubheading: 'Enter your email to reserve before batches sell out.',
+      newsletterPlaceholder: 'Enter your email',
+      newsletterButtonText: 'Notify Me',
+      communityBlurb: 'We grow by word of mouth. Taste it. Share it. Bring a friend to pickup day.',
+      communityHashtagText: 'Tag #DrinkLongLife to join a community that chooses nature over noise.',
     });
 
     // 11. FAQs
