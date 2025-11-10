@@ -94,7 +94,7 @@ export default async function Page({ params }: PageProps) {
       {/* Intro Section */}
       <Section className="py-12 sm:py-16 bg-gray-50">
         <div className="max-w-2xl">
-          <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-6" style={{lineHeight: "0.9"}}>
+          <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-6 leading-tight-90">
             {page.title}
           </h1>
           {page.intro && (

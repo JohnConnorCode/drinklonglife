@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { BackToTop } from '@/components/BackToTop';
 import { client } from '@/lib/sanity.client';
 import { siteSettingsQuery, navigationQuery } from '@/lib/sanity.queries';
 
@@ -46,6 +47,7 @@ export default async function RootLayout({
         />
         <main className="min-h-screen">{children}</main>
         <Footer siteSettings={siteSettings} navigation={navigation} />
+        <BackToTop />
       </body>
     </html>
   );

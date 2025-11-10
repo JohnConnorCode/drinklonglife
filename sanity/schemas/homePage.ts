@@ -117,6 +117,15 @@ export default defineType({
               title: 'Icon (optional)',
               type: 'image',
             }),
+            defineField({
+              name: 'image',
+              title: 'Background Image (optional)',
+              type: 'image',
+              description: 'Large background image for this value prop card (min 800x600px)',
+              options: {
+                hotspot: true,
+              },
+            }),
           ],
         },
       ],

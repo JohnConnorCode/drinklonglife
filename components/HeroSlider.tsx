@@ -20,6 +20,13 @@ interface HeroSliderProps {
 export function HeroSlider({ slides }: HeroSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [scrollY, setScrollY] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    // Trigger animation after mount
+    const timer = setTimeout(() => setHasAnimated(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,38 +95,44 @@ export function HeroSlider({ slides }: HeroSliderProps) {
           <div className="relative z-20 h-full flex items-center">
             <div className="max-w-7xl mx-auto px-6 sm:px-8 w-full">
               <div className="max-w-3xl">
-                {/* Heading - fades in first */}
+                {/* Heading */}
                 <h1
-                  className={`font-heading text-6xl sm:text-7xl md:text-8xl font-bold text-white mb-6 leading-tight transition-all duration-1000 delay-300 ${
-                    index === currentSlide
-                      ? 'translate-y-0 opacity-100'
+                  className={`font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight transition-all duration-1000 ${
+                    index === currentSlide && (hasAnimated || index !== 0)
+                      ? 'translate-y-0 opacity-100 delay-100'
+                      : index === currentSlide
+                      ? 'translate-y-10 opacity-100'
                       : 'translate-y-10 opacity-0'
                   }`}
                 >
                   {slide.heading}
                 </h1>
-                {/* Subheading - fades in second */}
+                {/* Subheading */}
                 <p
-                  className={`text-xl sm:text-2xl text-white/90 mb-8 leading-relaxed transition-all duration-1000 delay-500 ${
-                    index === currentSlide
-                      ? 'translate-y-0 opacity-100'
+                  className={`text-lg sm:text-xl md:text-2xl text-white/90 mb-6 sm:mb-8 leading-relaxed transition-all duration-1000 ${
+                    index === currentSlide && (hasAnimated || index !== 0)
+                      ? 'translate-y-0 opacity-100 delay-300'
+                      : index === currentSlide
+                      ? 'translate-y-10 opacity-100'
                       : 'translate-y-10 opacity-0'
                   }`}
                 >
                   {slide.subheading}
                 </p>
-                {/* CTA - fades in third */}
+                {/* CTA */}
                 {slide.ctaText && slide.ctaLink && (
                   <div
-                    className={`transition-all duration-1000 delay-700 ${
-                      index === currentSlide
-                        ? 'translate-y-0 opacity-100'
+                    className={`transition-all duration-1000 ${
+                      index === currentSlide && (hasAnimated || index !== 0)
+                        ? 'translate-y-0 opacity-100 delay-500'
+                        : index === currentSlide
+                        ? 'translate-y-10 opacity-100'
                         : 'translate-y-10 opacity-0'
                     }`}
                   >
                     <Link
                       href={slide.ctaLink}
-                      className="inline-block px-8 py-4 bg-accent-primary text-white font-semibold rounded-full hover:bg-accent-primary/90 transition-all duration-300 transform hover:scale-105"
+                      className="inline-block px-6 py-3 sm:px-8 sm:py-4 bg-accent-primary text-white text-sm sm:text-base font-semibold rounded-full hover:bg-accent-primary/90 transition-all duration-300 transform hover:scale-105"
                     >
                       {slide.ctaText}
                     </Link>
@@ -134,7 +147,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 flex items-center justify-center group"
+        className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 w-14 h-14 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 flex items-center justify-center group touch-manipulation"
         aria-label="Previous slide"
       >
         <svg
@@ -149,7 +162,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
 
       <button
         onClick={nextSlide}
-        className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 flex items-center justify-center group"
+        className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 w-14 h-14 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 flex items-center justify-center group touch-manipulation"
         aria-label="Next slide"
       >
         <svg

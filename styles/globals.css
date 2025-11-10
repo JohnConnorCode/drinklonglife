@@ -34,3 +34,25 @@ body {
 
 /* Prose styles for rich text */
 @import './prose.css';
+
+/* Ripple effect animation */
+@keyframes ripple {
+  from {
+    opacity: 1;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+/* Typography utilities */
+@layer utilities {
+  .leading-tight-90 {
+    line-height: 0.9;
+  }
+  .leading-tight-95 {
+    line-height: 0.95;
+  }
+}

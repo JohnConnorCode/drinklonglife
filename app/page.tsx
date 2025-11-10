@@ -50,15 +50,11 @@ export default async function Home() {
     processHeading,
     processIntro,
     processSteps,
-    sourcingHeading,
-    sourcingIntro,
-    standards,
     newsletterHeading,
     newsletterSubheading,
     newsletterPlaceholder,
     newsletterButtonText,
     communityBlurb,
-    communityHashtagText,
     socialProof
   } = homePage;
 

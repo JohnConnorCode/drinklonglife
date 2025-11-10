@@ -31,6 +31,7 @@ export function RippleEffect({
       }, duration);
       return () => clearTimeout(timeout);
     }
+    return undefined;
   }, [ripples, duration]);
 
   const addRipple = (event: MouseEvent<HTMLDivElement>) => {

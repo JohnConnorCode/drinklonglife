@@ -132,6 +132,54 @@ async function seedData() {
       'process-shipping.jpg'
     );
 
+    // Value prop images
+    const valueProp1Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=800&q=80',
+      'value-prop-1-fresh-juice.jpg'
+    );
+
+    const valueProp2Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=800&q=80',
+      'value-prop-2-cold-pressed.jpg'
+    );
+
+    const valueProp3Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=800&q=80',
+      'value-prop-3-small-batch.jpg'
+    );
+
+    // Standards/sourcing images
+    const standard1Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80',
+      'standard-regenerative-farm.jpg'
+    );
+
+    const standard2Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=800&q=80',
+      'standard-fresh-produce.jpg'
+    );
+
+    const standard3Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80',
+      'standard-organic-farming.jpg'
+    );
+
+    // Team member images
+    const team1Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+      'team-member-1.jpg'
+    );
+
+    const team2Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
+      'team-member-2.jpg'
+    );
+
+    const team3Image = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+      'team-member-3.jpg'
+    );
+
     // 1. Site Settings (Singleton)
     await upsertDoc({
       _id: 'siteSettings',
@@ -281,6 +329,7 @@ async function seedData() {
           children: [{ _type: 'span', text: 'Soil health, biodiversity, and carbon sequestration over yield.' }],
         },
       ],
+      image: standard1Image,
     });
 
     await upsertDoc({
@@ -293,6 +342,7 @@ async function seedData() {
           children: [{ _type: 'span', text: 'Every ingredient identified by farm and harvest date.' }],
         },
       ],
+      image: standard2Image,
     });
 
     await upsertDoc({
@@ -305,6 +355,7 @@ async function seedData() {
           children: [{ _type: 'span', text: 'Cold-pressed only. Living enzymes preserved.' }],
         },
       ],
+      image: standard3Image,
     });
 
     // 6. Farms
@@ -561,14 +612,17 @@ async function seedData() {
         {
           title: 'Nothing fake',
           body: 'Only whole fruits, roots, and greens. No concentrates. No fillers.',
+          image: valueProp1Image,
         },
         {
           title: 'Pressed for power',
           body: 'Cold-pressed to preserve flavor and nutrients.',
+          image: valueProp2Image,
         },
         {
           title: 'Small-batch integrity',
           body: 'Made in limited runs. First come, first served.',
+          image: valueProp3Image,
         },
       ],
       featuredBlendsHeading: 'Featured Blends',

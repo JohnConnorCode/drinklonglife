@@ -8,7 +8,6 @@ interface AnimatedLogoProps {
   logoUrl?: string;
   size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
-  title?: string;
   variant?: 'header' | 'footer';
 }
 
@@ -17,7 +16,6 @@ export function AnimatedLogo({
   logoUrl,
   size = 'md',
   showText = true,
-  title = 'Long Life',
   variant = 'header',
 }: AnimatedLogoProps) {
   // Size configurations
@@ -45,7 +43,7 @@ export function AnimatedLogo({
       opacity: 1,
       rotate: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         stiffness: 200,
         damping: 20,
         duration: 0.6,
@@ -65,7 +63,7 @@ export function AnimatedLogo({
       transition: {
         delay: 0.3,
         duration: 0.4,
-        ease: 'easeOut',
+        ease: 'easeOut' as const,
       },
     },
   };
@@ -82,7 +80,7 @@ export function AnimatedLogo({
       transition: {
         delay: 0.5,
         duration: 0.4,
-        ease: 'easeOut',
+        ease: 'easeOut' as const,
       },
     },
   };

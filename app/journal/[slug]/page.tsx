@@ -101,7 +101,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <article className="max-w-2xl mx-auto">
           {/* Header */}
           <header className="mb-12">
-            <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-4" style={{lineHeight: "0.9"}}>
+            <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-4 leading-tight-90">
               {post.title}
             </h1>
             <div className="flex items-center justify-between text-sm text-muted border-b border-gray-200 pb-6">

@@ -97,7 +97,8 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
   valueProps[] {
     title,
     body,
-    "icon": icon ${imageFragment}
+    "icon": icon ${imageFragment},
+    "image": image ${imageFragment}
   },
   featuredBlendsHeading,
   featuredBlendsSubheading,
@@ -119,10 +120,12 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
   pricingHeading,
   "sizesPricing": sizesPricing[]->{
     _id,
-    label,
+    name,
+    slug { current },
+    volume,
     price,
-    sku,
-    isActive
+    servingsPerBottle,
+    description
   },
   processHeading,
   processIntro,
@@ -139,7 +142,8 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
     _id,
     title,
     body,
-    "icon": icon ${imageFragment}
+    "icon": icon ${imageFragment},
+    "image": image ${imageFragment}
   },
   newsletterHeading,
   newsletterSubheading,
@@ -203,10 +207,12 @@ export const blendQuery = groq`*[_type == "blend" && slug.current == $slug][0]{
   labelColor,
   "sizes": sizes[]->{
     _id,
-    label,
+    name,
+    slug { current },
+    volume,
     price,
-    sku,
-    isActive
+    servingsPerBottle,
+    description
   },
   seo
 }`;
@@ -348,7 +354,8 @@ export const ingredientsSourcingPageQuery = groq`*[_type == "ingredientsSourcing
     _id,
     title,
     body,
-    "icon": icon ${imageFragment}
+    "icon": icon ${imageFragment},
+    "image": image ${imageFragment}
   },
   spotlightHeading,
   ingredientCategories[] {
