@@ -94,7 +94,6 @@ export function AnimatedLogo({
       {/* Animated Logo Image */}
       <motion.div
         className={`relative ${sizeClasses[size]}`}
-        style={variant === 'header' ? { top: '-0.2rem' } : {}}
         initial="hidden"
         animate="visible"
         variants={logoVariants}
@@ -104,7 +103,7 @@ export function AnimatedLogo({
           transition: { duration: 0.3 },
         }}
       >
-        <div className="relative w-full h-full text-accent-primary transition-all duration-300 flex items-center">
+        <div className="relative w-full h-full text-accent-primary transition-all duration-300 flex items-center justify-center">
           <Image
             src={logoUrl || '/long-life-logo.png'}
             alt="Long Life Logo"
