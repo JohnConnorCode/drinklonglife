@@ -71,7 +71,9 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                 quality={90}
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-accent-yellow/20 via-accent-primary/20 to-accent-green/20" />
+              <div className={`w-full h-full bg-gradient-to-br from-accent-yellow/20 via-accent-primary/20 to-accent-green/20 transition-transform duration-[20000ms] ease-out ${
+                index === currentSlide ? 'scale-100' : 'scale-110'
+              }`} />
             )}
             {/* Overlay */}
             <div className="absolute inset-0 bg-black/40" />
