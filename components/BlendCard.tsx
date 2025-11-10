@@ -11,7 +11,7 @@ interface BlendCardProps {
 
 const labelColorMap = {
   yellow: 'bg-accent-yellow',
-  red: 'bg-accent-red',
+  red: 'bg-accent-primary',
   green: 'bg-accent-green',
 };
 

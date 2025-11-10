@@ -81,7 +81,7 @@ export default function AboutPage() {
             <div className="bg-gray-50 p-8 rounded-lg my-8">
               <ul className="space-y-4 text-lg">
                 <li className="flex items-start gap-3">
-                  <span className="text-accent-red text-2xl">✓</span>
+                  <span className="text-accent-primary text-2xl">✓</span>
                   <span>
                     <strong>Clarity over hype.</strong> We won't make medical claims or
                     promise magic. We make juice with real ingredients and tell you
@@ -89,7 +89,7 @@ export default function AboutPage() {
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-accent-red text-2xl">✓</span>
+                  <span className="text-accent-primary text-2xl">✓</span>
                   <span>
                     <strong>Craft over shortcuts.</strong> Cold-pressed, same-day
                     bottled, small-batch integrity. We could make more if we compromised.
@@ -97,7 +97,7 @@ export default function AboutPage() {
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-accent-red text-2xl">✓</span>
+                  <span className="text-accent-primary text-2xl">✓</span>
                   <span>
                     <strong>Ingredients you can point to.</strong> Every bottle is
                     batch-dated. Every ingredient is tracked. If you want to know where
@@ -206,13 +206,13 @@ export default function AboutPage() {
           <div className="flex gap-4 justify-center">
             <Link
               href="/blends"
-              className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+              className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
             >
               Shop Weekly Batches
             </Link>
             <Link
               href="#newsletter"
-              className="px-6 py-3 border-2 border-black text-black rounded-md font-semibold hover:bg-black hover:text-white transition-colors"
+              className="px-6 py-3 border-2 border-black text-black rounded-full font-semibold hover:bg-black hover:text-white transition-colors"
             >
               Join the List
             </Link>

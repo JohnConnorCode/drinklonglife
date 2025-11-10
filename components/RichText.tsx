@@ -30,7 +30,7 @@ const RichTextComponents = {
     link: ({ children, value }: any) => (
       <a
         href={value.href}
-        className="text-accent-red hover:underline"
+        className="text-accent-primary hover:underline"
         target={value.href?.startsWith('http') ? '_blank' : undefined}
         rel={value.href?.startsWith('http') ? 'noreferrer' : undefined}
       >

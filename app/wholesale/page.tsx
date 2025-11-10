@@ -156,7 +156,7 @@ export default function WholesalePage() {
           </h2>
           <div className="space-y-4">
             <div className="flex items-start gap-4">
-              <div className="text-accent-red text-2xl">✓</div>
+              <div className="text-accent-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold mb-1">Real Ingredients</h3>
                 <p className="text-muted">
@@ -166,7 +166,7 @@ export default function WholesalePage() {
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="text-accent-red text-2xl">✓</div>
+              <div className="text-accent-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold mb-1">Small-Batch Quality</h3>
                 <p className="text-muted">
@@ -176,7 +176,7 @@ export default function WholesalePage() {
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="text-accent-red text-2xl">✓</div>
+              <div className="text-accent-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold mb-1">Local & Transparent</h3>
                 <p className="text-muted">
@@ -186,7 +186,7 @@ export default function WholesalePage() {
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="text-accent-red text-2xl">✓</div>
+              <div className="text-accent-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold mb-1">Reliable Partner</h3>
                 <p className="text-muted">
@@ -256,7 +256,7 @@ export default function WholesalePage() {
             />
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+              className="w-full px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
             >
               Apply for Wholesale
             </button>

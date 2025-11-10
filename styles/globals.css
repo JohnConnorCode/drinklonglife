@@ -9,9 +9,10 @@
   --bg: #ffffff;
   --fg: #000000;
   --muted: #6b7280;
-  --accent-yellow: #fcd34d;
-  --accent-red: #ef4444;
-  --accent-green: #10b981;
+  --accent-primary: #0f5348;
+  --accent-yellow: #d7f25c;
+  --accent-green: #8cbfa4;
+  --accent-cream: #f0ecea;
 
   --font-inter: 'Inter', sans-serif;
   --font-playfair: 'Playfair Display', serif;

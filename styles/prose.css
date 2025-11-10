@@ -28,7 +28,7 @@
 }
 
 .prose a {
-  @apply text-accent-red hover:underline;
+  @apply text-accent-primary hover:underline;
 }
 
 .prose blockquote {

@@ -71,7 +71,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
       <Section>
         <div className="text-center py-12">
           <h1 className="text-3xl font-bold mb-4">Blend Not Found</h1>
-          <Link href="/blends" className="text-accent-red hover:underline">
+          <Link href="/blends" className="text-accent-primary hover:underline">
             Back to Blends
           </Link>
         </div>
@@ -175,15 +175,15 @@ export default async function BlendPage({ params }: BlendPageProps) {
               .map((size: any) => (
                 <div
                   key={size._id}
-                  className="border-2 border-gray-200 rounded-lg p-6 text-center hover:border-accent-red transition-colors"
+                  className="border-2 border-gray-200 rounded-lg p-6 text-center hover:border-accent-primary transition-colors"
                 >
                   <h3 className="font-heading text-xl font-bold mb-2">
                     {size.label}
                   </h3>
-                  <p className="text-3xl font-bold text-accent-red mb-4">
+                  <p className="text-3xl font-bold text-accent-primary mb-4">
                     ${size.price}
                   </p>
-                  <button className="w-full px-4 py-2 bg-black text-white rounded-md font-semibold hover:opacity-90 transition-opacity">
+                  <button className="w-full px-4 py-2 bg-black text-white rounded-full font-semibold hover:opacity-90 transition-opacity">
                     Add to Cart
                   </button>
                 </div>
@@ -194,7 +194,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
 
       {/* Back Link */}
       <Section>
-        <Link href="/blends" className="text-accent-red hover:underline">
+        <Link href="/blends" className="text-accent-primary hover:underline">
           ← Back to Blends
         </Link>
       </Section>

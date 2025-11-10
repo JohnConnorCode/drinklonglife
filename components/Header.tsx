@@ -68,7 +68,7 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                   href={link.href || '#'}
                   className={clsx(
                     'text-sm font-medium transition-colors',
-                    isActive ? 'text-red-600' : 'text-gray-700 hover:text-black'
+                    isActive ? 'text-accent-primary' : 'text-gray-700 hover:text-black'
                   )}
                 >
                   {link.text}

@@ -45,7 +45,7 @@ export default function SubscriptionsPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-accent-red rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 text-white">
+              <div className="w-16 h-16 bg-accent-primary rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 text-white">
                 2
               </div>
               <h3 className="font-heading text-xl font-bold mb-3">
@@ -78,7 +78,7 @@ export default function SubscriptionsPage() {
           </h2>
           <div className="space-y-4">
             <div className="flex items-start gap-4 p-6 bg-white rounded-lg">
-              <div className="text-accent-red text-2xl">✓</div>
+              <div className="text-accent-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold mb-1">Priority Access</h3>
                 <p className="text-muted">
@@ -87,7 +87,7 @@ export default function SubscriptionsPage() {
               </div>
             </div>
             <div className="flex items-start gap-4 p-6 bg-white rounded-lg">
-              <div className="text-accent-red text-2xl">✓</div>
+              <div className="text-accent-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold mb-1">Early Tasting Invites</h3>
                 <p className="text-muted">
@@ -96,7 +96,7 @@ export default function SubscriptionsPage() {
               </div>
             </div>
             <div className="flex items-start gap-4 p-6 bg-white rounded-lg">
-              <div className="text-accent-red text-2xl">✓</div>
+              <div className="text-accent-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold mb-1">Flexible Plans</h3>
                 <p className="text-muted">
@@ -105,7 +105,7 @@ export default function SubscriptionsPage() {
               </div>
             </div>
             <div className="flex items-start gap-4 p-6 bg-white rounded-lg">
-              <div className="text-accent-red text-2xl">✓</div>
+              <div className="text-accent-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold mb-1">Community Connection</h3>
                 <p className="text-muted">
@@ -143,13 +143,13 @@ export default function SubscriptionsPage() {
                   <span className="font-bold">$18/week</span>
                 </div>
               </div>
-              <button className="w-full px-6 py-3 bg-black text-white rounded-md font-semibold hover:opacity-90 transition-opacity">
+              <button className="w-full px-6 py-3 bg-black text-white rounded-full font-semibold hover:opacity-90 transition-opacity">
                 Start Weekly Plan
               </button>
             </div>
 
-            <div className="border-2 border-accent-red rounded-lg p-8">
-              <div className="inline-block px-3 py-1 bg-accent-red text-white text-xs font-bold rounded-full mb-2">
+            <div className="border-2 border-accent-primary rounded-lg p-8">
+              <div className="inline-block px-3 py-1 bg-accent-primary text-white text-xs font-bold rounded-full mb-2">
                 POPULAR
               </div>
               <h3 className="font-heading text-2xl font-bold mb-4">Bi-Weekly</h3>
@@ -170,7 +170,7 @@ export default function SubscriptionsPage() {
                   <span className="font-bold">$18/delivery</span>
                 </div>
               </div>
-              <button className="w-full px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity">
+              <button className="w-full px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity">
                 Start Bi-Weekly Plan
               </button>
             </div>
@@ -193,13 +193,13 @@ export default function SubscriptionsPage() {
           <div className="flex gap-4 justify-center">
             <Link
               href="/blends"
-              className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+              className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
             >
               View Our Blends
             </Link>
             <Link
               href="#newsletter"
-              className="px-6 py-3 border-2 border-black text-black rounded-md font-semibold hover:bg-black hover:text-white transition-colors"
+              className="px-6 py-3 border-2 border-black text-black rounded-full font-semibold hover:bg-black hover:text-white transition-colors"
             >
               Get Notified
             </Link>

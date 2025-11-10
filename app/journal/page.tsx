@@ -52,7 +52,7 @@ export default async function JournalPage() {
                   </div>
                 )}
               </div>
-              <h3 className="font-heading text-lg font-bold mb-2 group-hover:text-accent-red transition-colors">
+              <h3 className="font-heading text-lg font-bold mb-2 group-hover:text-accent-primary transition-colors">
                 {post.title}
               </h3>
               {post.excerpt && (

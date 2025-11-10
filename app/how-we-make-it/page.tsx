@@ -51,7 +51,7 @@ export default function HowWeMakeItPage() {
           {/* Step 2 */}
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="md:order-2">
-              <div className="inline-block px-4 py-2 bg-accent-red text-white rounded-full text-sm font-bold mb-4">
+              <div className="inline-block px-4 py-2 bg-accent-primary text-white rounded-full text-sm font-bold mb-4">
                 STEP 2
               </div>
               <h2 className="font-heading text-3xl font-bold mb-4">
@@ -171,7 +171,7 @@ export default function HowWeMakeItPage() {
             We could make more. We could cut corners. We don't. Long Life grows by making
             the same thing, better, week after week. That's the craft.
           </p>
-          <div className="inline-block px-6 py-3 bg-black text-white rounded-md font-semibold">
+          <div className="inline-block px-6 py-3 bg-black text-white rounded-full font-semibold">
             Made in limited runs. First come, first served.
           </div>
         </div>

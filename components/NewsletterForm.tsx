@@ -42,7 +42,7 @@ export function NewsletterForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? 'Subscribing...' : 'Subscribe'}
       </button>

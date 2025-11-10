@@ -47,10 +47,54 @@ async function upsertDoc(doc: SanityDocument) {
   return client.create(doc);
 }
 
+// Helper to upload image from URL
+async function uploadImageFromUrl(url: string, filename: string) {
+  try {
+    const response = await fetch(url);
+    const buffer = await response.arrayBuffer();
+    const asset = await client.assets.upload('image', Buffer.from(buffer), {
+      filename,
+    });
+    return {
+      _type: 'image',
+      asset: {
+        _type: 'reference',
+        _ref: asset._id,
+      },
+    };
+  } catch (error) {
+    console.error(`Failed to upload image ${filename}:`, error);
+    return null;
+  }
+}
+
 async function seedData() {
   console.log('🌱 Starting Long Life content seed...\n');
 
   try {
+    // Upload placeholder images
+    console.log('📸 Uploading placeholder images...\n');
+
+    const heroImage = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=1200&q=80',
+      'hero-juice-bottles.jpg'
+    );
+
+    const yellowBombImage = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=800&q=80',
+      'yellow-bomb-turmeric.jpg'
+    );
+
+    const redBombImage = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=800&q=80',
+      'red-bomb-beet.jpg'
+    );
+
+    const greenBombImage = await uploadImageFromUrl(
+      'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=800&q=80',
+      'green-bomb-celery.jpg'
+    );
+
     // 1. Site Settings (Singleton)
     await upsertDoc({
       _id: 'siteSettings',
@@ -58,7 +102,7 @@ async function seedData() {
       title: 'Long Life',
       tagline: 'Peak performance, one bottle at a time.',
       description: 'Premium superfood juice blends engineered for energy, focus, and vitality. Cold-pressed organic ingredients from regenerative farms.',
-      contactEmail: 'hello@longlife.com',
+      contactEmail: 'hello@drinklonglife.com',
       address: 'Los Angeles, CA',
       social: {
         instagram: 'https://instagram.com/drinklonglife',
@@ -327,6 +371,7 @@ async function seedData() {
       slug: { current: 'yellow-bomb' },
       tagline: 'Wake the system. Feel the rush.',
       functionList: ['Energy', 'Anti-inflammatory', 'Immunity'],
+      image: yellowBombImage,
       labelColor: 'yellow',
       isFeatured: true,
       order: 1,
@@ -355,6 +400,7 @@ async function seedData() {
       slug: { current: 'red-bomb' },
       tagline: 'Flow state. Endurance unlocked.',
       functionList: ['Circulation', 'Endurance', 'Detox'],
+      image: redBombImage,
       labelColor: 'red',
       isFeatured: true,
       order: 2,
@@ -382,6 +428,7 @@ async function seedData() {
       slug: { current: 'green-bomb' },
       tagline: 'Cleanse. Alkalize. Elevate.',
       functionList: ['Detox', 'Hydration', 'Alkalinity'],
+      image: greenBombImage,
       labelColor: 'green',
       isFeatured: true,
       order: 3,
@@ -421,6 +468,7 @@ async function seedData() {
       hero: {
         heading: 'Peak performance, one bottle at a time.',
         subheading: 'Cold-pressed superfood blends engineered for energy, focus, and vitality.',
+        image: heroImage,
         ctaPrimary: { _ref: ctaShop._id, _type: 'reference' },
       },
       valueProps: [

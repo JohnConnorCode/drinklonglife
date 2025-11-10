@@ -67,7 +67,7 @@ export default function IngredientsSourcingPage() {
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-lg border-l-4 border-accent-red">
+            <div className="bg-white p-8 rounded-lg border-l-4 border-accent-primary">
               <h3 className="font-heading text-xl font-bold mb-4">
                 Verify farm practices and harvest windows
               </h3>
@@ -166,14 +166,14 @@ export default function IngredientsSourcingPage() {
 
             {/* Herbs & Roots */}
             <div>
-              <h3 className="font-heading text-2xl font-bold mb-6 text-accent-red">
+              <h3 className="font-heading text-2xl font-bold mb-6 text-accent-primary">
                 Herbs & Roots
               </h3>
               <div className="grid md:grid-cols-3 gap-6">
                 {['Ginger', 'Mint', 'Parsley'].map((herb) => (
                   <div
                     key={herb}
-                    className="border border-gray-200 rounded-lg p-4 text-center hover:border-accent-red transition-colors"
+                    className="border border-gray-200 rounded-lg p-4 text-center hover:border-accent-primary transition-colors"
                   >
                     <p className="font-semibold">{herb}</p>
                   </div>
@@ -237,7 +237,7 @@ export default function IngredientsSourcingPage() {
             />
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+              className="w-full px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
             >
               Introduce Your Farm
             </button>
@@ -262,7 +262,7 @@ export default function IngredientsSourcingPage() {
           <div className="mt-8">
             <Link
               href="mailto:hello@longlife.com"
-              className="px-6 py-3 bg-black text-white rounded-md font-semibold hover:opacity-90 transition-opacity inline-block"
+              className="px-6 py-3 bg-black text-white rounded-full font-semibold hover:opacity-90 transition-opacity inline-block"
             >
               Contact Us
             </Link>

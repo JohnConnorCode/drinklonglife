@@ -68,7 +68,7 @@ export default async function Page({ params }: PageProps) {
       <Section>
         <div className="text-center py-12">
           <h1 className="text-3xl font-bold mb-4">Page Not Found</h1>
-          <Link href="/" className="text-accent-red hover:underline">
+          <Link href="/" className="text-accent-primary hover:underline">
             Back Home
           </Link>
         </div>
@@ -94,7 +94,7 @@ export default async function Page({ params }: PageProps) {
       {/* Intro Section */}
       <Section className="py-12 sm:py-16 bg-gray-50">
         <div className="max-w-2xl">
-          <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-6">
+          <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-6" style={{lineHeight: "0.9"}}>
             {page.title}
           </h1>
           {page.intro && (
@@ -114,7 +114,7 @@ export default async function Page({ params }: PageProps) {
 
       {/* Back Link */}
       <Section>
-        <Link href="/" className="text-accent-red hover:underline">
+        <Link href="/" className="text-accent-primary hover:underline">
           ← Back Home
         </Link>
       </Section>

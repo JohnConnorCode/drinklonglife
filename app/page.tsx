@@ -37,15 +37,15 @@ export default async function Home() {
       <Section className="bg-gradient-to-br from-gray-50 to-white py-20 sm:py-32">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="font-heading text-5xl sm:text-6xl font-bold mb-4 leading-tight">
+            <h1 className="font-heading text-5xl sm:text-6xl font-bold mb-4" style={{lineHeight: '0.9'}}>
               Long Life
             </h1>
             {hero?.heading ? (
-              <p className="text-2xl font-semibold mb-4 leading-snug">
+              <p className="text-2xl font-semibold mb-4" style={{lineHeight: '0.95'}}>
                 {hero.heading}
               </p>
             ) : (
-              <p className="text-2xl font-semibold mb-4 leading-snug">
+              <p className="text-2xl font-semibold mb-4" style={{lineHeight: '0.95'}}>
                 Small-batch juice for real humans.
               </p>
             )}
@@ -67,14 +67,14 @@ export default async function Home() {
                   href={hero.ctaPrimary.target?.pageRef?.slug?.current
                     ? `/${hero.ctaPrimary.target.pageRef.slug.current}`
                     : hero.ctaPrimary.target?.externalUrl || '/blends'}
-                  className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+                  className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
                 >
                   {hero.ctaPrimary.label}
                 </Link>
               ) : (
                 <Link
                   href="/blends"
-                  className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+                  className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
                 >
                   Shop Weekly Batches
                 </Link>
@@ -84,14 +84,14 @@ export default async function Home() {
                   href={hero.ctaSecondary.target?.pageRef?.slug?.current
                     ? `/${hero.ctaSecondary.target.pageRef.slug.current}`
                     : hero.ctaSecondary.target?.externalUrl || '#newsletter'}
-                  className="px-6 py-3 border-2 border-black text-black rounded-md font-semibold hover:bg-black hover:text-white transition-colors"
+                  className="px-6 py-3 border-2 border-black text-black rounded-full font-semibold hover:bg-black hover:text-white transition-colors"
                 >
                   {hero.ctaSecondary.label}
                 </Link>
               ) : (
                 <Link
                   href="#newsletter"
-                  className="px-6 py-3 border-2 border-black text-black rounded-md font-semibold hover:bg-black hover:text-white transition-colors"
+                  className="px-6 py-3 border-2 border-black text-black rounded-full font-semibold hover:bg-black hover:text-white transition-colors"
                 >
                   Join the List
                 </Link>
@@ -142,7 +142,7 @@ export default async function Home() {
       {featuredBlends && featuredBlends.length > 0 && (
         <Section className="bg-gray-50">
           <div className="text-center mb-12">
-            <h2 className="font-heading text-4xl font-bold mb-4">
+            <h2 className="font-heading text-4xl font-bold mb-4" style={{lineHeight: "0.9"}}>
               Featured Blends
             </h2>
             <p className="text-lg text-muted italic">
@@ -163,7 +163,7 @@ export default async function Home() {
             </p>
             <Link
               href="/blends"
-              className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity inline-block"
+              className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity inline-block"
             >
               Reserve This Week
             </Link>
@@ -174,7 +174,7 @@ export default async function Home() {
       {/* Pricing */}
       {sizesPricing && sizesPricing.length > 0 && (
         <Section>
-          <h2 className="font-heading text-4xl font-bold text-center mb-12">
+          <h2 className="font-heading text-4xl font-bold text-center mb-12" style={{lineHeight: "0.9"}}>
             Sizing & Pricing
           </h2>
           <div className="grid md:grid-cols-3 gap-6 max-w-2xl mx-auto">
@@ -183,18 +183,18 @@ export default async function Home() {
               .map((size: any) => (
                 <div
                   key={size._id}
-                  className="border-2 border-gray-200 rounded-lg p-6 text-center hover:border-accent-red transition-colors"
+                  className="border-2 border-gray-200 rounded-lg p-6 text-center hover:border-accent-primary transition-colors"
                 >
                   <h3 className="font-heading text-xl font-bold mb-2">
                     {size.label}
                   </h3>
-                  <p className="text-3xl font-bold text-accent-red mb-4">
+                  <p className="text-3xl font-bold text-accent-primary mb-4">
                     ${size.price}
                   </p>
                   {size.sku && (
                     <p className="text-xs text-muted mb-4">SKU: {size.sku}</p>
                   )}
-                  <button className="w-full px-4 py-2 bg-black text-white rounded-md font-semibold hover:opacity-90 transition-opacity">
+                  <button className="w-full px-4 py-2 bg-black text-white rounded-full font-semibold hover:opacity-90 transition-opacity">
                     Add to Cart
                   </button>
                 </div>
@@ -206,7 +206,7 @@ export default async function Home() {
       {/* Process */}
       {processSteps && processSteps.length > 0 && (
         <Section className="bg-gray-50">
-          <h2 className="font-heading text-4xl font-bold text-center mb-8">
+          <h2 className="font-heading text-4xl font-bold text-center mb-8" style={{lineHeight: "0.9"}}>
             How We Make It
           </h2>
           {processIntro && (
@@ -247,7 +247,7 @@ export default async function Home() {
       {/* Sourcing Standards */}
       {standards && standards.length > 0 && (
         <Section>
-          <h2 className="font-heading text-4xl font-bold text-center mb-8">
+          <h2 className="font-heading text-4xl font-bold text-center mb-8" style={{lineHeight: "0.9"}}>
             Ingredients & Sourcing
           </h2>
           {sourcingIntro ? (
@@ -261,7 +261,7 @@ export default async function Home() {
           )}
           <div className="grid md:grid-cols-2 gap-8">
             {standards.map((standard: any) => (
-              <div key={standard._id} className="border-l-4 border-accent-red pl-6">
+              <div key={standard._id} className="border-l-4 border-accent-primary pl-6">
                 <h3 className="font-heading text-xl font-bold mb-3">
                   {standard.title}
                 </h3>
@@ -290,7 +290,7 @@ export default async function Home() {
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+              className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
             >
               Notify Me
             </button>

@@ -73,7 +73,7 @@ export default async function PostPage({ params }: PostPageProps) {
       <Section>
         <div className="text-center py-12">
           <h1 className="text-3xl font-bold mb-4">Post Not Found</h1>
-          <Link href="/journal" className="text-accent-red hover:underline">
+          <Link href="/journal" className="text-accent-primary hover:underline">
             Back to Journal
           </Link>
         </div>
@@ -101,7 +101,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <article className="max-w-2xl mx-auto">
           {/* Header */}
           <header className="mb-12">
-            <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-4">
+            <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-4" style={{lineHeight: "0.9"}}>
               {post.title}
             </h1>
             <div className="flex items-center justify-between text-sm text-muted border-b border-gray-200 pb-6">
@@ -131,7 +131,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* Back Link */}
           <div className="mt-12 pt-6 border-t border-gray-200">
-            <Link href="/journal" className="text-accent-red hover:underline">
+            <Link href="/journal" className="text-accent-primary hover:underline">
               ← Back to Journal
             </Link>
           </div>

@@ -146,7 +146,7 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
         {/* Copyright */}
         <div className="border-t border-gray-200 pt-8 text-center text-sm text-muted">
           <p>
-            © {siteSettings?.title || 'Long Life'} • Indiana, USA
+            © {new Date().getFullYear()} {siteSettings?.title || 'Long Life'}. All rights reserved.
           </p>
         </div>
       </Section>
