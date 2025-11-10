@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { Section } from './Section';
-import { Logo } from './Logo';
+import { AnimatedLogo } from './AnimatedLogo';
+import { FadeIn, StaggerContainer } from './animations';
 
 interface FooterProps {
   siteSettings?: any;
@@ -17,14 +18,16 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
       <Section className="py-16 sm:py-24">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <StaggerContainer staggerDelay={0.15} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Logo className="w-8 h-8 text-accent-primary" />
-              <h3 className="font-heading text-lg font-bold">
-                {siteSettings?.title || 'Long Life'}
-              </h3>
+            <div className="mb-4">
+              <AnimatedLogo
+                size="sm"
+                variant="footer"
+                logoUrl={siteSettings?.logo?.asset?.url}
+                showText={true}
+              />
             </div>
             <p className="text-sm text-muted mb-6">
               {siteSettings?.tagline || 'Real juice. Real people.'}
@@ -35,11 +38,11 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
                   href={social.instagram}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-gray-600 hover:text-black transition-colors"
+                  className="group relative w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg border-2 border-gray-200 hover:border-accent-primary hover:bg-accent-primary"
+                  aria-label="Instagram"
                 >
-                  <span className="sr-only">Instagram</span>
                   <svg
-                    className="w-5 h-5"
+                    className="w-5 h-5 transition-transform duration-300 group-hover:rotate-12"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -52,11 +55,11 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
                   href={social.tiktok}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-gray-600 hover:text-black transition-colors"
+                  className="group relative w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg border-2 border-gray-200 hover:border-accent-primary hover:bg-accent-primary"
+                  aria-label="TikTok"
                 >
-                  <span className="sr-only">TikTok</span>
                   <svg
-                    className="w-5 h-5"
+                    className="w-5 h-5 transition-transform duration-300 group-hover:rotate-12"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -69,11 +72,11 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
                   href={social.youtube}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-gray-600 hover:text-black transition-colors"
+                  className="group relative w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg border-2 border-gray-200 hover:border-accent-primary hover:bg-accent-primary"
+                  aria-label="YouTube"
                 >
-                  <span className="sr-only">YouTube</span>
                   <svg
-                    className="w-5 h-5"
+                    className="w-5 h-5 transition-transform duration-300 group-hover:rotate-12"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -96,9 +99,10 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
                         ? `/${link.reference.slug.current}`
                         : link.externalUrl || '#'
                     }
-                    className="text-sm text-muted hover:text-black transition-colors"
+                    className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
                   >
                     {link.title}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
                   </Link>
                 </li>
               ))}
@@ -112,9 +116,10 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
               <p className="text-sm text-muted mb-2">
                 <a
                   href={`mailto:${siteSettings.contactEmail}`}
-                  className="hover:text-black transition-colors"
+                  className="group hover:text-black transition-colors relative inline-block"
                 >
                   {siteSettings.contactEmail}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
                 </a>
               </p>
             )}
@@ -137,22 +142,25 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
                         ? `/${link.reference.slug.current}`
                         : '#'
                     }
-                    className="text-sm text-muted hover:text-black transition-colors"
+                    className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
                   >
                     {link.title}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-        </div>
+        </StaggerContainer>
 
         {/* Copyright */}
-        <div className="border-t border-gray-200 pt-8 text-center text-sm text-muted">
-          <p>
-            © {new Date().getFullYear()} {siteSettings?.title || 'Long Life'}. All rights reserved.
-          </p>
-        </div>
+        <FadeIn direction="up" delay={0.6}>
+          <div className="border-t border-gray-200 pt-8 text-center text-sm text-muted">
+            <p>
+              © {new Date().getFullYear()} {siteSettings?.title || 'Long Life'}. All rights reserved.
+            </p>
+          </div>
+        </FadeIn>
       </Section>
     </footer>
   );

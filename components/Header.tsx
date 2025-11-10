@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { Logo } from './Logo';
+import { AnimatedLogo } from './AnimatedLogo';
+import { StaggerContainer } from './animations';
+import { RippleEffect } from './RippleEffect';
 
 interface HeaderProps {
   siteSettings?: any;
@@ -15,6 +17,7 @@ interface HeaderProps {
 export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const headerLinks = navigation?.primaryLinks || [];
 
   // Close mobile menu on route change
@@ -34,16 +37,35 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
     };
   }, [mobileMenuOpen]);
 
+  // Detect scroll for header styling
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
+    <header
+      className={clsx(
+        'sticky top-0 z-50 transition-all duration-300',
+        scrolled
+          ? 'bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm'
+          : 'bg-white border-b border-gray-100'
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 relative z-50 flex items-center gap-2 group">
-            <Logo className="w-10 h-10 text-accent-primary transition-transform group-hover:scale-110" />
-            <span className="text-xl font-heading font-bold hidden sm:inline">
-              {siteSettings?.title || 'Long Life'}
-            </span>
+          <Link href="/" className="flex-shrink-0 relative z-50">
+            <AnimatedLogo
+              size="md"
+              variant="header"
+              logoUrl={siteSettings?.logo?.asset?.url}
+              showText={true}
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -59,28 +81,39 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                   target={link.newTab ? '_blank' : undefined}
                   rel={link.newTab ? 'noopener noreferrer' : undefined}
                   className={clsx(
-                    'text-sm font-medium transition-colors',
+                    'group text-sm font-medium transition-colors relative',
                     isActive ? 'text-accent-primary' : 'text-gray-700 hover:text-black'
                   )}
                 >
                   {link.title}
+                  <span
+                    className={clsx(
+                      'absolute -bottom-1 left-0 h-0.5 bg-accent-primary transition-all duration-300',
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    )}
+                  />
                 </Link>
               );
             })}
           </nav>
 
           {/* Desktop CTA Button */}
-          <Link
-            href="/blends"
-            className="hidden md:inline-flex px-6 py-2 rounded-full bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors"
+          <RippleEffect
+            className="hidden md:inline-flex rounded-full"
+            color="rgba(255, 255, 255, 0.4)"
           >
-            {ctaLabel || 'Shop Blends'}
-          </Link>
+            <Link
+              href="/blends"
+              className="px-6 py-2 rounded-full bg-accent-primary text-white text-sm font-medium hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg block"
+            >
+              {ctaLabel || 'Shop Blends'}
+            </Link>
+          </RippleEffect>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden relative z-50 p-2 -mr-2"
+            className="md:hidden relative z-50 p-3 -mr-2 touch-manipulation"
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -120,7 +153,7 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
 
           {/* Mobile Menu Panel */}
           <nav className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-white z-40 overflow-y-auto">
-            <div className="px-4 py-6 space-y-1">
+            <StaggerContainer staggerDelay={0.1} className="px-4 py-6 space-y-1">
               {headerLinks.map((link: any, index: number) => {
                 const href = link.externalUrl || (link.reference?.slug?.current ? `/${link.reference.slug.current}` : '#');
                 const isActive = pathname === href || pathname.startsWith(href + '/');
@@ -132,10 +165,10 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                     target={link.newTab ? '_blank' : undefined}
                     rel={link.newTab ? 'noopener noreferrer' : undefined}
                     className={clsx(
-                      'block px-4 py-3 text-lg font-medium rounded-lg transition-colors',
+                      'block px-4 py-3 text-lg font-medium rounded-lg transition-all duration-300',
                       isActive
-                        ? 'bg-gray-100 text-black'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        ? 'bg-gradient-to-r from-accent-yellow/20 to-accent-green/20 text-accent-primary'
+                        : 'text-gray-700 hover:bg-gray-50 hover:translate-x-1'
                     )}
                   >
                     {link.title}
@@ -144,13 +177,18 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
               })}
 
               {/* Mobile CTA */}
-              <Link
-                href="/blends"
-                className="block mt-6 px-6 py-3 text-center rounded-full bg-black text-white font-medium hover:bg-gray-800 transition-colors"
+              <RippleEffect
+                className="block mt-6 rounded-full"
+                color="rgba(255, 255, 255, 0.4)"
               >
-                {ctaLabel || 'Shop Blends'}
-              </Link>
-            </div>
+                <Link
+                  href="/blends"
+                  className="block px-6 py-3 text-center rounded-full bg-accent-primary text-white font-medium hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg"
+                >
+                  {ctaLabel || 'Shop Blends'}
+                </Link>
+              </RippleEffect>
+            </StaggerContainer>
           </nav>
         </>
       )}
