@@ -17,6 +17,15 @@
   --font-inter: 'Inter', sans-serif;
   --font-playfair: 'Playfair Display', serif;
   --font-montserrat: 'Montserrat', sans-serif;
+  /* Use Montserrat on mobile (Futura doesn't render well on mobile) */
+  --font-heading: 'Montserrat', sans-serif;
+}
+
+/* Use Futura on desktop (md breakpoint and above) */
+@media (min-width: 768px) {
+  :root {
+    --font-heading: 'Futura', 'Futura PT', 'Century Gothic', 'Montserrat', sans-serif;
+  }
 }
 
 * {

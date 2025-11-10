@@ -16,7 +16,7 @@ const config: Config = {
       },
       fontFamily: {
         'sans': ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        'heading': ['var(--font-montserrat)', 'Montserrat', 'Futura', 'Futura PT', 'Century Gothic', 'Trebuchet MS', 'Arial', 'sans-serif'],
+        'heading': ['var(--font-heading)', 'Montserrat', 'Futura', 'Futura PT', 'Century Gothic', 'Trebuchet MS', 'Arial', 'sans-serif'],
       },
       lineHeight: {
         'tight': '0.9',
