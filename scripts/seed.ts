@@ -39,8 +39,8 @@ async function upsertDoc(doc: SanityDocument) {
   const existing = await client.getDocument(_id);
 
   if (existing) {
-    console.log(`✓ Document ${_id} already exists, skipping...`);
-    return existing;
+    console.log(`✓ Document ${_id} already exists, updating...`);
+    return client.patch(_id).set(doc).commit();
   }
 
   console.log(`Creating ${_type}: ${_id}...`);
@@ -402,37 +402,68 @@ async function seedData() {
       },
     });
 
-    // 9. Home Page (Singleton)
+    // 9. Create CTA documents for homepage
+    const ctaShop = await upsertDoc({
+      _id: 'cta-shop-blends',
+      _type: 'cta',
+      label: 'Shop Blends',
+      style: 'primary',
+      target: {
+        type: 'external',
+        externalUrl: '/blends',
+      },
+    });
+
+    // 10. Home Page (Singleton)
     await upsertDoc({
       _id: 'homePage',
       _type: 'homePage',
       hero: {
-        headline: 'Peak performance, one bottle at a time.',
-        subheadline: 'Cold-pressed superfood blends engineered for energy, focus, and vitality.',
-        ctaText: 'Shop Blends',
-        ctaLink: '/blends',
+        heading: 'Peak performance, one bottle at a time.',
+        subheading: 'Cold-pressed superfood blends engineered for energy, focus, and vitality.',
+        ctaPrimary: { _ref: ctaShop._id, _type: 'reference' },
       },
       valueProps: [
         {
           title: 'Regenerative Organic',
-          description: 'Every ingredient sourced from farms that heal the soil.',
+          body: 'Every ingredient sourced from farms that heal the soil.',
         },
         {
           title: 'Cold-Pressed, Never HPP',
-          description: 'Hydraulic press only. Living enzymes preserved.',
+          body: 'Hydraulic press only. Living enzymes preserved.',
         },
         {
           title: 'Frozen Within Hours',
-          description: 'Flash-frozen at peak freshness. No preservatives.',
+          body: 'Flash-frozen at peak freshness. No preservatives.',
         },
       ],
-      communityHeadline: 'Join the Long Life movement',
-      communityDescription: 'Daily rituals. Performance metrics. Real results from real people.',
-      newsletterHeadline: 'Get early access to new blends',
-      newsletterDescription: 'Subscribers get first dibs on seasonal releases and farm stories.',
+      featuredBlends: [
+        { _ref: 'blend-yellow-bomb', _type: 'reference' },
+        { _ref: 'blend-red-bomb', _type: 'reference' },
+        { _ref: 'blend-green-bomb', _type: 'reference' },
+      ],
+      sizesPricing: [
+        { _ref: sizeGallon._id, _type: 'reference' },
+        { _ref: sizeHalfGallon._id, _type: 'reference' },
+        { _ref: sizeShot._id, _type: 'reference' },
+      ],
+      processIntro: 'We care about every detail, from farm to bottle. Here\'s our process.',
+      processSteps: [
+        { _ref: 'process-1', _type: 'reference' },
+        { _ref: 'process-2', _type: 'reference' },
+        { _ref: 'process-3', _type: 'reference' },
+        { _ref: 'process-4', _type: 'reference' },
+      ],
+      sourcingIntro: 'We work with farms that share our commitment to regenerative agriculture and soil health.',
+      standards: [
+        { _ref: 'standard-1', _type: 'reference' },
+        { _ref: 'standard-2', _type: 'reference' },
+        { _ref: 'standard-3', _type: 'reference' },
+      ],
+      communityBlurb: 'Join the Long Life movement. Daily rituals. Performance metrics. Real results from real people.',
     });
 
-    // 10. FAQs
+    // 11. FAQs
     await upsertDoc({
       _id: 'faq-1',
       _type: 'faq',
@@ -489,7 +520,7 @@ async function seedData() {
       answer: 'Three things: regenerative sourcing (we trace every farm), true cold-press (no HPP shortcuts), and frozen delivery (no preservatives needed).',
     });
 
-    // 11. Journal Posts
+    // 12. Journal Posts
     await upsertDoc({
       _id: 'post-regenerative-farming',
       _type: 'post',
