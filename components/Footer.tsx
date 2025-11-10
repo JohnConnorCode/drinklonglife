@@ -23,7 +23,9 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
             <h3 className="font-heading text-lg font-bold mb-4">
               {siteSettings?.title || 'Long Life'}
             </h3>
-            <p className="text-sm text-muted mb-6">{siteSettings?.tagline}</p>
+            <p className="text-sm text-muted mb-6">
+              {siteSettings?.tagline || 'Real juice. Real people.'}
+            </p>
             <div className="flex gap-4">
               {social.instagram && (
                 <a
@@ -145,8 +147,7 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
         {/* Copyright */}
         <div className="border-t border-gray-200 pt-8 text-center text-sm text-muted">
           <p>
-            © {currentYear} {siteSettings?.title || 'Long Life'}. All rights
-            reserved.
+            © {siteSettings?.title || 'Long Life'} • Indiana, USA
           </p>
         </div>
       </Section>
