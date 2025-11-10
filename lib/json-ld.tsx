@@ -3,6 +3,7 @@
  * Generate Schema.org markup for SEO
  */
 
+import React from 'react';
 import type { Thing, WithContext } from 'schema-dts';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://longlife.com';

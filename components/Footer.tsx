@@ -9,7 +9,6 @@ interface FooterProps {
 }
 
 export function Footer({ siteSettings, navigation }: FooterProps) {
-  const currentYear = new Date().getFullYear();
   const footerLinks = navigation?.footerLinks || [];
   const legalLinks = navigation?.legalLinks || [];
   const social = siteSettings?.social || {};

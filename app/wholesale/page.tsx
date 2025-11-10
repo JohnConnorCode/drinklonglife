@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { Section } from '@/components/Section';
 
 export const metadata: Metadata = {
