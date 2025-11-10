@@ -19,22 +19,12 @@ interface HeroSliderProps {
 
 export function HeroSlider({ slides }: HeroSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
     // Trigger animation after mount
     const timer = setTimeout(() => setHasAnimated(true), 100);
     return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -93,7 +83,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
               <div className="max-w-3xl">
                 {/* Heading */}
                 <h1
-                  className={`font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight transition-all duration-1000 ${
+                  className={`font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white mb-4 sm:mb-6 leading-tight transition-all duration-1000 ${
                     index === currentSlide && (hasAnimated || index !== 0)
                       ? 'translate-y-0 opacity-100 delay-100'
                       : index === currentSlide
