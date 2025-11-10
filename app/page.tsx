@@ -330,10 +330,10 @@ export default async function Home() {
 
       {/* Process */}
       {processSteps && processSteps.length > 0 && (
-        <Section className="bg-gradient-to-b from-white via-accent-cream/30 to-white relative overflow-hidden !py-12 sm:!py-16">
+        <Section className="bg-accent-green/20 relative overflow-hidden !py-12 sm:!py-16">
           {/* Decorative organic shapes */}
-          <div className="absolute top-20 right-0 w-96 h-96 bg-accent-yellow/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 left-0 w-96 h-96 bg-accent-green/10 rounded-full blur-3xl" />
+          <div className="absolute top-20 right-0 w-96 h-96 bg-white/30 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 left-0 w-96 h-96 bg-accent-green/30 rounded-full blur-3xl" />
 
           <div className="relative z-10">
             <FadeIn direction="up" className="text-center mb-8">
