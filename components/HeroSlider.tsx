@@ -67,20 +67,16 @@ export function HeroSlider({ slides }: HeroSliderProps) {
             index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >
-          {/* Background Image with Parallax */}
-          <div
-            className="absolute inset-0 scale-110"
-            style={{
-              transform: `translateY(${scrollY * 0.5}px)`,
-              transition: 'transform 0.1s ease-out',
-            }}
-          >
+          {/* Background Image with Ken Burns zoom-out effect */}
+          <div className="absolute inset-0 overflow-hidden">
             {slide.image ? (
               <Image
                 src={urlFor(slide.image).width(1920).height(1080).url()}
                 alt={slide.heading}
                 fill
-                className="object-cover"
+                className={`object-cover transition-transform duration-[20000ms] ease-out ${
+                  index === currentSlide ? 'scale-100' : 'scale-110'
+                }`}
                 priority={index === 0}
                 quality={90}
               />

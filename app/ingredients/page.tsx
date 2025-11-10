@@ -71,8 +71,8 @@ export default async function IngredientsSourcingPage() {
       {/* Hero */}
       <Section className="py-24 relative overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1600&h=900&fit=crop')] bg-cover bg-center" />
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1600&h=900&fit=crop')] bg-cover bg-center scale-110 animate-ken-burns" />
           <div className="absolute inset-0 bg-gradient-to-br from-accent-primary/80 via-accent-green/70 to-accent-yellow/60" />
         </div>
 

@@ -47,6 +47,20 @@ body {
   }
 }
 
+/* Ken Burns slow zoom-out effect */
+@keyframes ken-burns {
+  from {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 20s ease-out forwards;
+}
+
 /* Typography utilities */
 @layer utilities {
   .leading-tight-90 {

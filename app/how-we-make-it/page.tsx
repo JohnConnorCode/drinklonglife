@@ -61,8 +61,8 @@ export default async function HowWeMakeItPage() {
       {/* Hero */}
       <Section className="py-24 relative overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=1600&h=900&fit=crop')] bg-cover bg-center" />
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=1600&h=900&fit=crop')] bg-cover bg-center scale-110 animate-ken-burns" />
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-accent-primary/50 to-accent-green/40" />
         </div>
 
