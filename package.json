@@ -9,7 +9,10 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "studio": "sanity dev",
-    "sanity:deploy": "sanity deploy"
+    "sanity:deploy": "sanity deploy",
+    "seed": "tsx scripts/seed.ts",
+    "export:sanity": "sanity dataset export production backup.tar.gz",
+    "import:sanity": "sanity dataset import backup.tar.gz production"
   },
   "dependencies": {
     "@portabletext/react": "^5.0.0",
@@ -38,6 +41,7 @@
     "eslint": "^8.0.0",
     "eslint-config-next": "^15.0.0",
     "postcss": "^8.4.0",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.0"
   }
 }

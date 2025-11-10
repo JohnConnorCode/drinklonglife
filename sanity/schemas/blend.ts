@@ -9,7 +9,8 @@ export default defineType({
       name: 'name',
       title: 'Blend Name',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      description: 'E.g., "Yellow Bomb", "Red Bomb", "Green Bomb"',
+      validation: (Rule) => Rule.required().min(2).max(50),
     }),
     defineField({
       name: 'slug',
@@ -32,7 +33,8 @@ export default defineType({
       title: 'Functions',
       type: 'array',
       of: [{ type: 'string' }],
-      description: 'E.g., "energy", "focus", "mood elevation"',
+      description: 'E.g., "Energy", "Focus", "Detox" - short one-word benefits displayed as badges',
+      validation: (Rule) => Rule.min(1).max(5),
     }),
     defineField({
       name: 'ingredients',
@@ -44,31 +46,48 @@ export default defineType({
           to: { type: 'ingredient' },
         },
       ],
+      description: 'Select ingredients in order of prominence. First ingredient should be the primary one.',
+      validation: (Rule) => Rule.required().min(2),
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'blockContent',
+      description: 'Full description of the blend shown on the detail page. Use rich text formatting.',
     }),
     defineField({
       name: 'labelColor',
       title: 'Label Color',
       type: 'string',
+      description: 'Accent color for blend cards and detail page',
       options: {
         list: [
           { title: 'Yellow', value: 'yellow' },
           { title: 'Red', value: 'red' },
           { title: 'Green', value: 'green' },
         ],
+        layout: 'radio',
       },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'image',
       title: 'Blend Image',
       type: 'image',
+      description: 'High-resolution product photo (min 1200x1200px). Use hotspot to focus on bottle.',
       options: {
         hotspot: true,
       },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alt Text',
+          description: 'Describe the image for accessibility (required)',
+          validation: (Rule) => Rule.required(),
+        },
+      ],
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'sizes',
@@ -91,6 +110,8 @@ export default defineType({
       name: 'order',
       title: 'Display Order',
       type: 'number',
+      description: 'Lower numbers appear first (1, 2, 3...)',
+      validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: 'seo',
