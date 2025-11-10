@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { urlFor } from '@/lib/image';
+import { Logo } from './Logo';
 
 interface HeaderProps {
   siteSettings?: any;
@@ -40,21 +41,11 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 relative z-50">
-            {siteSettings?.logo ? (
-              <div className="relative w-8 h-8">
-                <Image
-                  src={urlFor(siteSettings.logo).url()}
-                  alt={siteSettings.title || 'Long Life'}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            ) : (
-              <span className="text-xl font-heading font-bold">
-                {siteSettings?.title || 'Long Life'}
-              </span>
-            )}
+          <Link href="/" className="flex-shrink-0 relative z-50 flex items-center gap-2 group">
+            <Logo className="w-10 h-10 text-accent-primary transition-transform group-hover:scale-110" />
+            <span className="text-xl font-heading font-bold hidden sm:inline">
+              {siteSettings?.title || 'Long Life'}
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

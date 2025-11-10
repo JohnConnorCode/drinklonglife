@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Section } from './Section';
+import { Logo } from './Logo';
 
 interface FooterProps {
   siteSettings?: any;
@@ -19,9 +20,12 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div>
-            <h3 className="font-heading text-lg font-bold mb-4">
-              {siteSettings?.title || 'Long Life'}
-            </h3>
+            <div className="flex items-center gap-2 mb-4">
+              <Logo className="w-8 h-8 text-accent-primary" />
+              <h3 className="font-heading text-lg font-bold">
+                {siteSettings?.title || 'Long Life'}
+              </h3>
+            </div>
             <p className="text-sm text-muted mb-6">
               {siteSettings?.tagline || 'Real juice. Real people.'}
             </p>
