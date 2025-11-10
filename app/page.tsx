@@ -34,57 +34,83 @@ export default async function Home() {
   return (
     <>
       {/* Hero Section */}
-      {hero && (
-        <Section className="bg-gradient-to-br from-gray-50 to-white py-20 sm:py-32">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              {hero.heading && (
-                <h1 className="font-heading text-5xl sm:text-6xl font-bold mb-6 leading-tight">
-                  {hero.heading}
-                </h1>
-              )}
-              {hero.subheading && (
-                <p className="text-lg text-muted mb-8 leading-relaxed">
-                  {hero.subheading}
-                </p>
-              )}
-              <div className="flex gap-4">
-                {hero.ctaPrimary && (
-                  <Link
-                    href={hero.ctaPrimary.target?.pageRef?.slug?.current
-                      ? `/${hero.ctaPrimary.target.pageRef.slug.current}`
-                      : hero.ctaPrimary.target?.externalUrl || '#'}
-                    className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    {hero.ctaPrimary.label}
-                  </Link>
-                )}
-                {hero.ctaSecondary && (
-                  <Link
-                    href={hero.ctaSecondary.target?.pageRef?.slug?.current
-                      ? `/${hero.ctaSecondary.target.pageRef.slug.current}`
-                      : hero.ctaSecondary.target?.externalUrl || '#'}
-                    className="px-6 py-3 border-2 border-black text-black rounded-md font-semibold hover:bg-black hover:text-white transition-colors"
-                  >
-                    {hero.ctaSecondary.label}
-                  </Link>
-                )}
-              </div>
-            </div>
-            {hero.image && (
-              <div className="relative h-96 md:h-full">
-                <Image
-                  src={urlFor(hero.image).url()}
-                  alt="Hero"
-                  fill
-                  className="object-cover rounded-lg"
-                  priority
-                />
-              </div>
+      <Section className="bg-gradient-to-br from-gray-50 to-white py-20 sm:py-32">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h1 className="font-heading text-5xl sm:text-6xl font-bold mb-4 leading-tight">
+              Long Life
+            </h1>
+            {hero?.heading ? (
+              <p className="text-2xl font-semibold mb-4 leading-snug">
+                {hero.heading}
+              </p>
+            ) : (
+              <p className="text-2xl font-semibold mb-4 leading-snug">
+                Small-batch juice for real humans.
+              </p>
             )}
+            {hero?.subheading ? (
+              <p className="text-lg text-muted mb-2 leading-relaxed">
+                {hero.subheading}
+              </p>
+            ) : (
+              <p className="text-lg text-muted mb-2 leading-relaxed">
+                Cold-pressed, ingredient-dense, made weekly in Indiana.
+              </p>
+            )}
+            <p className="text-lg font-semibold mb-8">
+              Drink what your body recognizes.
+            </p>
+            <div className="flex gap-4">
+              {hero?.ctaPrimary ? (
+                <Link
+                  href={hero.ctaPrimary.target?.pageRef?.slug?.current
+                    ? `/${hero.ctaPrimary.target.pageRef.slug.current}`
+                    : hero.ctaPrimary.target?.externalUrl || '/blends'}
+                  className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+                >
+                  {hero.ctaPrimary.label}
+                </Link>
+              ) : (
+                <Link
+                  href="/blends"
+                  className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+                >
+                  Shop Weekly Batches
+                </Link>
+              )}
+              {hero?.ctaSecondary ? (
+                <Link
+                  href={hero.ctaSecondary.target?.pageRef?.slug?.current
+                    ? `/${hero.ctaSecondary.target.pageRef.slug.current}`
+                    : hero.ctaSecondary.target?.externalUrl || '#newsletter'}
+                  className="px-6 py-3 border-2 border-black text-black rounded-md font-semibold hover:bg-black hover:text-white transition-colors"
+                >
+                  {hero.ctaSecondary.label}
+                </Link>
+              ) : (
+                <Link
+                  href="#newsletter"
+                  className="px-6 py-3 border-2 border-black text-black rounded-md font-semibold hover:bg-black hover:text-white transition-colors"
+                >
+                  Join the List
+                </Link>
+              )}
+            </div>
           </div>
-        </Section>
-      )}
+          {hero?.image && (
+            <div className="relative h-96 md:h-full">
+              <Image
+                src={urlFor(hero.image).url()}
+                alt="Long Life Juice"
+                fill
+                className="object-cover rounded-lg"
+                priority
+              />
+            </div>
+          )}
+        </div>
+      </Section>
 
       {/* Value Props */}
       {valueProps && valueProps.length > 0 && (
@@ -115,20 +141,31 @@ export default async function Home() {
       {/* Featured Blends */}
       {featuredBlends && featuredBlends.length > 0 && (
         <Section className="bg-gray-50">
-          <h2 className="font-heading text-4xl font-bold text-center mb-12">
-            Our Blends
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-4xl font-bold mb-4">
+              Featured Blends
+            </h2>
+            <p className="text-lg text-muted italic">
+              Sold in weekly drops. Reserve early.
+            </p>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
             {featuredBlends.map((blend: any) => (
               <BlendCard key={blend._id} blend={blend} />
             ))}
           </div>
           <div className="text-center mt-12">
+            <p className="text-muted mb-4">
+              <strong>Sizes:</strong> 1-Gallon $50 • ½-Gallon $35 • Shot $5
+            </p>
+            <p className="text-sm text-muted mb-6">
+              Pickup or local delivery during weekly windows. Shipments coming soon.
+            </p>
             <Link
               href="/blends"
-              className="px-6 py-3 bg-black text-white rounded-md font-semibold hover:opacity-90 transition-opacity inline-block"
+              className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity inline-block"
             >
-              Explore All Blends
+              Reserve This Week
             </Link>
           </div>
         </Section>
@@ -169,6 +206,9 @@ export default async function Home() {
       {/* Process */}
       {processSteps && processSteps.length > 0 && (
         <Section className="bg-gray-50">
+          <h2 className="font-heading text-4xl font-bold text-center mb-8">
+            How We Make It
+          </h2>
           {processIntro && (
             <p className="text-center text-lg text-muted mb-12">
               {processIntro}
@@ -207,9 +247,16 @@ export default async function Home() {
       {/* Sourcing Standards */}
       {standards && standards.length > 0 && (
         <Section>
-          {sourcingIntro && (
+          <h2 className="font-heading text-4xl font-bold text-center mb-8">
+            Ingredients & Sourcing
+          </h2>
+          {sourcingIntro ? (
             <p className="text-center text-lg text-muted mb-12">
               {sourcingIntro}
+            </p>
+          ) : (
+            <p className="text-center text-lg text-muted mb-12">
+              We source from trusted growers who share our standards. Seasonal rotation is part of the craft.
             </p>
           )}
           <div className="grid md:grid-cols-2 gap-8">
@@ -226,33 +273,36 @@ export default async function Home() {
       )}
 
       {/* Community/Newsletter */}
-      {communityBlurb && (
-        <Section className="bg-accent-yellow/10">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="font-heading text-3xl font-bold mb-6">
-              Join the Community
-            </h2>
-            <p className="text-lg text-muted mb-8">{communityBlurb}</p>
-            <form className="flex gap-3 mb-8">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-yellow"
-                required
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
-              >
-                Subscribe
-              </button>
-            </form>
-            <p className="text-sm text-muted">
-              We respect your privacy. Unsubscribe at any time.
-            </p>
-          </div>
-        </Section>
-      )}
+      <Section className="bg-accent-yellow/10" id="newsletter">
+        <div className="text-center max-w-2xl mx-auto">
+          <h2 className="font-heading text-3xl font-bold mb-6">
+            Get first access to drops and new blends
+          </h2>
+          <p className="text-lg text-muted mb-8">
+            {communityBlurb || "Enter your email to reserve before batches sell out."}
+          </p>
+          <form className="flex gap-3 mb-8">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-yellow"
+              required
+            />
+            <button
+              type="submit"
+              className="px-6 py-3 bg-accent-red text-white rounded-md font-semibold hover:opacity-90 transition-opacity"
+            >
+              Notify Me
+            </button>
+          </form>
+          <p className="text-sm text-muted mb-6">
+            We grow by word of mouth. Taste it. Share it. Bring a friend to pickup day.
+          </p>
+          <p className="text-sm text-muted">
+            Tag <strong>#DrinkLongLife</strong> to join a community that chooses nature over noise.
+          </p>
+        </div>
+      </Section>
     </>
   );
 }
