@@ -15,8 +15,8 @@ const config: Config = {
         'accent-cream': 'var(--accent-cream, #f0ecea)',
       },
       fontFamily: {
-        'sans': ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        'heading': ['var(--font-heading)', 'Alata', 'Futura', 'Futura PT', 'Century Gothic', 'Trebuchet MS', 'Arial', 'sans-serif'],
+        'sans': ['var(--font-jost)', 'system-ui', 'sans-serif'],
+        'heading': ['var(--font-jost)', 'system-ui', 'sans-serif'],
       },
       lineHeight: {
         'tight': '0.9',
