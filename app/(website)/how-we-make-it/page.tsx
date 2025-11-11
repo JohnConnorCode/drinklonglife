@@ -62,7 +62,10 @@ export default async function HowWeMakeItPage() {
       <Section className="py-24 relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=1600&h=900&fit=crop')] bg-cover bg-center scale-110 animate-ken-burns" />
+          <div
+            className="absolute inset-0 bg-cover bg-center scale-110 animate-ken-burns"
+            style={{ backgroundImage: 'url(/slider-desktop-2.png)' }}
+          />
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-accent-primary/50 to-accent-green/40" />
         </div>
 
@@ -89,17 +92,26 @@ export default async function HowWeMakeItPage() {
         <Section className="bg-white">
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8">
-              {processSteps.map((step: any, idx: number) => (
-                <FadeIn key={step._id} direction="up" delay={idx * 0.1}>
-                  <div className="group relative bg-gradient-to-br from-gray-50 to-white rounded-2xl overflow-hidden border-2 border-gray-100 hover:border-accent-primary/30 transition-all duration-500 hover:shadow-xl">
-                    {/* Step Image */}
-                    {step.image && (
+              {processSteps.map((step: any, idx: number) => {
+                // Default step images from /public - fallback if no Sanity image
+                const defaultStepImages = [
+                  '/step1.png',
+                  '/step2.png',
+                  '/step3.png',
+                  '/step4.png',
+                ];
+
+                return (
+                  <FadeIn key={step._id} direction="up" delay={idx * 0.1}>
+                    <div className="group relative bg-gradient-to-br from-gray-50 to-white rounded-2xl overflow-hidden border-2 border-gray-100 hover:border-accent-primary/30 transition-all duration-500 hover:shadow-xl">
+                      {/* Step Image */}
                       <div className="relative h-64 overflow-hidden">
                         <Image
-                          src={urlFor(step.image).url()}
+                          src={step.image?.asset ? urlFor(step.image).url() : defaultStepImages[idx]}
                           alt={step.title}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-700"
+                          sizes="(max-width: 768px) 100vw, 50vw"
                         />
                         {/* Gradient overlay */}
                         <div className={`absolute inset-0 bg-gradient-to-b ${gradients[idx % 3]} opacity-40`} />
@@ -111,7 +123,6 @@ export default async function HowWeMakeItPage() {
                           </span>
                         </div>
                       </div>
-                    )}
 
                     {/* Content */}
                     <div className="p-6">
@@ -129,7 +140,8 @@ export default async function HowWeMakeItPage() {
                     <div className={`absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl ${gradients[idx % 3]} rounded-tl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                   </div>
                 </FadeIn>
-              ))}
+              );
+              })}
             </div>
           </div>
         </Section>

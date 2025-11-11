@@ -362,6 +362,13 @@ export default async function Home() {
                   'from-accent-green/20 to-accent-primary/20',
                   'from-accent-primary/20 to-accent-yellow/20',
                 ];
+                // Default step images from /public - fallback if no Sanity image
+                const defaultStepImages = [
+                  '/step1.png',
+                  '/step2.png',
+                  '/step3.png',
+                  '/step4.png',
+                ];
 
                 return (
                   <div
@@ -406,28 +413,27 @@ export default async function Home() {
                       </FadeIn>
 
                       {/* Image Side with Parallax */}
-                      {step.image && (
-                        <ParallaxElement speed={isEven ? 0.3 : -0.3}>
-                          <FadeIn
-                            direction={isEven ? 'left' : 'right'}
-                            delay={0.2}
-                            className="relative group"
-                          >
-                            {/* Main Image Container */}
-                            <div className="relative h-[200px] sm:h-[240px] md:h-[280px] rounded-2xl overflow-hidden shadow-xl border-4 border-white">
-                              <Image
-                                src={urlFor(step.image).url()}
-                                alt={step.title}
-                                fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                              />
-                              {/* Gradient overlay on hover */}
-                              <div className={`absolute inset-0 bg-gradient-to-br ${gradients[idx % 3]} opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
-                            </div>
+                      <ParallaxElement speed={isEven ? 0.3 : -0.3}>
+                        <FadeIn
+                          direction={isEven ? 'left' : 'right'}
+                          delay={0.2}
+                          className="relative group"
+                        >
+                          {/* Main Image Container */}
+                          <div className="relative h-[200px] sm:h-[240px] md:h-[280px] rounded-2xl overflow-hidden shadow-xl border-4 border-white">
+                            <Image
+                              src={step.image?.asset ? urlFor(step.image).url() : defaultStepImages[idx]}
+                              alt={step.title}
+                              fill
+                              className="object-cover transition-transform duration-700 group-hover:scale-110"
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                            />
+                            {/* Gradient overlay on hover */}
+                            <div className={`absolute inset-0 bg-gradient-to-br ${gradients[idx % 3]} opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
+                          </div>
 
-                            {/* Floating decorative element */}
-                            <div className={`absolute ${isEven ? '-right-4 -bottom-4' : '-left-4 -bottom-4'} w-20 h-20 bg-gradient-to-br ${gradients[idx % 3]} rounded-full blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-500`} />
+                          {/* Floating decorative element */}
+                          <div className={`absolute ${isEven ? '-right-4 -bottom-4' : '-left-4 -bottom-4'} w-20 h-20 bg-gradient-to-br ${gradients[idx % 3]} rounded-full blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-500`} />
 
                             {/* Corner icon badge with brand colors */}
                             <div className={`absolute ${isEven ? 'top-3 left-3' : 'top-3 right-3'} w-10 h-10 rounded-full bg-accent-primary border-2 border-white flex items-center justify-center shadow-lg transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500`}>
@@ -454,7 +460,6 @@ export default async function Home() {
                             </div>
                           </FadeIn>
                         </ParallaxElement>
-                      )}
                     </div>
 
                     {/* Connecting line to next step */}
@@ -581,51 +586,38 @@ export default async function Home() {
 
           {/* Right Side - Product Imagery */}
           <div className="relative h-[500px] hidden md:block">
-            {featuredBlends && featuredBlends.length > 0 ? (
-              <>
-                {/* Three images staggered vertically with strong parallax */}
-                {featuredBlends.slice(0, 3).map((blend: any, idx: number) => {
-                  // Stronger parallax speeds for noticeable movement
-                  const speeds = [0.7, 0.9, 1.1];
-                  // Positioned in middle area, aligned with newsletter content, evenly staggered
-                  const positions = [
-                    'top-32 left-1/2 -translate-x-1/2 w-56 h-80', // Center-left, middle
-                    'top-20 right-8 w-48 h-72',  // Right side, higher
-                    'top-44 left-4 w-44 h-64',   // Left side, lower
-                  ];
-                  // High z-index so they appear above section above
-                  const zIndexClasses = ['z-50', 'z-40', 'z-30'];
+            {/* Three mobile slider images staggered vertically with strong parallax */}
+            {[
+              { src: '/slider-mobile-1.png', alt: 'Peak Performance Starts Here' },
+              { src: '/slider-mobile-2.png', alt: 'Real Ingredients. Real Results' },
+              { src: '/slider-mobile-3.png', alt: 'Small-Batch Integrity' },
+            ].map((image, idx) => {
+              // Stronger parallax speeds for noticeable movement
+              const speeds = [0.7, 0.9, 1.1];
+              // Positioned in middle area, aligned with newsletter content, evenly staggered
+              const positions = [
+                'top-32 left-1/2 -translate-x-1/2 w-56 h-80', // Center-left, middle
+                'top-20 right-8 w-48 h-72',  // Right side, higher
+                'top-44 left-4 w-44 h-64',   // Left side, lower
+              ];
+              // High z-index so they appear above section above
+              const zIndexClasses = ['z-50', 'z-40', 'z-30'];
 
-                  return blend.image ? (
-                    <ParallaxElement key={idx} speed={speeds[idx]}>
-                      <div className={`absolute ${positions[idx]} ${zIndexClasses[idx]} rounded-3xl shadow-2xl border-4 border-white overflow-hidden transform hover:scale-105 transition-transform duration-300`}>
-                        <Image
-                          src={urlFor(blend.image).width(500).height(700).url()}
-                          alt={blend.name || 'Long Life Juice'}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 0px, 250px"
-                          priority={idx === 0}
-                        />
-                      </div>
-                    </ParallaxElement>
-                  ) : null;
-                })}
-              </>
-            ) : (
-              <>
-                {/* Fallback gradients */}
-                <ParallaxElement speed={0.7}>
-                  <div className="absolute top-32 left-1/2 -translate-x-1/2 w-56 h-80 z-50 bg-gradient-to-br from-accent-green to-accent-primary rounded-3xl shadow-2xl border-4 border-white" />
+              return (
+                <ParallaxElement key={idx} speed={speeds[idx]}>
+                  <div className={`absolute ${positions[idx]} ${zIndexClasses[idx]} rounded-3xl shadow-2xl border-4 border-white overflow-hidden transform hover:scale-105 transition-transform duration-300`}>
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 0px, 250px"
+                      priority={idx === 0}
+                    />
+                  </div>
                 </ParallaxElement>
-                <ParallaxElement speed={0.9}>
-                  <div className="absolute top-20 right-8 w-48 h-72 z-40 bg-gradient-to-br from-accent-yellow to-accent-green rounded-3xl shadow-2xl border-4 border-white" />
-                </ParallaxElement>
-                <ParallaxElement speed={1.1}>
-                  <div className="absolute top-44 left-4 w-44 h-64 z-30 bg-gradient-to-br from-accent-primary to-accent-yellow rounded-3xl shadow-2xl border-4 border-white" />
-                </ParallaxElement>
-              </>
-            )}
+              );
+            })}
           </div>
         </div>
       </Section>

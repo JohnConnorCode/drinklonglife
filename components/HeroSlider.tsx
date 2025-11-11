@@ -143,7 +143,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                         className={`object-cover hidden md:block transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`}
                         priority={index === 0}
                         quality={90}
-                        unoptimized
+                        sizes="100vw"
                       />
                     )}
                     {/* Mobile Image - shown on mobile, hidden on md+ */}
@@ -155,7 +155,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                         className={`object-cover md:hidden transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`}
                         priority={index === 0}
                         quality={90}
-                        unoptimized
+                        sizes="100vw"
                       />
                     )}
                   </>
