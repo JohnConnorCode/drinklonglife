@@ -85,7 +85,8 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
     subheading,
     ctaText,
     ctaLink,
-    "image": image ${imageFragment}
+    "desktopImage": desktopImage ${imageFragment},
+    "mobileImage": mobileImage ${imageFragment}
   },
   "hero": hero {
     heading,

@@ -65,18 +65,24 @@ export default async function Home() {
       subheading: 'Cold-pressed, small-batch juices crafted for serious athletes and health-conscious humans.',
       ctaText: 'Shop Blends',
       ctaLink: '/blends',
+      desktopImage: { asset: { url: '/slider-desktop-1.png' } },
+      mobileImage: { asset: { url: '/slider-mobile-1.png' } },
     },
     {
       heading: 'Real Ingredients. Real Results.',
       subheading: 'No concentrates. No shortcuts. Just whole fruits, roots, and greens pressed fresh weekly.',
       ctaText: 'Our Process',
       ctaLink: '/how-we-make-it',
+      desktopImage: { asset: { url: '/slider-desktop-2.png' } },
+      mobileImage: { asset: { url: '/slider-mobile-2.png' } },
     },
     {
       heading: 'Small-Batch Integrity',
       subheading: 'Limited runs. First come, first served. Made in Indiana with ingredients you can trace.',
       ctaText: 'Learn More',
       ctaLink: '/about',
+      desktopImage: { asset: { url: '/slider-desktop-3.png' } },
+      mobileImage: { asset: { url: '/slider-mobile-3.png' } },
     },
   ];
 

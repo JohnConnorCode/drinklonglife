@@ -37,18 +37,30 @@ export default defineType({
               type: 'string',
             }),
             defineField({
-              name: 'image',
-              title: 'Background Image',
+              name: 'desktopImage',
+              title: 'Desktop Background Image',
               type: 'image',
+              description: 'Image for desktop viewports (min 1920x1080px)',
               options: {
                 hotspot: true,
               },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'mobileImage',
+              title: 'Mobile Background Image',
+              type: 'image',
+              description: 'Image for mobile viewports (min 768x1024px)',
+              options: {
+                hotspot: true,
+              },
+              validation: (Rule) => Rule.required(),
             }),
           ],
           preview: {
             select: {
               title: 'heading',
-              media: 'image',
+              media: 'desktopImage',
             },
           },
         },
