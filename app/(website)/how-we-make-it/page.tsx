@@ -166,13 +166,13 @@ export default async function HowWeMakeItPage() {
       {/* Why It Matters */}
       {whyCards && whyCards.length > 0 && (
         <Section className="bg-gradient-to-b from-accent-cream/30 to-white">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <FadeIn direction="up">
               <h2 className="font-heading text-4xl font-bold mb-12 text-center text-gray-900">
                 {whyHeading || 'Why Our Process Matters'}
               </h2>
             </FadeIn>
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-3 gap-6">
               {whyCards.map((card: any, idx: number) => (
                 <FadeIn key={idx} direction="up" delay={idx * 0.1}>
                   <div className="group relative bg-white p-8 rounded-2xl border-2 border-gray-100 hover:border-accent-primary/30 transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
