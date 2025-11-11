@@ -19,11 +19,11 @@ interface HeroSliderProps {
 
 export function HeroSlider({ slides }: HeroSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    // Trigger animation after mount
-    const timer = setTimeout(() => setHasAnimated(true), 100);
+    // Trigger animation after mount with slight delay for initial load
+    const timer = setTimeout(() => setIsInitialLoad(false), 150);
     return () => clearTimeout(timer);
   }, []);
 
@@ -57,7 +57,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
             index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >
-          {/* Background Image with Ken Burns zoom-out effect */}
+          {/* Background Image with Ken Burns zoom-in effect */}
           <div className="absolute inset-0 overflow-hidden">
             {slide.image ? (
               <Image
@@ -65,14 +65,14 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                 alt={slide.heading}
                 fill
                 className={`object-cover transition-transform duration-[20000ms] ease-out ${
-                  index === currentSlide ? 'scale-100' : 'scale-110'
+                  index === currentSlide ? 'scale-110' : 'scale-100'
                 }`}
                 priority={index === 0}
                 quality={90}
               />
             ) : (
               <div className={`w-full h-full bg-gradient-to-br from-accent-yellow/20 via-accent-primary/20 to-accent-green/20 transition-transform duration-[20000ms] ease-out ${
-                index === currentSlide ? 'scale-100' : 'scale-110'
+                index === currentSlide ? 'scale-110' : 'scale-100'
               }`} />
             )}
             {/* Overlay */}
@@ -80,16 +80,14 @@ export function HeroSlider({ slides }: HeroSliderProps) {
           </div>
 
           {/* Content */}
-          <div className="relative z-20 h-full flex items-start pt-32 sm:pt-40 md:items-center md:pt-0">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 w-full">
-              <div className="max-w-3xl">
+          <div className="relative z-20 h-full flex items-start pt-36 sm:pt-44 md:items-center md:pt-0">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full">
+              <div className="max-w-4xl">
                 {/* Heading */}
                 <h1
-                  className={`font-heading text-6xl sm:text-7xl md:text-7xl lg:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight transition-all duration-1000 ${
-                    index === currentSlide && (hasAnimated || index !== 0)
+                  className={`font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white mb-6 sm:mb-8 md:mb-10 leading-[1.1] transition-all duration-1000 ${
+                    index === currentSlide && !isInitialLoad
                       ? 'translate-y-0 opacity-100 delay-100'
-                      : index === currentSlide
-                      ? 'translate-y-10 opacity-0'
                       : 'translate-y-10 opacity-0'
                   }`}
                 >
@@ -97,11 +95,9 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                 </h1>
                 {/* Subheading */}
                 <p
-                  className={`text-xl sm:text-2xl md:text-3xl text-white/90 mb-6 sm:mb-8 leading-relaxed transition-all duration-1000 ${
-                    index === currentSlide && (hasAnimated || index !== 0)
+                  className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white/90 mb-8 sm:mb-10 md:mb-12 leading-relaxed max-w-3xl transition-all duration-1000 ${
+                    index === currentSlide && !isInitialLoad
                       ? 'translate-y-0 opacity-100 delay-300'
-                      : index === currentSlide
-                      ? 'translate-y-10 opacity-0'
                       : 'translate-y-10 opacity-0'
                   }`}
                 >
@@ -111,16 +107,14 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                 {slide.ctaText && slide.ctaLink && (
                   <div
                     className={`transition-all duration-1000 ${
-                      index === currentSlide && (hasAnimated || index !== 0)
+                      index === currentSlide && !isInitialLoad
                         ? 'translate-y-0 opacity-100 delay-500'
-                        : index === currentSlide
-                        ? 'translate-y-10 opacity-100'
                         : 'translate-y-10 opacity-0'
                     }`}
                   >
                     <Link
                       href={slide.ctaLink}
-                      className="inline-block px-6 py-3 sm:px-8 sm:py-4 bg-accent-primary text-white text-sm sm:text-base font-semibold rounded-full hover:bg-accent-primary/90 transition-all duration-300 transform hover:scale-105"
+                      className="inline-block px-8 py-4 sm:px-10 sm:py-5 md:px-12 md:py-6 bg-accent-primary text-white text-base sm:text-lg md:text-xl font-semibold rounded-full hover:bg-accent-primary/90 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-accent-primary/50"
                     >
                       {slide.ctaText}
                     </Link>
