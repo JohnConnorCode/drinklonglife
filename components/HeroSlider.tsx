@@ -11,6 +11,8 @@ interface Slide {
   ctaText?: string;
   ctaLink?: string;
   image?: any;
+  desktopImage?: any;
+  mobileImage?: any;
 }
 
 interface HeroSliderProps {
@@ -68,6 +70,21 @@ export function HeroSlider({ slides }: HeroSliderProps) {
     return () => clearInterval(timer);
   }, [slides.length]);
 
+  // Helper function to get image URL (handles both old 'image' and new 'desktop/mobile' structure)
+  const getImageSrc = (imageField: any) => {
+    if (!imageField) return null;
+    // Check if it's a static image (has asset.url pointing to /public)
+    if (imageField.asset?.url && typeof imageField.asset.url === 'string') {
+      return imageField.asset.url;
+    }
+    // Otherwise it's a Sanity image reference, use urlFor
+    try {
+      return urlFor(imageField).url();
+    } catch {
+      return null;
+    }
+  };
+
   // Helper function to generate animation classes
   const getAnimationClasses = (delayClass: string) => {
     const isActive = !isInitialLoad;
@@ -95,7 +112,8 @@ export function HeroSlider({ slides }: HeroSliderProps) {
       {/* Slides */}
       {slides.map((slide, index) => {
         const isActive = index === currentSlide;
-        const kenBurnsScale = isActive ? 'scale-110' : 'scale-100';
+        // Ken Burns effect: scale-100 on mount, then scale-110 after initial load
+        const kenBurnsScale = isActive && !isInitialLoad ? 'scale-110' : 'scale-100';
 
         return (
           <div
@@ -106,18 +124,43 @@ export function HeroSlider({ slides }: HeroSliderProps) {
           >
             {/* Background Image with Ken Burns zoom-in effect */}
             <div className="absolute inset-0 overflow-hidden">
-              {slide.image ? (
-                <Image
-                  src={urlFor(slide.image).width(1920).height(1080).url()}
-                  alt={slide.heading}
-                  fill
-                  className={`object-cover transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`}
-                  priority={index === 0}
-                  quality={90}
-                />
-              ) : (
-                <div className={`w-full h-full bg-gradient-to-br from-accent-yellow/20 via-accent-primary/20 to-accent-green/20 transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`} />
-              )}
+              {(() => {
+                const desktopSrc = getImageSrc(slide.desktopImage || slide.image);
+                const mobileSrc = getImageSrc(slide.mobileImage || slide.image);
+
+                if (!desktopSrc && !mobileSrc) {
+                  return <div className={`w-full h-full bg-gradient-to-br from-accent-yellow/20 via-accent-primary/20 to-accent-green/20 transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`} />;
+                }
+
+                return (
+                  <>
+                    {/* Desktop Image - hidden on mobile, shown on md+ */}
+                    {desktopSrc && (
+                      <Image
+                        src={desktopSrc}
+                        alt={slide.heading}
+                        fill
+                        className={`object-cover hidden md:block transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`}
+                        priority={index === 0}
+                        quality={90}
+                        unoptimized
+                      />
+                    )}
+                    {/* Mobile Image - shown on mobile, hidden on md+ */}
+                    {mobileSrc && (
+                      <Image
+                        src={mobileSrc}
+                        alt={slide.heading}
+                        fill
+                        className={`object-cover md:hidden transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`}
+                        priority={index === 0}
+                        quality={90}
+                        unoptimized
+                      />
+                    )}
+                  </>
+                );
+              })()}
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/40" />
             </div>
@@ -128,7 +171,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                 <div className="max-w-4xl">
                   {/* Heading */}
                   <h1
-                    className={`font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white mb-6 sm:mb-8 md:mb-10 leading-[1.1] ${
+                    className={`font-heading text-5xl sm:text-6xl md:text-6xl lg:text-[6.5rem] font-bold text-white mb-4 sm:mb-6 md:mb-6 leading-[1.1] ${
                       isActive ? getAnimationClasses('delay-100') : getAnimationClasses('')
                     }`}
                   >
@@ -136,7 +179,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                   </h1>
                   {/* Subheading */}
                   <p
-                    className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white/90 mb-8 sm:mb-10 md:mb-12 leading-relaxed max-w-3xl ${
+                    className={`text-lg sm:text-xl md:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 md:mb-10 leading-relaxed max-w-3xl ${
                       isActive ? getAnimationClasses('delay-300') : getAnimationClasses('')
                     }`}
                   >
@@ -147,7 +190,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                     <div className={isActive ? getAnimationClasses('delay-500') : getAnimationClasses('')}>
                       <Link
                         href={slide.ctaLink}
-                        className="inline-block px-8 py-4 sm:px-10 sm:py-5 md:px-12 md:py-6 bg-accent-primary text-white text-base sm:text-lg md:text-xl font-semibold rounded-full hover:bg-accent-primary/90 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-accent-primary/50"
+                        className="inline-block px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-5 bg-accent-primary text-white text-sm sm:text-base md:text-lg font-semibold rounded-full hover:bg-accent-primary/90 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-accent-primary/50"
                       >
                         {slide.ctaText}
                       </Link>

@@ -86,7 +86,9 @@ export default async function Home() {
     },
   ];
 
-  const slides = heroSlides && heroSlides.length > 0 ? heroSlides : defaultSlides;
+  // Use defaultSlides until images are uploaded to Sanity CMS
+  // Sanity currently has slides with null images, so we use defaults with /public images
+  const slides = defaultSlides;
 
   return (
     <>

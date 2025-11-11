@@ -6,6 +6,7 @@ import { schemaTypes } from './sanity/schemas';
 const config: Config = defineConfig({
   name: 'default',
   title: 'Long Life',
+  basePath: '/studio',
 
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
