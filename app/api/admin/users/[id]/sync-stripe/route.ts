@@ -3,6 +3,9 @@ import { createServerClient } from '@/lib/supabase/server';
 import { isCurrentUserAdmin } from '@/lib/admin';
 import { getCustomerSubscriptions } from '@/lib/stripe';
 
+// Force dynamic rendering to prevent build-time Stripe client initialization
+export const dynamic = 'force-dynamic';
+
 export async function POST(
   _req: NextRequest,
   { params }: { params: { id: string } }
