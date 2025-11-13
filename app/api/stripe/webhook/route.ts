@@ -3,6 +3,8 @@ import Stripe from 'stripe';
 import { stripe } from '@/lib/stripe';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { upsertSubscription, createPurchase, updatePurchaseStatus } from '@/lib/subscription';
+import { completeReferral } from '@/lib/referral-utils';
+import { trackServerEvent } from '@/lib/analytics';
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -115,12 +117,22 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       .eq('id', userId);
   }
 
+  // Handle tier upgrade purchases
+  if (metadata?.type === 'tier_upgrade' && userId && metadata?.newTier) {
+    await handleTierUpgrade(userId, metadata.newTier);
+  }
+
   // Handle subscription checkout
   if (mode === 'subscription' && subscription) {
     const stripeSubscription = await stripe.subscriptions.retrieve(
       typeof subscription === 'string' ? subscription : subscription.id
     );
     await handleSubscriptionChange(stripeSubscription);
+
+    // Complete referral if this is the first subscription
+    if (userId) {
+      await completeReferral(userId);
+    }
   }
 
   // Handle one-time payment checkout
@@ -128,6 +140,11 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     const paymentIntentId = typeof payment_intent === 'string' ? payment_intent : payment_intent.id;
     const stripePaymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
     await handlePaymentIntentSucceeded(stripePaymentIntent);
+
+    // Complete referral if this is the first purchase
+    if (userId) {
+      await completeReferral(userId);
+    }
   }
 }
 
@@ -342,4 +359,38 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
   });
 
   console.log(`One-time purchase ${id} succeeded for user ${profile.id}`);
+}
+
+/**
+ * Handle tier upgrade purchase
+ */
+async function handleTierUpgrade(userId: string, newTier: string) {
+  const supabase = createServiceRoleClient();
+
+  // Get current tier
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('partnership_tier')
+    .eq('id', userId)
+    .single();
+
+  const oldTier = profile?.partnership_tier || 'none';
+
+  // Update user's tier
+  await supabase
+    .from('profiles')
+    .update({
+      partnership_tier: newTier,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', userId);
+
+  // Track analytics event
+  await trackServerEvent('tier_upgraded', {
+    userId,
+    oldTier,
+    newTier,
+  });
+
+  console.log(`User ${userId} tier upgraded from ${oldTier} to ${newTier}`);
 }
