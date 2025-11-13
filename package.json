@@ -12,7 +12,15 @@
     "sanity:deploy": "sanity deploy",
     "seed": "tsx scripts/seed.ts",
     "export:sanity": "sanity dataset export production backup.tar.gz",
-    "import:sanity": "sanity dataset import backup.tar.gz production"
+    "import:sanity": "sanity dataset import backup.tar.gz production",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:checkout": "playwright test tests/e2e/checkout",
+    "test:visual": "playwright test tests/e2e/ui",
+    "test:report": "playwright show-report",
+    "test:ci": "playwright test --reporter=github"
   },
   "dependencies": {
     "@portabletext/react": "^5.0.0",

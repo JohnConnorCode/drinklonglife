@@ -359,6 +359,105 @@ npm run studio                            # Run Sanity dev server (separate)
 npm run sanity:deploy                     # Deploy Sanity Studio to CDN
 ```
 
+## Testing
+
+### E2E Tests with Playwright
+
+The project includes comprehensive end-to-end tests covering checkout flows, subscription handling, and UI components.
+
+#### Test Setup
+
+Before running tests, validate your environment:
+
+```bash
+# Run environment validation script
+bash scripts/setup-test-env.sh
+```
+
+This will check:
+- Node.js version (18+ required)
+- Playwright installation
+- Required environment variables
+- Test directory structure
+
+#### Running Tests
+
+```bash
+# Run all E2E tests (headless)
+npm run test:e2e
+
+# Run tests with visible browser
+npm run test:e2e:headed
+
+# Run tests with Playwright UI (interactive)
+npm run test:e2e:ui
+
+# Run tests in debug mode
+npm run test:e2e:debug
+
+# Run only checkout tests
+npm run test:checkout
+
+# Run only visual/UI tests
+npm run test:visual
+
+# View test report
+npm run test:report
+
+# Run tests in CI mode (GitHub Actions format)
+npm run test:ci
+```
+
+#### Test Structure
+
+```
+tests/
+  e2e/
+    checkout/
+      guest-checkout.spec.ts          # Guest checkout flow
+      authenticated-checkout.spec.ts  # Logged-in user checkout
+      subscription-checkout.spec.ts   # Subscription purchases
+      checkout-errors.spec.ts         # Error handling
+      webhook-verification.spec.ts    # Stripe webhook tests
+    ui/
+      homepage.spec.ts                # Homepage rendering
+      blend-pages.spec.ts             # Product pages
+      navigation.spec.ts              # Site navigation
+      responsive.spec.ts              # Mobile/tablet views
+      image-loading.spec.ts           # Image optimization
+```
+
+#### Continuous Integration
+
+Tests run automatically on:
+- Pull requests to `main`
+- Pushes to `main`
+- Manual workflow dispatch
+
+See `.github/workflows/e2e-tests.yml` for CI configuration.
+
+#### Environment Variables for Testing
+
+Required in `.env.local` and GitHub Secrets:
+
+```env
+# Public
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SANITY_PROJECT_ID=xxx
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxx
+NEXT_PUBLIC_SUPABASE_URL=xxx
+NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
+
+# Private (for backend tests)
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+SANITY_READ_TOKEN=xxx
+SUPABASE_SERVICE_ROLE_KEY=xxx
+```
+
+**Note**: Use TEST mode Stripe keys for local development. Production keys are only needed in the production environment.
+
 ## Adding Features
 
 ### Add a New Page
