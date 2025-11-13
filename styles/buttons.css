@@ -1,0 +1,92 @@
+/* Button System - Global Styles */
+
+/* Primary Buttons */
+.btn-primary {
+  @apply px-6 py-3 bg-accent-primary text-white rounded-lg font-semibold;
+  @apply hover:opacity-90 transition-all shadow-md hover:shadow-lg;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-primary-lg {
+  @apply px-8 py-4 bg-accent-primary text-white rounded-lg font-semibold text-lg;
+  @apply hover:opacity-90 transition-all shadow-lg hover:shadow-xl;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-primary-sm {
+  @apply px-4 py-2 bg-accent-primary text-white rounded-md font-medium text-sm;
+  @apply hover:opacity-90 transition-all shadow-sm hover:shadow-md;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Secondary Buttons */
+.btn-secondary {
+  @apply px-6 py-3 bg-white text-accent-primary border-2 border-accent-primary rounded-lg font-semibold;
+  @apply hover:bg-accent-primary hover:text-white transition-all;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-secondary-lg {
+  @apply px-8 py-4 bg-white text-accent-primary border-2 border-accent-primary rounded-lg font-semibold text-lg;
+  @apply hover:bg-accent-primary hover:text-white transition-all;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-secondary-sm {
+  @apply px-4 py-2 bg-white text-accent-primary border-2 border-accent-primary rounded-md font-medium text-sm;
+  @apply hover:bg-accent-primary hover:text-white transition-all;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Ghost Buttons */
+.btn-ghost {
+  @apply px-6 py-3 bg-transparent text-gray-700 border-2 border-gray-300 rounded-lg font-semibold;
+  @apply hover:border-gray-400 hover:bg-gray-50 transition-all;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Success Buttons */
+.btn-success {
+  @apply px-6 py-3 bg-green-600 text-white rounded-lg font-semibold;
+  @apply hover:bg-green-700 transition-all shadow-md hover:shadow-lg;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Danger Buttons */
+.btn-danger {
+  @apply px-6 py-3 bg-red-600 text-white rounded-lg font-semibold;
+  @apply hover:bg-red-700 transition-all shadow-md hover:shadow-lg;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Link Buttons */
+.btn-link {
+  @apply text-accent-primary hover:text-accent-dark font-semibold underline;
+  @apply transition-colors;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Icon Buttons */
+.btn-icon {
+  @apply p-2 rounded-lg hover:bg-gray-100 transition-colors;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Gradient Buttons */
+.btn-gradient {
+  @apply px-6 py-3 bg-gradient-to-r from-accent-primary to-accent-green text-white rounded-lg font-semibold;
+  @apply hover:from-accent-dark hover:to-accent-green transition-all shadow-md hover:shadow-lg;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-gradient-purple {
+  @apply px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold;
+  @apply hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-gradient-gold {
+  @apply px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg font-semibold;
+  @apply hover:from-yellow-600 hover:to-yellow-700 transition-all shadow-md hover:shadow-lg;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}

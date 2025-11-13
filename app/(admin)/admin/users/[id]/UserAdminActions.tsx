@@ -1,0 +1,166 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+interface UserAdminActionsProps {
+  userId: string;
+  currentTier: string;
+  stripeCustomerId: string | null;
+}
+
+export function UserAdminActions({
+  userId,
+  currentTier,
+  stripeCustomerId,
+}: UserAdminActionsProps) {
+  const router = useRouter();
+  const [selectedTier, setSelectedTier] = useState(currentTier);
+  const [updating, setUpdating] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleUpdateTier = async () => {
+    if (selectedTier === currentTier) {
+      setMessage({ type: 'error', text: 'Tier is already set to this value' });
+      return;
+    }
+
+    setUpdating(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch(`/api/admin/users/${userId}/update-tier`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tier: selectedTier }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update tier');
+      }
+
+      setMessage({ type: 'success', text: 'Tier updated successfully!' });
+      router.refresh();
+    } catch (error) {
+      console.error('Update tier error:', error);
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to update tier',
+      });
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleSyncStripe = async () => {
+    if (!stripeCustomerId) {
+      setMessage({ type: 'error', text: 'User does not have a Stripe customer ID' });
+      return;
+    }
+
+    setSyncing(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch(`/api/admin/users/${userId}/sync-stripe`, {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to sync from Stripe');
+      }
+
+      setMessage({ type: 'success', text: 'Successfully synced from Stripe!' });
+      router.refresh();
+    } catch (error) {
+      console.error('Sync Stripe error:', error);
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to sync from Stripe',
+      });
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow p-6 space-y-6">
+      <h2 className="font-semibold text-lg">Admin Actions</h2>
+
+      {/* Message */}
+      {message && (
+        <div
+          className={`p-4 rounded-lg ${
+            message.type === 'success'
+              ? 'bg-green-50 border border-green-200 text-green-700'
+              : 'bg-red-50 border border-red-200 text-red-700'
+          }`}
+        >
+          <p className="text-sm font-medium">{message.text}</p>
+        </div>
+      )}
+
+      {/* Update Partnership Tier */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Partnership Tier
+        </label>
+        <div className="flex gap-3">
+          <select
+            value={selectedTier}
+            onChange={(e) => setSelectedTier(e.target.value)}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            disabled={updating}
+          >
+            <option value="none">Standard (None)</option>
+            <option value="affiliate">Affiliate</option>
+            <option value="partner">Partner</option>
+            <option value="vip">VIP</option>
+          </select>
+          <button
+            onClick={handleUpdateTier}
+            disabled={updating || selectedTier === currentTier}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {updating ? 'Updating...' : 'Update Tier'}
+          </button>
+        </div>
+        <p className="mt-2 text-sm text-gray-500">
+          Current: <span className="font-semibold capitalize">{currentTier === 'none' ? 'Standard' : currentTier}</span>
+        </p>
+      </div>
+
+      {/* Sync from Stripe */}
+      <div className="pt-6 border-t border-gray-200">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-medium text-gray-900 mb-1">
+              Re-sync from Stripe
+            </h3>
+            <p className="text-sm text-gray-600 max-w-md">
+              Fetch the latest subscription data from Stripe and update this user's profile.
+              Use this if webhooks failed or data is out of sync.
+            </p>
+          </div>
+          <button
+            onClick={handleSyncStripe}
+            disabled={syncing || !stripeCustomerId}
+            className="px-6 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {syncing ? 'Syncing...' : 'Sync Now'}
+          </button>
+        </div>
+        {!stripeCustomerId && (
+          <p className="mt-2 text-sm text-yellow-600">
+            ⚠️ User does not have a Stripe customer ID yet
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

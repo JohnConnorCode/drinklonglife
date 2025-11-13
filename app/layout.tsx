@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Jost } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import '@/styles/globals.css';
 
 const jost = Jost({
@@ -20,7 +21,10 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className={jost.variable}>
-      <body className="bg-white text-black font-sans">{children}</body>
+      <body className="bg-white text-black font-sans">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

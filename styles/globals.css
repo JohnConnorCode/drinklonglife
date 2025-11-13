@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global UI System */
+@import './buttons.css';
+@import './containers.css';
+@import './typography.css';
+
 :root {
   --bg: #ffffff;
   --fg: #000000;

@@ -22,6 +22,12 @@ import processPage from './processPage';
 import ingredientsSourcingPage from './ingredientsSourcingPage';
 import subscriptionsPage from './subscriptionsPage';
 import wholesalePage from './wholesalePage';
+import stripeProduct from './stripeProduct';
+import subscriptionPageSettings from './subscriptionPageSettings';
+import partnershipPerk from './partnershipPerk';
+import userDiscount from './userDiscount';
+import upsellOffer from './upsellOffer';
+import referralReward from './referralReward';
 
 export const schemaTypes = [
   blockContent,
@@ -48,4 +54,10 @@ export const schemaTypes = [
   cta,
   testimonial,
   teamMember,
+  stripeProduct,
+  subscriptionPageSettings,
+  partnershipPerk,
+  userDiscount,
+  upsellOffer,
+  referralReward,
 ];

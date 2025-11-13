@@ -1,0 +1,115 @@
+/* Container System - Global Styles */
+
+/* Page Containers */
+.container-page {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+}
+
+.container-page-wide {
+  @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8;
+}
+
+.container-page-narrow {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+}
+
+/* Card Containers */
+.card {
+  @apply bg-white rounded-lg shadow-md p-6 border border-gray-100;
+}
+
+.card-lg {
+  @apply bg-white rounded-xl shadow-lg p-8 border border-gray-100;
+}
+
+.card-sm {
+  @apply bg-white rounded-md shadow-sm p-4 border border-gray-100;
+}
+
+.card-hover {
+  @apply bg-white rounded-lg shadow-md p-6 border border-gray-100;
+  @apply hover:shadow-lg hover:border-accent-primary/20 transition-all;
+}
+
+/* Feature Cards */
+.card-feature {
+  @apply bg-gradient-to-br from-accent-cream to-white rounded-xl shadow-lg p-8;
+  @apply border-2 border-accent-yellow/20;
+}
+
+.card-feature-primary {
+  @apply bg-gradient-to-br from-accent-yellow/10 to-accent-green/10 rounded-xl shadow-lg p-8;
+  @apply border-2 border-accent-yellow/30;
+}
+
+.card-feature-secondary {
+  @apply bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-lg p-8;
+  @apply border-2 border-purple-200;
+}
+
+/* Grid Layouts */
+.grid-cards {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.grid-cards-2 {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.grid-cards-4 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+}
+
+/* Section Containers */
+.section {
+  @apply py-16 md:py-24;
+}
+
+.section-lg {
+  @apply py-24 md:py-32;
+}
+
+.section-sm {
+  @apply py-8 md:py-12;
+}
+
+/* Content Containers */
+.content-prose {
+  @apply max-w-3xl mx-auto prose prose-lg;
+  @apply prose-headings:font-heading prose-headings:font-bold;
+  @apply prose-a:text-accent-primary prose-a:no-underline hover:prose-a:underline;
+}
+
+/* Banner Containers */
+.banner {
+  @apply rounded-lg p-4 border-2;
+}
+
+.banner-info {
+  @apply bg-blue-50 border-blue-200 text-blue-800;
+}
+
+.banner-success {
+  @apply bg-green-50 border-green-200 text-green-800;
+}
+
+.banner-warning {
+  @apply bg-yellow-50 border-yellow-200 text-yellow-800;
+}
+
+.banner-error {
+  @apply bg-red-50 border-red-200 text-red-800;
+}
+
+/* Stats Containers */
+.stats-card {
+  @apply bg-white rounded-xl shadow-lg p-6;
+}
+
+.stats-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+}
+
+.stats-grid-4 {
+  @apply grid grid-cols-2 md:grid-cols-4 gap-4;
+}
