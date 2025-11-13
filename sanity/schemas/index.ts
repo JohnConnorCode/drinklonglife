@@ -26,6 +26,8 @@ import stripeProduct from './stripeProduct';
 import subscriptionPageSettings from './subscriptionPageSettings';
 import partnershipPerk from './partnershipPerk';
 import userDiscount from './userDiscount';
+import upsellOffer from './upsellOffer';
+import referralReward from './referralReward';
 
 export const schemaTypes = [
   blockContent,
@@ -56,4 +58,6 @@ export const schemaTypes = [
   subscriptionPageSettings,
   partnershipPerk,
   userDiscount,
+  upsellOffer,
+  referralReward,
 ];

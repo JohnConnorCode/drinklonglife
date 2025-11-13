@@ -52,6 +52,12 @@ export default async function AdminLayout({
                 >
                   Discounts
                 </Link>
+                <Link
+                  href="/admin/settings"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Settings
+                </Link>
               </nav>
             </div>
             <div className="flex items-center gap-4">
