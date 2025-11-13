@@ -66,14 +66,16 @@ export async function POST(req: NextRequest) {
 
     // If not found, try legacy inline sizes system
     if (!product || !product.variant) {
+      // Check for both one-time and subscription price IDs
       const blendWithSize = await client.fetch(
-        `*[_type == "blend" && defined(sizes) && $priceId in sizes[].stripePriceId][0]{
+        `*[_type == "blend" && defined(sizes) && ($priceId in sizes[].stripePriceId || $priceId in sizes[].stripeSubscriptionPriceId)][0]{
           _id,
           name,
-          "size": sizes[stripePriceId == $priceId][0]{
+          "size": sizes[stripePriceId == $priceId || stripeSubscriptionPriceId == $priceId][0]{
             _key,
             size,
-            stripePriceId
+            stripePriceId,
+            stripeSubscriptionPriceId
           }
         }`,
         { priceId }
@@ -90,6 +92,9 @@ export async function POST(req: NextRequest) {
       metadata.blendId = blendWithSize._id;
       metadata.blendName = blendWithSize.name;
       metadata.sizeKey = blendWithSize.size._key || blendWithSize.size.size;
+
+      // Add mode to metadata for tracking
+      metadata.checkoutMode = mode;
     } else {
       // Use stripeProduct data for metadata
       metadata.productId = product.stripeProductId;
