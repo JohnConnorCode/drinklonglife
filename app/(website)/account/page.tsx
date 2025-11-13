@@ -11,6 +11,7 @@ import { getActiveUser, calculateProfileCompletion, shouldShowProfileCompletion 
 import { getReferralStats } from '@/lib/referral-utils';
 import { ProfileCompletionCard } from '@/components/account/ProfileCompletionCard';
 import { ReferralShareCard } from '@/components/account/ReferralShareCard';
+import { SuccessNotification } from '@/components/account/SuccessNotification';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 
 export const metadata: Metadata = {
@@ -48,9 +49,11 @@ export default async function AccountPage() {
   const referralStats = isFeatureEnabled('referrals_enabled') ? await getReferralStats(user.id) : null;
 
   return (
-    <Section className="min-h-screen bg-gradient-to-br from-accent-cream via-white to-accent-yellow/10 py-16">
-      <div className="max-w-6xl mx-auto">
-        {/* Header with Navigation */}
+    <>
+      <SuccessNotification />
+      <Section className="min-h-screen bg-gradient-to-br from-accent-cream via-white to-accent-yellow/10 py-16">
+        <div className="max-w-6xl mx-auto">
+          {/* Header with Navigation */}
         <FadeIn direction="up" delay={0.1}>
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -324,12 +327,13 @@ export default async function AccountPage() {
             ) : (
               <div className="space-y-3">
                 {purchases.map((purchase) => (
-                  <div
+                  <Link
                     key={purchase.id}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    href={`/account/orders/${purchase.id}`}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group cursor-pointer"
                   >
-                    <div>
-                      <p className="font-medium">
+                    <div className="flex-1">
+                      <p className="font-medium group-hover:text-accent-primary transition-colors">
                         {purchase.size_key ? purchase.size_key.replace('_', ' ') : 'Purchase'}
                       </p>
                       <p className="text-sm text-gray-500">
@@ -340,15 +344,30 @@ export default async function AccountPage() {
                         })}
                       </p>
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold">
-                        {formatPrice(purchase.amount, purchase.currency)}
-                      </p>
-                      <p className="text-sm text-gray-500 capitalize">
-                        {purchase.status}
-                      </p>
+                    <div className="text-right flex items-center gap-3">
+                      <div>
+                        <p className="font-semibold">
+                          {formatPrice(purchase.amount, purchase.currency)}
+                        </p>
+                        <p className="text-sm text-gray-500 capitalize">
+                          {purchase.status}
+                        </p>
+                      </div>
+                      <svg
+                        className="w-5 h-5 text-gray-400 group-hover:text-accent-primary transition-colors"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
@@ -406,7 +425,8 @@ export default async function AccountPage() {
             </a>
           </div>
         </FadeIn>
-      </div>
-    </Section>
+        </div>
+      </Section>
+    </>
   );
 }
