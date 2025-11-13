@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { createServerClient } from '@/lib/supabase/server';
 import { getUserSubscriptions, getUserPurchases } from '@/lib/subscription';
 import { Section } from '@/components/Section';
 import { FadeIn } from '@/components/animations';
@@ -14,14 +13,22 @@ export const metadata: Metadata = {
 };
 
 export default async function AccountPage() {
-  const session = await getServerSession(authOptions);
+  const supabase = createServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!session?.user) {
-    redirect('/api/auth/signin?callbackUrl=/account');
+  if (!user) {
+    redirect('/login?redirectTo=/account');
   }
 
-  const subscriptions = await getUserSubscriptions(session.user.id);
-  const purchases = await getUserPurchases(session.user.id);
+  // Get user profile
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name, email')
+    .eq('id', user.id)
+    .single();
+
+  const subscriptions = await getUserSubscriptions(user.id);
+  const purchases = await getUserPurchases(user.id);
 
   const activeSubscriptions = subscriptions.filter(s =>
     ['active', 'trialing'].includes(s.status)
@@ -40,7 +47,7 @@ export default async function AccountPage() {
               My Account
             </h1>
             <p className="text-xl text-gray-600">
-              Welcome back, {session.user.name || session.user.email}
+              Welcome back, {profile?.name || profile?.email || user.email}
             </p>
           </div>
         </FadeIn>

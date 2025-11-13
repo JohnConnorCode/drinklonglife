@@ -1,27 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { createServerClient } from '@/lib/supabase/server';
 import { createBillingPortalSession } from '@/lib/stripe';
-import { prisma } from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const supabase = createServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
 
-    if (!session?.user) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized. Please sign in.' },
         { status: 401 }
       );
     }
 
-    // Get user's Stripe customer ID
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { stripeCustomerId: true },
-    });
+    // Get user's Stripe customer ID from profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('stripe_customer_id')
+      .eq('id', user.id)
+      .single();
 
-    if (!user?.stripeCustomerId) {
+    if (!profile?.stripe_customer_id) {
       return NextResponse.json(
         { error: 'No subscription found. Please subscribe first.' },
         { status: 404 }
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     // Create billing portal session
     const portalSession = await createBillingPortalSession({
-      customerId: user.stripeCustomerId,
+      customerId: profile.stripe_customer_id,
       returnUrl,
     });
 

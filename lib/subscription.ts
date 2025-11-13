@@ -1,5 +1,36 @@
-import { prisma } from './prisma';
-import { User, Subscription, Purchase } from '@prisma/client';
+import { createServiceRoleClient } from './supabase/server';
+
+export interface Subscription {
+  id: string;
+  user_id: string;
+  stripe_subscription_id: string;
+  stripe_customer_id: string;
+  stripe_price_id: string;
+  stripe_product_id: string;
+  tier_key: string | null;
+  size_key: string | null;
+  status: string;
+  current_period_start: string | null;
+  current_period_end: string | null;
+  cancel_at_period_end: boolean;
+  canceled_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Purchase {
+  id: string;
+  user_id: string;
+  stripe_payment_intent_id: string | null;
+  stripe_price_id: string;
+  stripe_product_id: string;
+  size_key: string | null;
+  amount: number;
+  currency: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
 
 /**
  * Check if user has an active subscription to a specific tier
@@ -9,17 +40,22 @@ export async function isUserSubscribedToTier(
   tierKey: string
 ): Promise<boolean> {
   try {
-    const subscription = await prisma.subscription.findFirst({
-      where: {
-        userId,
-        tierKey,
-        status: {
-          in: ['active', 'trialing'],
-        },
-      },
-    });
+    const supabase = createServiceRoleClient();
 
-    return !!subscription;
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('tier_key', tierKey)
+      .in('status', ['active', 'trialing'])
+      .limit(1);
+
+    if (error) {
+      console.error(`Error checking subscription for user ${userId}:`, error);
+      return false;
+    }
+
+    return (data?.length ?? 0) > 0;
   } catch (error) {
     console.error(`Error checking subscription for user ${userId}:`, error);
     return false;
@@ -31,16 +67,21 @@ export async function isUserSubscribedToTier(
  */
 export async function hasActiveSubscription(userId: string): Promise<boolean> {
   try {
-    const subscription = await prisma.subscription.findFirst({
-      where: {
-        userId,
-        status: {
-          in: ['active', 'trialing'],
-        },
-      },
-    });
+    const supabase = createServiceRoleClient();
 
-    return !!subscription;
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .select('id')
+      .eq('user_id', userId)
+      .in('status', ['active', 'trialing'])
+      .limit(1);
+
+    if (error) {
+      console.error(`Error checking active subscription for user ${userId}:`, error);
+      return false;
+    }
+
+    return (data?.length ?? 0) > 0;
   } catch (error) {
     console.error(`Error checking active subscription for user ${userId}:`, error);
     return false;
@@ -55,15 +96,22 @@ export async function hasUserPurchasedVariant(
   sizeKey: string
 ): Promise<boolean> {
   try {
-    const purchase = await prisma.purchase.findFirst({
-      where: {
-        userId,
-        sizeKey,
-        status: 'succeeded',
-      },
-    });
+    const supabase = createServiceRoleClient();
 
-    return !!purchase;
+    const { data, error } = await supabase
+      .from('purchases')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('size_key', sizeKey)
+      .eq('status', 'succeeded')
+      .limit(1);
+
+    if (error) {
+      console.error(`Error checking variant purchase for user ${userId}:`, error);
+      return false;
+    }
+
+    return (data?.length ?? 0) > 0;
   } catch (error) {
     console.error(`Error checking variant purchase for user ${userId}:`, error);
     return false;
@@ -78,15 +126,22 @@ export async function hasOneTimePurchase(
   stripePriceId: string
 ): Promise<boolean> {
   try {
-    const purchase = await prisma.purchase.findFirst({
-      where: {
-        userId,
-        stripePriceId,
-        status: 'succeeded',
-      },
-    });
+    const supabase = createServiceRoleClient();
 
-    return !!purchase;
+    const { data, error } = await supabase
+      .from('purchases')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('stripe_price_id', stripePriceId)
+      .eq('status', 'succeeded')
+      .limit(1);
+
+    if (error) {
+      console.error(`Error checking one-time purchase for user ${userId}:`, error);
+      return false;
+    }
+
+    return (data?.length ?? 0) > 0;
   } catch (error) {
     console.error(`Error checking one-time purchase for user ${userId}:`, error);
     return false;
@@ -94,18 +149,24 @@ export async function hasOneTimePurchase(
 }
 
 /**
- * Get all active subscriptions for a user
+ * Get all subscriptions for a user
  */
 export async function getUserSubscriptions(userId: string): Promise<Subscription[]> {
   try {
-    return await prisma.subscription.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    const supabase = createServiceRoleClient();
+
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error(`Error fetching subscriptions for user ${userId}:`, error);
+      return [];
+    }
+
+    return data || [];
   } catch (error) {
     console.error(`Error fetching subscriptions for user ${userId}:`, error);
     return [];
@@ -117,15 +178,21 @@ export async function getUserSubscriptions(userId: string): Promise<Subscription
  */
 export async function getUserPurchases(userId: string): Promise<Purchase[]> {
   try {
-    return await prisma.purchase.findMany({
-      where: {
-        userId,
-        status: 'succeeded',
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    const supabase = createServiceRoleClient();
+
+    const { data, error} = await supabase
+      .from('purchases')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('status', 'succeeded')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error(`Error fetching purchases for user ${userId}:`, error);
+      return [];
+    }
+
+    return data || [];
   } catch (error) {
     console.error(`Error fetching purchases for user ${userId}:`, error);
     return [];
@@ -139,17 +206,27 @@ export async function getActiveSubscription(
   userId: string
 ): Promise<Subscription | null> {
   try {
-    return await prisma.subscription.findFirst({
-      where: {
-        userId,
-        status: {
-          in: ['active', 'trialing'],
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    const supabase = createServiceRoleClient();
+
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', userId)
+      .in('status', ['active', 'trialing'])
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // No rows returned
+        return null;
+      }
+      console.error(`Error fetching active subscription for user ${userId}:`, error);
+      return null;
+    }
+
+    return data;
   } catch (error) {
     console.error(`Error fetching active subscription for user ${userId}:`, error);
     return null;
@@ -163,12 +240,13 @@ export async function isSubscriptionExpiringSoon(userId: string): Promise<boolea
   try {
     const subscription = await getActiveSubscription(userId);
 
-    if (!subscription || !subscription.currentPeriodEnd) {
+    if (!subscription || !subscription.current_period_end) {
       return false;
     }
 
+    const expiryDate = new Date(subscription.current_period_end);
     const daysUntilExpiry = Math.ceil(
-      (subscription.currentPeriodEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+      (expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
     );
 
     return daysUntilExpiry <= 7 && daysUntilExpiry > 0;
@@ -185,11 +263,23 @@ export async function getSubscriptionByStripeId(
   stripeSubscriptionId: string
 ): Promise<Subscription | null> {
   try {
-    return await prisma.subscription.findUnique({
-      where: {
-        stripeSubscriptionId,
-      },
-    });
+    const supabase = createServiceRoleClient();
+
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('stripe_subscription_id', stripeSubscriptionId)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return null;
+      }
+      console.error(`Error fetching subscription ${stripeSubscriptionId}:`, error);
+      return null;
+    }
+
+    return data;
   } catch (error) {
     console.error(`Error fetching subscription ${stripeSubscriptionId}:`, error);
     return null;
@@ -212,58 +302,62 @@ export async function upsertSubscription(data: {
   currentPeriodEnd?: Date;
   cancelAtPeriodEnd?: boolean;
   canceledAt?: Date;
-}): Promise<Subscription> {
-  // Try to find existing subscription
-  const existing = await prisma.subscription.findUnique({
-    where: { stripeSubscriptionId: data.stripeSubscriptionId },
-  });
+}): Promise<Subscription | null> {
+  try {
+    const supabase = createServiceRoleClient();
 
-  // If updating and no userId provided, use existing userId
-  const finalUserId = data.userId || existing?.userId;
+    // If no userId provided, try to find user by Stripe customer ID
+    let userId = data.userId;
+    if (!userId) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('stripe_customer_id', data.stripeCustomerId)
+        .single();
 
-  if (!finalUserId) {
-    // Try to find user by Stripe customer ID
-    const user = await prisma.user.findUnique({
-      where: { stripeCustomerId: data.stripeCustomerId },
-    });
+      if (!profile) {
+        console.error(
+          `Cannot upsert subscription: no user found for customer ${data.stripeCustomerId}`
+        );
+        return null;
+      }
 
-    if (!user) {
-      throw new Error(
-        `Cannot create subscription: no user found for customer ${data.stripeCustomerId}`
-      );
+      userId = profile.id;
     }
 
-    data.userId = user.id;
-  }
+    const subscriptionData = {
+      user_id: userId,
+      stripe_customer_id: data.stripeCustomerId,
+      stripe_subscription_id: data.stripeSubscriptionId,
+      stripe_price_id: data.stripePriceId,
+      stripe_product_id: data.stripeProductId,
+      tier_key: data.tierKey || null,
+      size_key: data.sizeKey || null,
+      status: data.status,
+      current_period_start: data.currentPeriodStart?.toISOString() || null,
+      current_period_end: data.currentPeriodEnd?.toISOString() || null,
+      cancel_at_period_end: data.cancelAtPeriodEnd ?? false,
+      canceled_at: data.canceledAt?.toISOString() || null,
+    };
 
-  return await prisma.subscription.upsert({
-    where: { stripeSubscriptionId: data.stripeSubscriptionId },
-    create: {
-      userId: data.userId!,
-      stripeCustomerId: data.stripeCustomerId,
-      stripeSubscriptionId: data.stripeSubscriptionId,
-      stripePriceId: data.stripePriceId,
-      stripeProductId: data.stripeProductId,
-      tierKey: data.tierKey,
-      sizeKey: data.sizeKey,
-      status: data.status,
-      currentPeriodStart: data.currentPeriodStart,
-      currentPeriodEnd: data.currentPeriodEnd,
-      cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? false,
-      canceledAt: data.canceledAt,
-    },
-    update: {
-      stripePriceId: data.stripePriceId,
-      stripeProductId: data.stripeProductId,
-      tierKey: data.tierKey,
-      sizeKey: data.sizeKey,
-      status: data.status,
-      currentPeriodStart: data.currentPeriodStart,
-      currentPeriodEnd: data.currentPeriodEnd,
-      cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? false,
-      canceledAt: data.canceledAt,
-    },
-  });
+    const { data: result, error } = await supabase
+      .from('subscriptions')
+      .upsert(subscriptionData, {
+        onConflict: 'stripe_subscription_id',
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error upserting subscription:', error);
+      return null;
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error upserting subscription:', error);
+    return null;
+  }
 }
 
 /**
@@ -278,10 +372,37 @@ export async function createPurchase(data: {
   currency: string;
   status: string;
   stripePaymentIntentId?: string;
-}): Promise<Purchase> {
-  return await prisma.purchase.create({
-    data,
-  });
+}): Promise<Purchase | null> {
+  try {
+    const supabase = createServiceRoleClient();
+
+    const purchaseData = {
+      user_id: data.userId,
+      stripe_price_id: data.stripePriceId,
+      stripe_product_id: data.stripeProductId,
+      size_key: data.sizeKey || null,
+      amount: data.amount,
+      currency: data.currency,
+      status: data.status,
+      stripe_payment_intent_id: data.stripePaymentIntentId || null,
+    };
+
+    const { data: result, error } = await supabase
+      .from('purchases')
+      .insert(purchaseData)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating purchase:', error);
+      return null;
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error creating purchase:', error);
+    return null;
+  }
 }
 
 /**
@@ -292,10 +413,21 @@ export async function updatePurchaseStatus(
   status: string
 ): Promise<Purchase | null> {
   try {
-    return await prisma.purchase.update({
-      where: { stripePaymentIntentId },
-      data: { status },
-    });
+    const supabase = createServiceRoleClient();
+
+    const { data, error } = await supabase
+      .from('purchases')
+      .update({ status })
+      .eq('stripe_payment_intent_id', stripePaymentIntentId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error(`Error updating purchase ${stripePaymentIntentId}:`, error);
+      return null;
+    }
+
+    return data;
   } catch (error) {
     console.error(`Error updating purchase ${stripePaymentIntentId}:`, error);
     return null;

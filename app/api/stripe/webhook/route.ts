@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { stripe } from '@/lib/stripe';
-import { prisma } from '@/lib/prisma';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 import { upsertSubscription, createPurchase, updatePurchaseStatus } from '@/lib/subscription';
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -104,13 +104,15 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     return;
   }
 
+  const supabase = createServiceRoleClient();
+
   // Update user with Stripe customer ID
   const userId = metadata?.userId;
   if (userId) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { stripeCustomerId: customer },
-    });
+    await supabase
+      .from('profiles')
+      .update({ stripe_customer_id: customer })
+      .eq('id', userId);
   }
 
   // Handle subscription checkout
@@ -153,19 +155,23 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
     return;
   }
 
-  // Find user by Stripe customer ID
-  const user = await prisma.user.findUnique({
-    where: { stripeCustomerId: customer },
-  });
+  const supabase = createServiceRoleClient();
 
-  if (!user) {
+  // Find user by Stripe customer ID
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('stripe_customer_id', customer)
+    .single();
+
+  if (!profile) {
     console.error(`No user found for customer ${customer}`);
     return;
   }
 
   // Upsert subscription
   await upsertSubscription({
-    userId: user.id,
+    userId: profile.id,
     stripeCustomerId: customer,
     stripeSubscriptionId: id,
     stripePriceId: price.id,
@@ -176,10 +182,10 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
     currentPeriodStart: new Date(current_period_start * 1000),
     currentPeriodEnd: new Date(current_period_end * 1000),
     cancelAtPeriodEnd: cancel_at_period_end,
-    canceledAt: canceled_at ? new Date(canceled_at * 1000) : null,
+    canceledAt: canceled_at ? new Date(canceled_at * 1000) : undefined,
   });
 
-  console.log(`Subscription ${id} ${status} for user ${user.id}`);
+  console.log(`Subscription ${id} ${status} for user ${profile.id}`);
 }
 
 /**
@@ -187,14 +193,15 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
  */
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   const { id } = subscription;
+  const supabase = createServiceRoleClient();
 
-  await prisma.subscription.update({
-    where: { stripeSubscriptionId: id },
-    data: {
+  await supabase
+    .from('subscriptions')
+    .update({
       status: 'canceled',
-      canceledAt: new Date(),
-    },
-  });
+      canceled_at: new Date().toISOString(),
+    })
+    .eq('stripe_subscription_id', id);
 
   console.log(`Subscription ${id} deleted`);
 }
@@ -227,11 +234,12 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   }
 
   const subscriptionId = typeof subscription === 'string' ? subscription : subscription.id;
+  const supabase = createServiceRoleClient();
 
-  await prisma.subscription.update({
-    where: { stripeSubscriptionId: subscriptionId },
-    data: { status: 'past_due' },
-  });
+  await supabase
+    .from('subscriptions')
+    .update({ status: 'past_due' })
+    .eq('stripe_subscription_id', subscriptionId);
 
   console.log(`Invoice payment failed for subscription ${subscriptionId}`);
 }
@@ -247,20 +255,26 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
     return;
   }
 
-  // Find user by Stripe customer ID
-  const user = await prisma.user.findUnique({
-    where: { stripeCustomerId: customer },
-  });
+  const supabase = createServiceRoleClient();
 
-  if (!user) {
+  // Find user by Stripe customer ID
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('stripe_customer_id', customer)
+    .single();
+
+  if (!profile) {
     console.error(`No user found for customer ${customer}`);
     return;
   }
 
   // Check if purchase already exists
-  const existingPurchase = await prisma.purchase.findUnique({
-    where: { stripePaymentIntentId: id },
-  });
+  const { data: existingPurchase } = await supabase
+    .from('purchases')
+    .select('id, status')
+    .eq('stripe_payment_intent_id', id)
+    .single();
 
   if (existingPurchase) {
     // Update status if needed
@@ -272,7 +286,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
 
   // Create purchase record
   await createPurchase({
-    userId: user.id,
+    userId: profile.id,
     stripePriceId: metadata?.priceId || '',
     stripeProductId: metadata?.productId || '',
     sizeKey: metadata?.sizeKey,
@@ -282,5 +296,5 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
     stripePaymentIntentId: id,
   });
 
-  console.log(`One-time purchase ${id} succeeded for user ${user.id}`);
+  console.log(`One-time purchase ${id} succeeded for user ${profile.id}`);
 }

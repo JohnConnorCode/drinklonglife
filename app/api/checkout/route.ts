@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { createServerClient } from '@/lib/supabase/server';
 import { createCheckoutSession, getOrCreateCustomer } from '@/lib/stripe';
 import { client } from '@/lib/sanity.client';
-import { prisma } from '@/lib/prisma';
 
 interface CheckoutRequestBody {
   priceId: string;
@@ -14,7 +12,9 @@ interface CheckoutRequestBody {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const supabase = createServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
     const body: CheckoutRequestBody = await req.json();
 
     const { priceId, mode, successPath = '/checkout/success', cancelPath = '/checkout/cancel' } = body;
@@ -75,28 +75,31 @@ export async function POST(req: NextRequest) {
     let customerId: string | undefined;
     let customerEmail: string | undefined;
 
-    if (session?.user) {
-      metadata.userId = session.user.id;
+    if (user) {
+      metadata.userId = user.id;
 
-      // Get or create Stripe customer
-      const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
-      });
+      // Get user profile from Supabase
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('stripe_customer_id, email, name')
+        .eq('id', user.id)
+        .single();
 
-      if (user?.stripeCustomerId) {
-        customerId = user.stripeCustomerId;
-      } else if (user?.email) {
+      if (profile?.stripe_customer_id) {
+        customerId = profile.stripe_customer_id;
+      } else if (profile?.email || user.email) {
+        const email = profile?.email || user.email!;
         const customer = await getOrCreateCustomer({
-          email: user.email,
-          name: user.name || undefined,
+          email,
+          name: profile?.name || user.user_metadata?.name || undefined,
           metadata: { userId: user.id },
         });
 
         // Save customer ID to database
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { stripeCustomerId: customer.id },
-        });
+        await supabase
+          .from('profiles')
+          .update({ stripe_customer_id: customer.id })
+          .eq('id', user.id);
 
         customerId = customer.id;
       }
