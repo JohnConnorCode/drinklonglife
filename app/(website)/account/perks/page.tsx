@@ -6,6 +6,7 @@ import { client } from '@/lib/sanity.client';
 import { Section } from '@/components/Section';
 import { FadeIn, StaggerContainer } from '@/components/animations';
 import { SignOutButton } from '@/components/auth/SignOutButton';
+import { AvailableDiscounts } from '@/components/account/AvailableDiscounts';
 
 export const metadata: Metadata = {
   title: 'Perks & Rewards | Long Life',
@@ -139,7 +140,7 @@ export default async function PerksPage() {
   // Get user's active discounts from database
   const { data: userDiscounts } = await supabase
     .from('user_discounts')
-    .select('discount_code, source, expires_at')
+    .select('id, discount_code, source, expires_at, active')
     .eq('user_id', user.id)
     .eq('active', true);
 
@@ -208,12 +209,19 @@ export default async function PerksPage() {
         {/* Your Active Discounts */}
         {userDiscounts && userDiscounts.length > 0 && (
           <FadeIn direction="up" delay={0.25}>
+            <AvailableDiscounts discounts={userDiscounts} />
+          </FadeIn>
+        )}
+
+        {/* Legacy Discount Display - Remove this block when ready */}
+        {false && userDiscounts && userDiscounts.length > 0 && (
+          <FadeIn direction="up" delay={0.25}>
             <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 border-2 border-accent-green/20">
               <h2 className="font-heading text-2xl font-bold mb-6">
                 🎉 Your Active Discounts
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {userDiscounts.map((discount) => (
+                {userDiscounts.map((discount: any) => (
                   <div
                     key={discount.discount_code}
                     className="p-6 bg-gradient-to-br from-accent-green/10 to-accent-yellow/10 rounded-xl border-2 border-accent-green/20"

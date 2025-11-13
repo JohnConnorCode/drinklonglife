@@ -8,6 +8,7 @@ interface CheckoutButtonProps {
   label?: string;
   className?: string;
   disabled?: boolean;
+  discountCode?: string; // Optional discount code to apply
 }
 
 export function CheckoutButton({
@@ -16,6 +17,7 @@ export function CheckoutButton({
   label = 'Subscribe Now',
   className = '',
   disabled = false,
+  discountCode,
 }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,17 +27,24 @@ export function CheckoutButton({
       setLoading(true);
       setError(null);
 
+      const body: any = {
+        priceId,
+        mode,
+        successPath: '/checkout/success',
+        cancelPath: '/checkout/cancel',
+      };
+
+      // Add discount code if provided
+      if (discountCode) {
+        body.discountCode = discountCode;
+      }
+
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          priceId,
-          mode,
-          successPath: '/checkout/success',
-          cancelPath: '/checkout/cancel',
-        }),
+        body: JSON.stringify(body),
       });
 
       const data = await response.json();

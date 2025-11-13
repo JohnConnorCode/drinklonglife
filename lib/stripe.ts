@@ -109,6 +109,7 @@ export async function createCheckoutSession(
     customerId,
     customerEmail,
     metadata = {},
+    discountCode,
   }: {
     priceId: string;
     mode: 'payment' | 'subscription';
@@ -117,6 +118,7 @@ export async function createCheckoutSession(
     customerId?: string;
     customerEmail?: string;
     metadata?: Record<string, string>;
+    discountCode?: string;
   },
   stripeClient?: Stripe
 ): Promise<Stripe.Checkout.Session> {
@@ -140,6 +142,11 @@ export async function createCheckoutSession(
     sessionParams.customer = customerId;
   } else if (customerEmail) {
     sessionParams.customer_email = customerEmail;
+  }
+
+  // Add discount code if provided (Stripe coupon ID)
+  if (discountCode) {
+    sessionParams.discounts = [{ coupon: discountCode }];
   }
 
   // Add subscription-specific settings

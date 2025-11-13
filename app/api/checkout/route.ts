@@ -11,6 +11,7 @@ interface CheckoutRequestBody {
   cancelPath?: string;
   successUrl?: string;
   cancelUrl?: string;
+  discountCode?: string; // Optional discount/coupon code
 }
 
 export async function POST(req: NextRequest) {
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
       cancelPath,
       successUrl: providedSuccessUrl,
       cancelUrl: providedCancelUrl,
+      discountCode,
     } = body;
 
     // Validate request
@@ -126,6 +128,46 @@ export async function POST(req: NextRequest) {
     // Get dynamic Stripe client based on current mode (test/production)
     const stripeClient = await getStripeClient();
 
+    // Validate discount code if provided
+    let validatedDiscountCode: string | undefined;
+    if (discountCode) {
+      try {
+        // Check if it's a user discount from referrals
+        if (user) {
+          const { data: userDiscount } = await supabase
+            .from('user_discounts')
+            .select('discount_code, stripe_coupon_id, active, expires_at')
+            .eq('user_id', user.id)
+            .eq('discount_code', discountCode.toUpperCase())
+            .eq('active', true)
+            .single();
+
+          if (userDiscount) {
+            // Check if not expired
+            if (!userDiscount.expires_at || new Date(userDiscount.expires_at) > new Date()) {
+              validatedDiscountCode = userDiscount.stripe_coupon_id || discountCode.toUpperCase();
+            }
+          }
+        }
+
+        // If not found as user discount, validate with Stripe directly
+        if (!validatedDiscountCode) {
+          const promoCodes = await stripeClient.promotionCodes.list({
+            code: discountCode.toUpperCase(),
+            active: true,
+            limit: 1,
+          });
+
+          if (promoCodes.data.length > 0 && promoCodes.data[0].coupon) {
+            validatedDiscountCode = promoCodes.data[0].coupon.id;
+          }
+        }
+      } catch (error) {
+        console.error('Discount code validation error:', error);
+        // Continue without discount if validation fails
+      }
+    }
+
     // Create Stripe Checkout Session with dynamic Stripe client
     const checkoutSession = await createCheckoutSession(
       {
@@ -136,6 +178,7 @@ export async function POST(req: NextRequest) {
         customerId,
         customerEmail,
         metadata,
+        discountCode: validatedDiscountCode,
       },
       stripeClient
     );
