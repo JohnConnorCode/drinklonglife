@@ -54,7 +54,8 @@ export function ReserveBlendButton({
       const data = await response.json();
 
       if (data.url) {
-        router.push(data.url);
+        // Use window.location for external redirect to Stripe
+        window.location.href = data.url;
       } else if (data.error) {
         setError(data.error);
       }

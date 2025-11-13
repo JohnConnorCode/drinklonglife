@@ -207,16 +207,7 @@ export const blendQuery = groq`*[_type == "blend" && slug.current == $slug][0]{
   description,
   image ${imageFragment},
   labelColor,
-  "sizes": sizes[]->{
-    _id,
-    name,
-    slug { current },
-    volume,
-    price,
-    servingsPerBottle,
-    description,
-    stripePriceId
-  },
+  sizes,
   "stripeProduct": stripeProduct->{
     _id,
     title,

@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { AnimatedLogo } from './AnimatedLogo';
 import { StaggerContainer } from './animations';
 import { RippleEffect } from './RippleEffect';
-import { createBrowserClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 
 interface HeaderProps {
@@ -24,7 +24,6 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const headerLinks = navigation?.primaryLinks || [];
-  const supabase = createBrowserClient();
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -68,7 +67,7 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase.auth]);
+  }, []);
 
   return (
     <header

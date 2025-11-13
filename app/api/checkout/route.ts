@@ -45,7 +45,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate that priceId exists in Sanity
-    const product = await client.fetch(
+    // Try new stripeProduct system first
+    let product = await client.fetch(
       `*[_type == "stripeProduct" && isActive == true && references($priceId)][0]{
         _id,
         title,
@@ -60,25 +61,47 @@ export async function POST(req: NextRequest) {
       { priceId }
     );
 
-    if (!product || !product.variant) {
-      return NextResponse.json(
-        { error: 'Invalid price ID or product not active' },
-        { status: 404 }
-      );
-    }
-
     // Prepare metadata
-    const metadata: Record<string, string> = {
-      productId: product.stripeProductId,
-      sanityProductId: product._id,
-    };
+    const metadata: Record<string, string> = {};
 
-    if (product.tier_key) {
-      metadata.tier_key = product.tier_key;
-    }
+    // If not found, try legacy inline sizes system
+    if (!product || !product.variant) {
+      const blendWithSize = await client.fetch(
+        `*[_type == "blend" && defined(sizes) && $priceId in sizes[].stripePriceId][0]{
+          _id,
+          name,
+          "size": sizes[stripePriceId == $priceId][0]{
+            _key,
+            size,
+            stripePriceId
+          }
+        }`,
+        { priceId }
+      );
 
-    if (product.variant.size_key) {
-      metadata.size_key = product.variant.size_key;
+      if (!blendWithSize || !blendWithSize.size) {
+        return NextResponse.json(
+          { error: 'Invalid price ID or product not active' },
+          { status: 404 }
+        );
+      }
+
+      // Use blend data for metadata
+      metadata.blendId = blendWithSize._id;
+      metadata.blendName = blendWithSize.name;
+      metadata.sizeKey = blendWithSize.size._key || blendWithSize.size.size;
+    } else {
+      // Use stripeProduct data for metadata
+      metadata.productId = product.stripeProductId;
+      metadata.sanityProductId = product._id;
+
+      if (product.tier_key) {
+        metadata.tier_key = product.tier_key;
+      }
+
+      if (product.variant.size_key) {
+        metadata.size_key = product.variant.size_key;
+      }
     }
 
     // Handle authenticated vs guest checkout

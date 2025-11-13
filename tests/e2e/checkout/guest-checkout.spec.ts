@@ -11,17 +11,9 @@ import { waitForOrder } from '../../helpers/database';
 
 test.describe('Guest Checkout Flow', () => {
   test('should complete guest checkout with valid card', async ({ page }) => {
-    // Navigate to blends page
-    await goToBlends(page);
-
-    // Select first available blend
-    const blendLinks = page.locator('a[href*="/blends/"]').first();
-    await expect(blendLinks).toBeVisible();
-
-    const blendHref = await blendLinks.getAttribute('href');
-    if (blendHref) {
-      await page.goto(blendHref);
-    }
+    // Navigate directly to green bomb blend
+    await page.goto('/blends/green-bomb');
+    await page.waitForLoadState('domcontentloaded');
 
     // Select a size (Most Popular is usually the second one)
     const sizeButtons = page.locator('button:has-text("Reserve Now")');
@@ -47,17 +39,9 @@ test.describe('Guest Checkout Flow', () => {
   });
 
   test('should reject checkout with declined card', async ({ page }) => {
-    // Navigate to blends
-    await goToBlends(page);
-
-    // Select first available blend
-    const blendLinks = page.locator('a[href*="/blends/"]').first();
-    await expect(blendLinks).toBeVisible();
-
-    const blendHref = await blendLinks.getAttribute('href');
-    if (blendHref) {
-      await page.goto(blendHref);
-    }
+    // Navigate directly to green bomb blend
+    await page.goto('/blends/green-bomb');
+    await page.waitForLoadState('domcontentloaded');
 
     // Select a size
     const sizeButtons = page.locator('button:has-text("Reserve Now")');
@@ -67,31 +51,30 @@ test.describe('Guest Checkout Flow', () => {
     // Try checkout with declined card
     const testEmail = `declined-test-${Date.now()}@example.com`;
 
-    // Wait for Stripe checkout
-    await page.waitForURL(/stripe\.com/, { timeout: 30000 }).catch(() => null);
+    // Wait for Stripe checkout (full page redirect, not iframe)
+    await page.waitForURL('**/checkout.stripe.com/**', { timeout: 30000 });
 
-    const stripeFrame = page.frameLocator('iframe[src*="stripe"]').first();
-    const emailInput = stripeFrame.locator('input[type="email"]').first();
+    const emailInput = page.locator('input[type="email"]').first();
 
     await emailInput.waitFor({ timeout: 10000 });
     await emailInput.fill(testEmail);
 
     // Enter declined card
-    const cardInput = stripeFrame.locator('input[placeholder*="card" i], [placeholder*="1111" i]').first();
+    const cardInput = page.locator('input[placeholder*="card" i], [placeholder*="1111" i]').first();
     await cardInput.fill('4000000000000002'); // Declined card
 
-    const expInput = stripeFrame.locator('input[placeholder*="expiration" i], [placeholder*="MM" i]').first();
+    const expInput = page.locator('input[placeholder*="expiration" i], [placeholder*="MM" i]').first();
     await expInput.fill('12/25');
 
-    const cvcInput = stripeFrame.locator('input[placeholder*="CVC" i], [placeholder*="CVV" i]').first();
+    const cvcInput = page.locator('input[placeholder*="CVC" i], [placeholder*="CVV" i]').first();
     await cvcInput.fill('123');
 
     // Try to pay
-    const payButton = stripeFrame.locator('button:has-text("Pay"), button[type="submit"]').first();
+    const payButton = page.locator('button:has-text("Pay"), button[type="submit"]').first();
     await payButton.click();
 
     // Wait for error message
-    const errorMessage = stripeFrame.locator('text=/card declined|not accepted/i').first();
+    const errorMessage = page.locator('text=/card declined|not accepted/i').first();
     await errorMessage.waitFor({ timeout: 10000 }).catch(() => null);
 
     // Should remain on checkout page (not redirect to success)
@@ -100,17 +83,9 @@ test.describe('Guest Checkout Flow', () => {
   });
 
   test('should allow guest to enter custom email', async ({ page }) => {
-    // Navigate to blends
-    await goToBlends(page);
-
-    // Select first available blend
-    const blendLinks = page.locator('a[href*="/blends/"]').first();
-    await expect(blendLinks).toBeVisible();
-
-    const blendHref = await blendLinks.getAttribute('href');
-    if (blendHref) {
-      await page.goto(blendHref);
-    }
+    // Navigate directly to green bomb blend
+    await page.goto('/blends/green-bomb');
+    await page.waitForLoadState('domcontentloaded');
 
     // Select a size
     const sizeButtons = page.locator('button:has-text("Reserve Now")');
@@ -134,15 +109,9 @@ test.describe('Guest Checkout Flow', () => {
   });
 
   test('should display correct pricing on checkout page', async ({ page }) => {
-    // Navigate to blends
-    await goToBlends(page);
-
-    // Select first available blend
-    const blendLinks = page.locator('a[href*="/blends/"]').first();
-    const blendHref = await blendLinks.getAttribute('href');
-    if (blendHref) {
-      await page.goto(blendHref);
-    }
+    // Navigate directly to green bomb blend
+    await page.goto('/blends/green-bomb');
+    await page.waitForLoadState('domcontentloaded');
 
     // Select a size and note the price
     const priceElements = page.locator('text=$');
@@ -162,14 +131,9 @@ test.describe('Guest Checkout Flow', () => {
   });
 
   test('should handle network errors gracefully', async ({ page }) => {
-    // This test verifies error handling
-    await goToBlends(page);
-
-    const blendLinks = page.locator('a[href*="/blends/"]').first();
-    const blendHref = await blendLinks.getAttribute('href');
-    if (blendHref) {
-      await page.goto(blendHref);
-    }
+    // Navigate directly to green bomb blend
+    await page.goto('/blends/green-bomb');
+    await page.waitForLoadState('domcontentloaded');
 
     // Try to initiate checkout
     const sizeButtons = page.locator('button:has-text("Reserve Now")');

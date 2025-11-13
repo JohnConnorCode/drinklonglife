@@ -58,11 +58,11 @@ export async function selectSize(page: Page, sizeName: string): Promise<void> {
  * Wait for Stripe Checkout to load
  */
 export async function waitForStripeCheckout(page: Page, timeoutMs: number = 30000): Promise<void> {
-  // Stripe Checkout loads in an iframe
-  const stripeFrame = page.frameLocator('iframe[src*="stripe"]').first();
+  // Wait for redirect to Stripe Checkout (full page, not iframe)
+  await page.waitForURL('**/checkout.stripe.com/**', { timeout: timeoutMs });
 
-  // Wait for email input to be visible in the iframe
-  const emailInput = stripeFrame.locator('input[type="email"]').first();
+  // Wait for email input to be visible on the page
+  const emailInput = page.locator('input[type="email"]').first();
   await emailInput.waitFor({ timeout: timeoutMs });
 }
 
@@ -70,39 +70,36 @@ export async function waitForStripeCheckout(page: Page, timeoutMs: number = 3000
  * Fill in guest checkout details
  */
 export async function fillGuestCheckout(page: Page, details: CheckoutDetails): Promise<void> {
-  // Get the Stripe iframe
-  const stripeFrame = page.frameLocator('iframe[src*="stripe"]').first();
-
   // Fill email
   if (details.email) {
-    const emailInput = stripeFrame.locator('input[type="email"]').first();
+    const emailInput = page.locator('input[type="email"]').first();
     await emailInput.fill(details.email);
   }
 
   // Fill card information
   if (details.card) {
-    const cardInput = stripeFrame.locator('input[placeholder*="card" i]').first();
+    const cardInput = page.locator('input[placeholder*="card" i]').first();
     await cardInput.fill(details.card.number);
 
-    const expInput = stripeFrame.locator('input[placeholder*="expiration" i], input[placeholder*="MM" i]').first();
+    const expInput = page.locator('input[placeholder*="expiration" i], input[placeholder*="MM" i]').first();
     await expInput.fill(`${details.card.expMonth}/${details.card.expYear}`);
 
-    const cvcInput = stripeFrame.locator('input[placeholder*="CVC" i], input[placeholder*="CVV" i]').first();
+    const cvcInput = page.locator('input[placeholder*="CVC" i], input[placeholder*="CVV" i]').first();
     await cvcInput.fill(details.card.cvc);
   }
 
   // Fill billing address if provided
   if (details.address) {
-    const line1Input = stripeFrame.locator('input[placeholder*="address" i]').first();
+    const line1Input = page.locator('input[placeholder*="address" i]').first();
     await line1Input.fill(details.address.line1);
 
-    const cityInput = stripeFrame.locator('input[placeholder*="city" i]').first();
+    const cityInput = page.locator('input[placeholder*="city" i]').first();
     await cityInput.fill(details.address.city);
 
-    const stateInput = stripeFrame.locator('input[placeholder*="state" i], select[aria-label*="state" i]').first();
+    const stateInput = page.locator('input[placeholder*="state" i], select[aria-label*="state" i]').first();
     await stateInput.fill(details.address.state);
 
-    const zipInput = stripeFrame.locator('input[placeholder*="zip" i], input[placeholder*="postal" i]').first();
+    const zipInput = page.locator('input[placeholder*="zip" i], input[placeholder*="postal" i]').first();
     await zipInput.fill(details.address.postalCode);
   }
 }

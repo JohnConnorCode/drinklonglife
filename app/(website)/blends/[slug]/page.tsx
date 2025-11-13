@@ -188,7 +188,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
               <p className="text-xl text-gray-600">Sourced from trusted regenerative farms</p>
             </FadeIn>
             <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {blend.ingredients.map((ingredient: any) => (
+              {blend.ingredients?.filter((ingredient: any) => ingredient && ingredient.name).map((ingredient: any) => (
                 <div
                   key={ingredient._id}
                   className="group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-accent-green"
@@ -196,7 +196,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
                   {/* Icon or initial */}
                   <div className="w-14 h-14 bg-gradient-to-br from-accent-yellow/30 to-accent-green/30 rounded-full mb-4 flex items-center justify-center">
                     <span className="text-2xl font-heading font-bold text-accent-primary">
-                      {ingredient.name.charAt(0)}
+                      {ingredient.name?.charAt(0) || '?'}
                     </span>
                   </div>
 
@@ -262,13 +262,17 @@ export default async function BlendPage({ params }: BlendPageProps) {
               <p className="text-xl text-gray-600">Fresh-pressed and ready for pickup or delivery</p>
             </FadeIn>
             <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {(blend.stripeProduct?.variants?.length > 0 ? blend.stripeProduct.variants : blend.sizes).map((item: any, idx: number) => {
+              {(blend.stripeProduct?.variants?.length > 0 ? blend.stripeProduct.variants : blend.sizes?.filter((item: any) => item && (item.size || item.name)) || []).map((item: any, idx: number) => {
                   const isPopular = blend.stripeProduct?.variants ? item.isDefault : idx === 1;
                   const sizeData = blend.stripeProduct?.variants ? {
                     _id: item.sizeKey,
                     name: item.label,
                     stripePriceId: item.stripePriceId,
-                  } : item;
+                  } : {
+                    ...item,
+                    name: item.size || item.name,
+                    _id: item._key || item._id
+                  };
 
                   return (
                     <div
