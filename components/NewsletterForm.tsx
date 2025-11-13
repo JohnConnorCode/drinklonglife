@@ -1,62 +1,60 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { submitNewsletter } from '@/lib/actions';
+import { useEffect } from 'react';
 
-export function NewsletterForm() {
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+interface KlaviyoFormProps {
+  formId?: string;
+  className?: string;
+}
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsLoading(true);
-    setMessage(null);
-
-    const formData = new FormData();
-    formData.append('email', email);
-
-    const result = await submitNewsletter(formData);
-
-    if (result.success) {
-      setMessage({ type: 'success', text: result.message || 'Subscribed!' });
-      setEmail('');
-    } else {
-      setMessage({ type: 'error', text: result.error || 'Something went wrong' });
+export function NewsletterForm({ formId, className = '' }: KlaviyoFormProps) {
+  useEffect(() => {
+    // Ensure Klaviyo is loaded
+    if (typeof window !== 'undefined' && window._klOnsite) {
+      console.log('Klaviyo loaded successfully');
     }
-
-    setIsLoading(false);
-  }
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3">
-      <input
-        type="email"
-        placeholder="Enter your email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-yellow"
-        disabled={isLoading}
-      />
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isLoading ? 'Subscribing...' : 'Subscribe'}
-      </button>
-      {message && (
-        <div
-          className={`absolute bottom-0 left-0 right-0 px-4 py-3 rounded-md text-sm ${
-            message.type === 'success'
-              ? 'bg-green-100 text-green-800'
-              : 'bg-red-100 text-red-800'
-          }`}
-        >
-          {message.text}
+    <div className={`klaviyo-form-embed ${className}`}>
+      {/* Klaviyo will inject the form here based on your Klaviyo dashboard settings */}
+      {/* You can create forms in Klaviyo and embed them using the formId */}
+      {formId ? (
+        <div className={`klaviyo-form-${formId}`} />
+      ) : (
+        // Fallback inline form that Klaviyo can capture
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="flex-1 px-4 py-3 sm:px-6 sm:py-4 rounded-xl border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent bg-white shadow-md text-base sm:text-lg"
+            required
+            name="email"
+            id="klaviyo-email-input"
+          />
+          <button
+            type="button"
+            className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-accent-primary text-white rounded-xl font-bold hover:bg-accent-primary/90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-base sm:text-lg"
+            onClick={() => {
+              const email = (document.getElementById('klaviyo-email-input') as HTMLInputElement)?.value;
+              if (email && window.klaviyo) {
+                window.klaviyo.push(['identify', { email }]);
+                alert('Thanks for subscribing!');
+              }
+            }}
+          >
+            Join Now
+          </button>
         </div>
       )}
-    </form>
+    </div>
   );
+}
+
+// Type declaration for Klaviyo
+declare global {
+  interface Window {
+    klaviyo: any;
+    _klOnsite: any[];
+  }
 }

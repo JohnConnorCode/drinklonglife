@@ -11,6 +11,7 @@ import { CountUp } from '@/components/animations/CountUp';
 import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 import { StatsSection } from '@/components/StatsSection';
 import { HeroSlider } from '@/components/HeroSlider';
+import { NewsletterForm } from '@/components/NewsletterForm';
 
 export const revalidate = 60;
 
@@ -51,8 +52,8 @@ export default async function Home() {
     processSteps,
     newsletterHeading,
     newsletterSubheading,
-    newsletterPlaceholder,
-    newsletterButtonText,
+    newsletterPlaceholder: _newsletterPlaceholder,
+    newsletterButtonText: _newsletterButtonText,
     communityBlurb,
     socialProof
   } = homePage;
@@ -544,22 +545,9 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Form */}
-            <form className="space-y-4">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder={newsletterPlaceholder || 'Enter your email'}
-                  className="flex-1 px-4 py-3 sm:px-6 sm:py-4 rounded-xl border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent bg-white shadow-md text-base sm:text-lg"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-accent-primary text-white rounded-xl font-bold hover:bg-accent-primary/90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-base sm:text-lg"
-                >
-                  {newsletterButtonText || 'Join Now'}
-                </button>
-              </div>
+            {/* Klaviyo Newsletter Form */}
+            <div className="space-y-4">
+              <NewsletterForm />
               <div className="flex items-center justify-between text-sm">
                 <p className="text-gray-600 flex items-center gap-2">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -577,7 +565,7 @@ export default async function Home() {
                   </p>
                 )}
               </div>
-            </form>
+            </div>
 
             {communityBlurb && (
               <p className="text-sm text-gray-600 italic">
