@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { client } from '@/lib/sanity.client';
-import { homePageQuery } from '@/lib/sanity.queries';
+import { homePageQuery, siteSettingsQuery } from '@/lib/sanity.queries';
 import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
 import { BlendCard } from '@/components/BlendCard';
@@ -11,8 +12,63 @@ import { CountUp } from '@/components/animations/CountUp';
 import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 import { StatsSection } from '@/components/StatsSection';
 import { HeroSlider } from '@/components/HeroSlider';
+import { getOrganizationSchema, renderJsonLd } from '@/lib/json-ld';
 
 export const revalidate = 60;
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const homePage = await getHomePage();
+
+  // Get the first slider image - prefer Sanity, fallback to public
+  let ogImageUrl = `${siteUrl}/slider-desktop-1.png`;
+  let ogImageAlt = 'Long Life - Peak Performance Starts Here';
+
+  if (homePage?.heroSlides && homePage.heroSlides.length > 0) {
+    const firstSlide = homePage.heroSlides[0];
+    if (firstSlide.desktopImage?.asset?.url) {
+      ogImageUrl = firstSlide.desktopImage.asset.url;
+      ogImageAlt = firstSlide.heading || ogImageAlt;
+    }
+  }
+
+  const title = 'Long Life | Cold-Pressed Organic Juices Crafted for Vitality';
+  const description = 'Cold-pressed, small-batch organic juices crafted for serious athletes and health-conscious humans. Made weekly in Indiana with traceable ingredients. No concentrates, no shortcuts—just real results.';
+
+  return {
+    title,
+    description,
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: siteUrl,
+      siteName: 'Long Life',
+      title,
+      description,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1920,
+          height: 1080,
+          alt: ogImageAlt,
+          type: 'image/png',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImageUrl],
+      creator: '@drinklonglife',
+      site: '@drinklonglife',
+    },
+    alternates: {
+      canonical: siteUrl,
+    },
+  };
+}
 
 async function getHomePage() {
   try {
@@ -23,8 +79,20 @@ async function getHomePage() {
   }
 }
 
+async function getSiteSettings() {
+  try {
+    return await client.fetch(siteSettingsQuery);
+  } catch (error) {
+    console.error('Error fetching site settings:', error);
+    return null;
+  }
+}
+
 export default async function Home() {
-  const homePage = await getHomePage();
+  const [homePage, siteSettings] = await Promise.all([
+    getHomePage(),
+    getSiteSettings(),
+  ]);
 
   if (!homePage) {
     return (
@@ -91,6 +159,9 @@ export default async function Home() {
 
   return (
     <>
+      {/* JSON-LD Structured Data for SEO */}
+      {siteSettings && renderJsonLd(getOrganizationSchema(siteSettings))}
+
       {/* Hero Slider */}
       <HeroSlider slides={slides} />
 
