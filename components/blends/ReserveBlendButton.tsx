@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 interface ReserveBlendButtonProps {
   size: {
@@ -21,7 +20,6 @@ export function ReserveBlendButton({
 }: ReserveBlendButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const handleReserve = async () => {
     // Check if stripe price is available
