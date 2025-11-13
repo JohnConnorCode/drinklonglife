@@ -74,29 +74,86 @@ const DEFAULT_FLAGS: FeatureFlags = {
 
 /**
  * Get current feature flags
- *
- * In a more advanced setup, these could be:
- * - Stored in database (for runtime changes)
- * - Fetched from environment variables
- * - Cached in Redis
- * - Managed via admin UI
- *
- * For now, they're in-memory constants for simplicity.
+ * Fetches from database with in-memory cache
+ * Falls back to DEFAULT_FLAGS if database unavailable
  */
-export function getFeatureFlags(): FeatureFlags {
-  // TODO: In production, you might want to:
-  // 1. Fetch from database
-  // 2. Override with environment variables
-  // 3. Cache the result
 
-  return DEFAULT_FLAGS;
+// Simple in-memory cache with 60-second TTL
+let cachedFlags: FeatureFlags | null = null;
+let cacheTimestamp: number = 0;
+const CACHE_TTL = 60 * 1000; // 60 seconds
+
+export async function getFeatureFlags(): Promise<FeatureFlags> {
+  // Return cached flags if still valid
+  const now = Date.now();
+  if (cachedFlags && (now - cacheTimestamp) < CACHE_TTL) {
+    return cachedFlags;
+  }
+
+  try {
+    // Dynamic import to avoid circular dependencies
+    const { createServiceRoleClient } = await import('@/lib/supabase/server');
+    const supabase = createServiceRoleClient();
+
+    const { data: settings, error } = await supabase
+      .from('system_settings')
+      .select('key, value');
+
+    if (error) throw error;
+
+    // Convert database settings to FeatureFlags object
+    const flags: FeatureFlags = { ...DEFAULT_FLAGS };
+
+    if (settings) {
+      settings.forEach((setting: any) => {
+        const key = setting.key as keyof FeatureFlags;
+        const flagKey = key as keyof typeof flags;
+        // Parse JSONB value
+        if (typeof setting.value === 'boolean') {
+          (flags as any)[flagKey] = setting.value;
+        } else if (typeof setting.value === 'number') {
+          (flags as any)[flagKey] = setting.value;
+        } else {
+          // JSONB is stored as JSON, need to parse
+          (flags as any)[flagKey] = setting.value;
+        }
+      });
+    }
+
+    // Update cache
+    cachedFlags = flags;
+    cacheTimestamp = now;
+
+    return flags;
+  } catch (error) {
+    console.error('Failed to fetch feature flags from database, using defaults:', error);
+    // Fallback to defaults if database unavailable
+    return DEFAULT_FLAGS;
+  }
 }
 
 /**
- * Check if a specific feature is enabled
+ * Synchronous version that returns cached flags or defaults
+ * Use this in client components where async is not possible
  */
-export function isFeatureEnabled(featureName: keyof FeatureFlags): boolean {
-  const flags = getFeatureFlags();
+export function getFeatureFlagsSync(): FeatureFlags {
+  return cachedFlags || DEFAULT_FLAGS;
+}
+
+/**
+ * Clear the feature flags cache
+ * Call this after updating settings to force a refresh
+ */
+export function clearFeatureFlagsCache(): void {
+  cachedFlags = null;
+  cacheTimestamp = 0;
+}
+
+/**
+ * Check if a specific feature is enabled (async version)
+ */
+export async function isFeatureEnabled(featureName: keyof FeatureFlags): Promise<boolean> {
+  const flags = await getFeatureFlags();
   const value = flags[featureName];
 
   // For boolean flags, return directly
@@ -113,12 +170,40 @@ export function isFeatureEnabled(featureName: keyof FeatureFlags): boolean {
 }
 
 /**
- * Get a feature flag value (for non-boolean flags)
+ * Synchronous version for client components
  */
-export function getFeatureValue<K extends keyof FeatureFlags>(
+export function isFeatureEnabledSync(featureName: keyof FeatureFlags): boolean {
+  const flags = getFeatureFlagsSync();
+  const value = flags[featureName];
+
+  if (typeof value === 'boolean') {
+    return value;
+  }
+
+  if (typeof value === 'number') {
+    return value > 0;
+  }
+
+  return false;
+}
+
+/**
+ * Get a feature flag value (for non-boolean flags) - async version
+ */
+export async function getFeatureValue<K extends keyof FeatureFlags>(
+  featureName: K
+): Promise<FeatureFlags[K]> {
+  const flags = await getFeatureFlags();
+  return flags[featureName];
+}
+
+/**
+ * Synchronous version for client components
+ */
+export function getFeatureValueSync<K extends keyof FeatureFlags>(
   featureName: K
 ): FeatureFlags[K] {
-  const flags = getFeatureFlags();
+  const flags = getFeatureFlagsSync();
   return flags[featureName];
 }
 

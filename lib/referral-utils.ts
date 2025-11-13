@@ -40,7 +40,7 @@ export interface ReferralStats {
  * @returns Referral | null
  */
 export async function getReferralByCode(code: string): Promise<Referral | null> {
-  if (!isFeatureEnabled('referrals_enabled')) {
+  if (!(await isFeatureEnabled('referrals_enabled'))) {
     return null;
   }
 
@@ -131,7 +131,7 @@ export async function trackReferral(
   referralCode: string,
   newUserId: string
 ): Promise<boolean> {
-  if (!isFeatureEnabled('referrals_enabled')) {
+  if (!(await isFeatureEnabled('referrals_enabled'))) {
     return false;
   }
 
@@ -234,8 +234,9 @@ async function issueReferralRewards(
     const rewardPercentage = getFeatureValue('referrals_reward_percentage');
 
     // Create discount codes in Stripe
-    const referrerCoupon = await createReferralCoupon(rewardPercentage, 'referrer');
-    const refereeCoupon = await createReferralCoupon(rewardPercentage, 'referee');
+    const percentage = await rewardPercentage;
+    const referrerCoupon = await createReferralCoupon(percentage, 'referrer');
+    const refereeCoupon = await createReferralCoupon(percentage, 'referee');
 
     // Apply discount to referrer
     await applyDiscountToUser(referrerId, referrerCoupon.id, 'referral_reward');

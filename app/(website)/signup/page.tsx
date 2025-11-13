@@ -34,12 +34,12 @@ export default async function SignupPage({
 
   // Validate referral code if present
   let referralInfo = null;
-  if (referralCode && isFeatureEnabled('referrals_enabled')) {
+  if (referralCode && (await isFeatureEnabled('referrals_enabled'))) {
     const referral = await getReferralByCode(referralCode);
     if (referral) {
       referralInfo = {
         code: referralCode,
-        discount: getFeatureValue('referrals_reward_percentage'),
+        discount: await getFeatureValue('referrals_reward_percentage'),
       };
     }
   }

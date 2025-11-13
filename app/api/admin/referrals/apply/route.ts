@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
-import { requireAdmin } from '@/lib/auth/admin';
+import { requireAdminUser } from '@/lib/auth/admin';
 
 /**
  * POST /api/admin/referrals/apply
@@ -9,7 +9,7 @@ import { requireAdmin } from '@/lib/auth/admin';
 export async function POST(req: NextRequest) {
   try {
     // Check admin access
-    const user = await requireAdmin();
+    await requireAdminUser();
 
     const { userId, discountCode, source, expiresInDays = 30 } = await req.json();
 

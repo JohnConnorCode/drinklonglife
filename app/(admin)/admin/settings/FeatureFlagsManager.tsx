@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { FeatureFlags } from '@/lib/feature-flags';
 
 interface FeatureFlagsSectionProps {
@@ -12,9 +13,11 @@ interface FeatureFlagsSectionProps {
     value: boolean | number;
     type: 'boolean' | 'number';
   }>;
+  onUpdate: (key: string, value: boolean | number) => Promise<void>;
+  updating: string | null;
 }
 
-function FeatureFlagsSection({ title, description, flags }: FeatureFlagsSectionProps) {
+function FeatureFlagsSection({ title, description, flags, onUpdate, updating }: FeatureFlagsSectionProps) {
   return (
     <div className="bg-white rounded-lg shadow">
       <div className="p-6 border-b border-gray-200">
@@ -33,21 +36,34 @@ function FeatureFlagsSection({ title, description, flags }: FeatureFlagsSectionP
               </div>
               <p className="text-sm text-gray-600 mt-1">{flag.description}</p>
             </div>
-            <div className="ml-4">
+            <div className="ml-4 flex items-center gap-2">
               {flag.type === 'boolean' ? (
-                <div
-                  className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    flag.value
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-gray-100 text-gray-600'
+                <button
+                  onClick={() => onUpdate(flag.key, !flag.value)}
+                  disabled={updating === flag.key}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    flag.value ? 'bg-blue-600' : 'bg-gray-300'
                   }`}
                 >
-                  {flag.value ? 'Enabled' : 'Disabled'}
-                </div>
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      flag.value ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
               ) : (
-                <div className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
-                  {flag.value}
-                </div>
+                <input
+                  type="number"
+                  value={flag.value as number}
+                  onChange={(e) => onUpdate(flag.key, parseInt(e.target.value) || 0)}
+                  disabled={updating === flag.key}
+                  className="w-20 px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  min="0"
+                  max="100"
+                />
+              )}
+              {updating === flag.key && (
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 border-t-blue-600" />
               )}
             </div>
           </div>
@@ -62,7 +78,40 @@ interface FeatureFlagsManagerProps {
 }
 
 export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) {
-  const sections: FeatureFlagsSectionProps[] = [
+  const [flags, setFlags] = useState<FeatureFlags>(initialFlags);
+  const [updating, setUpdating] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleUpdate = async (key: string, value: boolean | number) => {
+    setUpdating(key);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/admin/settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, value }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update setting');
+      }
+
+      // Update local state
+      setFlags((prev) => ({ ...prev, [key]: value }));
+      setMessage({ type: 'success', text: `Setting updated: ${key}` });
+
+      // Clear success message after 3 seconds
+      setTimeout(() => setMessage(null), 3000);
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setUpdating(null);
+    }
+  };
+  const sections: Omit<FeatureFlagsSectionProps, 'onUpdate' | 'updating'>[] = [
     {
       title: 'Referral System',
       description: 'Viral growth mechanics - "Give 20%, Get 20%" referral program',
@@ -71,21 +120,21 @@ export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) 
           key: 'referrals_enabled',
           label: 'Referrals Enabled',
           description: 'Turn the entire referral system on or off',
-          value: initialFlags.referrals_enabled,
+          value: flags.referrals_enabled,
           type: 'boolean',
         },
         {
           key: 'referrals_reward_percentage',
           label: 'Reward Percentage',
           description: 'Discount percentage for referrer and referee (e.g., 20 = 20% off)',
-          value: initialFlags.referrals_reward_percentage,
+          value: flags.referrals_reward_percentage,
           type: 'number',
         },
         {
           key: 'referrals_show_leaderboard',
           label: 'Show Leaderboard',
           description: 'Display referral leaderboard in admin and user dashboards',
-          value: initialFlags.referrals_show_leaderboard,
+          value: flags.referrals_show_leaderboard,
           type: 'boolean',
         },
       ],
@@ -98,14 +147,14 @@ export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) 
           key: 'upsells_enabled',
           label: 'Upsells Enabled',
           description: 'Turn the entire upsell system on or off',
-          value: initialFlags.upsells_enabled,
+          value: flags.upsells_enabled,
           type: 'boolean',
         },
         {
           key: 'upsells_show_on_thank_you',
           label: 'Show on Thank You Page',
           description: 'Display upsells on the post-purchase thank you page',
-          value: initialFlags.upsells_show_on_thank_you,
+          value: flags.upsells_show_on_thank_you,
           type: 'boolean',
         },
       ],
@@ -118,14 +167,14 @@ export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) 
           key: 'tier_upgrades_enabled',
           label: 'Tier Upgrades Enabled',
           description: 'Turn the tier upgrade system on or off',
-          value: initialFlags.tier_upgrades_enabled,
+          value: flags.tier_upgrades_enabled,
           type: 'boolean',
         },
         {
           key: 'tier_upgrades_show_in_nav',
           label: 'Show in Navigation',
           description: 'Display "Upgrade" link in main navigation',
-          value: initialFlags.tier_upgrades_show_in_nav,
+          value: flags.tier_upgrades_show_in_nav,
           type: 'boolean',
         },
       ],
@@ -138,14 +187,14 @@ export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) 
           key: 'profile_completion_enabled',
           label: 'Profile Completion Enabled',
           description: 'Show profile completion percentage and checklist',
-          value: initialFlags.profile_completion_enabled,
+          value: flags.profile_completion_enabled,
           type: 'boolean',
         },
         {
           key: 'profile_completion_min_percentage',
           label: 'Minimum Percentage',
           description: 'Hide completion prompts once user reaches this % (e.g., 80)',
-          value: initialFlags.profile_completion_min_percentage,
+          value: flags.profile_completion_min_percentage,
           type: 'number',
         },
       ],
@@ -158,21 +207,21 @@ export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) 
           key: 'analytics_enabled',
           label: 'Analytics Enabled',
           description: 'Turn all analytics and tracking on or off',
-          value: initialFlags.analytics_enabled,
+          value: flags.analytics_enabled,
           type: 'boolean',
         },
         {
           key: 'analytics_track_page_views',
           label: 'Track Page Views',
           description: 'Log page view events',
-          value: initialFlags.analytics_track_page_views,
+          value: flags.analytics_track_page_views,
           type: 'boolean',
         },
         {
           key: 'analytics_track_events',
           label: 'Track Custom Events',
           description: 'Log custom events (signup, purchase, etc.)',
-          value: initialFlags.analytics_track_events,
+          value: flags.analytics_track_events,
           type: 'boolean',
         },
       ],
@@ -185,21 +234,21 @@ export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) 
           key: 'pricing_show_yearly_toggle',
           label: 'Show Yearly Toggle',
           description: 'Display monthly/yearly toggle on pricing page',
-          value: initialFlags.pricing_show_yearly_toggle,
+          value: flags.pricing_show_yearly_toggle,
           type: 'boolean',
         },
         {
           key: 'pricing_show_savings',
           label: 'Show Savings',
           description: 'Display savings calculations (e.g., "Save 20% with yearly")',
-          value: initialFlags.pricing_show_savings,
+          value: flags.pricing_show_savings,
           type: 'boolean',
         },
         {
           key: 'pricing_allow_one_time_purchases',
           label: 'Allow One-Time Purchases',
           description: 'Enable packs, bundles, and other non-subscription purchases',
-          value: initialFlags.pricing_allow_one_time_purchases,
+          value: flags.pricing_allow_one_time_purchases,
           type: 'boolean',
         },
       ],
@@ -212,14 +261,14 @@ export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) 
           key: 'show_toast_notifications',
           label: 'Toast Notifications',
           description: 'Show toast notifications for success/error messages',
-          value: initialFlags.show_toast_notifications,
+          value: flags.show_toast_notifications,
           type: 'boolean',
         },
         {
           key: 'show_manage_subscription_in_nav',
           label: 'Manage Subscription in Nav',
           description: 'Show "Manage Subscription" button in navigation for logged-in users',
-          value: initialFlags.show_manage_subscription_in_nav,
+          value: flags.show_manage_subscription_in_nav,
           type: 'boolean',
         },
       ],
@@ -228,26 +277,45 @@ export function FeatureFlagsManager({ initialFlags }: FeatureFlagsManagerProps) 
 
   return (
     <div className="space-y-6">
+      {/* Success/Error Message */}
+      {message && (
+        <div
+          className={`p-4 rounded-lg ${
+            message.type === 'success'
+              ? 'bg-green-50 border border-green-200'
+              : 'bg-red-50 border border-red-200'
+          }`}
+        >
+          <p
+            className={`text-sm font-medium ${
+              message.type === 'success' ? 'text-green-800' : 'text-red-800'
+            }`}
+          >
+            {message.text}
+          </p>
+        </div>
+      )}
+
       {sections.map((section) => (
-        <FeatureFlagsSection key={section.title} {...section} />
+        <FeatureFlagsSection
+          key={section.title}
+          {...section}
+          onUpdate={handleUpdate}
+          updating={updating}
+        />
       ))}
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="font-semibold text-blue-900 mb-1">💡 How to Change Settings</h3>
-        <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
-          <li>
-            Open <code className="bg-blue-100 px-1 rounded">lib/feature-flags.ts</code> in your code editor
-          </li>
-          <li>
-            Edit the <code className="bg-blue-100 px-1 rounded">DEFAULT_FLAGS</code> object
-          </li>
-          <li>Save the file and restart your development server</li>
-          <li>Changes will take effect across the entire application</li>
-        </ol>
-        <p className="text-sm text-blue-800 mt-3">
-          <strong>Pro tip:</strong> For production, consider storing these in environment variables
-          or a database table for runtime updates without code deployment.
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <h3 className="font-semibold text-green-900 mb-1">✅ Runtime Configuration Enabled</h3>
+        <p className="text-sm text-green-800 mb-2">
+          All settings are now stored in the database and can be updated in real-time without code deployment.
         </p>
+        <ul className="text-sm text-green-800 space-y-1 list-disc list-inside">
+          <li>Toggle switches for boolean settings (on/off)</li>
+          <li>Number inputs for percentage and numeric values</li>
+          <li>Changes take effect immediately with 60-second cache</li>
+          <li>All updates are logged with admin user ID and timestamp</li>
+        </ul>
       </div>
     </div>
   );

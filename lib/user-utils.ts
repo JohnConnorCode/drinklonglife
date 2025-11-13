@@ -5,7 +5,7 @@
  */
 
 import { createServerClient } from '@/lib/supabase/server';
-import { isFeatureEnabled, getFeatureValue } from '@/lib/feature-flags';
+import { isFeatureEnabledSync, getFeatureValueSync } from '@/lib/feature-flags';
 
 export interface UserProfile {
   id: string;
@@ -156,7 +156,7 @@ export function calculateProfileCompletion(
   const percentage = Math.round((completedCount / items.length) * 100);
 
   // Check feature flag for minimum percentage
-  const minPercentage = getFeatureValue('profile_completion_min_percentage');
+  const minPercentage = getFeatureValueSync('profile_completion_min_percentage');
   const isComplete = percentage >= minPercentage;
 
   return {
@@ -219,7 +219,7 @@ export function hasTierAccess(
  */
 export function shouldShowProfileCompletion(profile: UserProfile): boolean {
   // Check if feature is enabled
-  if (!isFeatureEnabled('profile_completion_enabled')) {
+  if (!isFeatureEnabledSync('profile_completion_enabled')) {
     return false;
   }
 

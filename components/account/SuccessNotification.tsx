@@ -26,6 +26,8 @@ export function SuccessNotification() {
       const timer = setTimeout(() => setShow(false), 5000);
       return () => clearTimeout(timer);
     }
+
+    return undefined;
   }, [searchParams, show]);
 
   if (!show || !message) return null;

@@ -46,7 +46,10 @@ export default async function AccountPage() {
   const showProfileCompletion = shouldShowProfileCompletion(user);
 
   // Referral stats
-  const referralStats = isFeatureEnabled('referrals_enabled') ? await getReferralStats(user.id) : null;
+  const referralStats = (await isFeatureEnabled('referrals_enabled')) ? await getReferralStats(user.id) : null;
+
+  // Feature flags for rendering
+  const showTierUpgrades = await isFeatureEnabled('tier_upgrades_enabled');
 
   return (
     <>
@@ -206,7 +209,7 @@ export default async function AccountPage() {
         )}
 
         {/* Tier Upgrade CTA */}
-        {isFeatureEnabled('tier_upgrades_enabled') && user.partnership_tier !== 'vip' && (
+        {showTierUpgrades && user.partnership_tier !== 'vip' && (
           <FadeIn direction="up" delay={0.28}>
             <Link
               href="/upgrade"

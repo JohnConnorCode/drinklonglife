@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { isFeatureEnabled } from '@/lib/feature-flags';
+import { isFeatureEnabledSync } from '@/lib/feature-flags';
 
 export type BillingInterval = 'monthly' | 'yearly';
 
@@ -21,8 +21,8 @@ export function PricingToggle({
   const [interval, setInterval] = useState<BillingInterval>(defaultInterval);
 
   // Check if toggle should be shown
-  const toggleEnabled = isFeatureEnabled('pricing_show_yearly_toggle');
-  const showSavingsFlag = isFeatureEnabled('pricing_show_savings') && showSavings;
+  const toggleEnabled = isFeatureEnabledSync('pricing_show_yearly_toggle');
+  const showSavingsFlag = isFeatureEnabledSync('pricing_show_savings') && showSavings;
 
   if (!toggleEnabled) {
     return null;

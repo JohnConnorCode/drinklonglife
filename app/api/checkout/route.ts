@@ -156,10 +156,15 @@ export async function POST(req: NextRequest) {
             code: discountCode.toUpperCase(),
             active: true,
             limit: 1,
+            expand: ['data.coupon'],
           });
 
-          if (promoCodes.data.length > 0 && promoCodes.data[0].coupon) {
-            validatedDiscountCode = promoCodes.data[0].coupon.id;
+          if (promoCodes.data.length > 0) {
+            const promoCode = promoCodes.data[0] as any;
+            const coupon = promoCode.coupon;
+            if (coupon && typeof coupon === 'object' && coupon.id) {
+              validatedDiscountCode = coupon.id;
+            }
           }
         }
       } catch (error) {

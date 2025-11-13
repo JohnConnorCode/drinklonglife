@@ -238,7 +238,7 @@ export default async function OrderDetailPage({
                 </Link>
               )}
               <a
-                href="mailto:support@longlife.com?subject=Order Support: " + data.id
+                href={`mailto:support@longlife.com?subject=Order Support: ${data.id}`}
                 className="block px-6 py-3 bg-gray-100 text-gray-700 text-center rounded-lg font-semibold hover:bg-gray-200 transition-colors"
               >
                 Contact Support

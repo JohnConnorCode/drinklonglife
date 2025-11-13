@@ -39,8 +39,9 @@ export default async function ThankYouPage({ searchParams }: ThankYouPageProps) 
 
   // Get upsell offers (if enabled)
   let upsellOffers: any[] = [];
-  const upsellsEnabled = isFeatureEnabled('upsells_enabled');
-  const showOnThankYou = isFeatureEnabled('upsells_show_on_thank_you');
+  const upsellsEnabled = await isFeatureEnabled('upsells_enabled');
+  const showOnThankYou = await isFeatureEnabled('upsells_show_on_thank_you');
+  const referralsEnabled = await isFeatureEnabled('referrals_enabled');
 
   if (upsellsEnabled && showOnThankYou) {
     // Fetch upsell offers from Sanity
@@ -120,7 +121,7 @@ export default async function ThankYouPage({ searchParams }: ThankYouPageProps) 
           </div>
 
           {/* Referral Prompt */}
-          {user.referral_code && isFeatureEnabled('referrals_enabled') && (
+          {user.referral_code && referralsEnabled && (
             <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg p-6 mb-12">
               <h3 className="font-semibold text-lg mb-2">
                 🎁 Share the Love, Get Rewarded

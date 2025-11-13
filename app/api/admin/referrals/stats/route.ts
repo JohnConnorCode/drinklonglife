@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
-import { requireAdmin } from '@/lib/auth/admin';
+import { requireAdminUser } from '@/lib/auth/admin';
 
 /**
  * GET /api/admin/referrals/stats
  * Get referral system statistics
  */
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // Check admin access
-    await requireAdmin();
+    await requireAdminUser();
 
     const supabase = createServiceRoleClient();
 
