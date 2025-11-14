@@ -7,46 +7,54 @@ interface KlaviyoFormProps {
   className?: string;
 }
 
-export function NewsletterForm({ formId, className = '' }: KlaviyoFormProps) {
+export function NewsletterForm({ formId = 'StpCUy', className = '' }: KlaviyoFormProps) {
   useEffect(() => {
-    // Ensure Klaviyo is loaded
-    if (typeof window !== 'undefined' && window._klOnsite) {
-      console.log('Klaviyo loaded successfully');
+    if (typeof window === 'undefined') return;
+
+    console.log('[Klaviyo Debug] Checking Klaviyo SDK status...');
+    console.log('[Klaviyo Debug] Form ID:', formId);
+    console.log('[Klaviyo Debug] window.klaviyo exists:', !!window.klaviyo);
+    console.log('[Klaviyo Debug] window._klOnsite exists:', !!window._klOnsite);
+
+    // Check for form div in DOM
+    const formDiv = document.querySelector(`.klaviyo-form-${formId}`);
+    console.log('[Klaviyo Debug] Form div found in DOM:', !!formDiv);
+
+    if (formDiv) {
+      console.log('[Klaviyo Debug] Form div innerHTML:', formDiv.innerHTML || '(empty)');
+      console.log('[Klaviyo Debug] Form div children count:', formDiv.children.length);
     }
-  }, []);
+
+    // Wait for Klaviyo SDK to fully load and inject form
+    const checkInterval = setInterval(() => {
+      const formDiv = document.querySelector(`.klaviyo-form-${formId}`);
+      if (formDiv && formDiv.children.length > 0) {
+        console.log('[Klaviyo Debug] ✓ Form successfully injected by Klaviyo SDK');
+        clearInterval(checkInterval);
+      }
+    }, 500);
+
+    // Stop checking after 10 seconds
+    setTimeout(() => {
+      clearInterval(checkInterval);
+      const formDiv = document.querySelector(`.klaviyo-form-${formId}`);
+      if (!formDiv || formDiv.children.length === 0) {
+        console.error('[Klaviyo Debug] ✗ Form failed to load after 10 seconds');
+        console.error('[Klaviyo Debug] Possible issues:');
+        console.error('  1. Form ID "' + formId + '" does not exist in Klaviyo dashboard');
+        console.error('  2. Form is not published/live in Klaviyo');
+        console.error('  3. Form targeting settings prevent display on this domain');
+        console.error('  4. Company ID mismatch (check NEXT_PUBLIC_KLAVIYO_COMPANY_ID)');
+      }
+    }, 10000);
+
+    return () => clearInterval(checkInterval);
+  }, [formId]);
 
   return (
     <div className={`klaviyo-form-embed ${className}`}>
       {/* Klaviyo will inject the form here based on your Klaviyo dashboard settings */}
-      {/* You can create forms in Klaviyo and embed them using the formId */}
-      {formId ? (
-        <div className={`klaviyo-form-${formId}`} />
-      ) : (
-        // Fallback inline form that Klaviyo can capture
-        <div className="flex flex-col sm:flex-row gap-3">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="flex-1 px-4 py-3 sm:px-6 sm:py-4 rounded-xl border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent bg-white shadow-md text-base sm:text-lg"
-            required
-            name="email"
-            id="klaviyo-email-input"
-          />
-          <button
-            type="button"
-            className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-accent-primary text-white rounded-xl font-bold hover:bg-accent-primary/90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-base sm:text-lg"
-            onClick={() => {
-              const email = (document.getElementById('klaviyo-email-input') as HTMLInputElement)?.value;
-              if (email && window.klaviyo) {
-                window.klaviyo.push(['identify', { email }]);
-                alert('Thanks for subscribing!');
-              }
-            }}
-          >
-            Join Now
-          </button>
-        </div>
-      )}
+      <div className={`klaviyo-form-${formId}`} />
     </div>
   );
 }
