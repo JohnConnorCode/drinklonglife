@@ -8,9 +8,10 @@ interface NewsletterFormProps {
 }
 
 const COMPANY_ID = process.env.NEXT_PUBLIC_KLAVIYO_COMPANY_ID || 'WCHubr';
+const DEFAULT_LIST_ID = 'VFxqc9'; // Main newsletter list
 const API_ENDPOINT = `https://a.klaviyo.com/client/subscriptions/?company_id=${COMPANY_ID}`;
 
-export function NewsletterForm({ listId, className = '' }: NewsletterFormProps) {
+export function NewsletterForm({ listId = DEFAULT_LIST_ID, className = '' }: NewsletterFormProps) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
