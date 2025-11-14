@@ -83,18 +83,35 @@ export default async function BlendPage({ params }: BlendPageProps) {
     );
   }
 
-  // Fetch Stripe prices for all variants
+  // Fetch Stripe prices - support both stripeProduct.variants and sizes structures
   const priceMap = new Map<string, number>();
+
+  // Collect price IDs from either stripeProduct.variants or sizes
+  let priceIds: string[] = [];
   if (blend.stripeProduct?.variants) {
-    const priceIds = blend.stripeProduct.variants.map((v: any) => v.stripePriceId).filter(Boolean);
-    if (priceIds.length > 0) {
-      const prices = await getStripePrices(priceIds);
-      prices.forEach((price, priceId) => {
-        if (price.unit_amount) {
-          priceMap.set(priceId, price.unit_amount);
-        }
-      });
-    }
+    priceIds = blend.stripeProduct.variants.map((v: any) => v.stripePriceId).filter(Boolean);
+  } else if (blend.sizes) {
+    priceIds = blend.sizes.map((s: any) => s.stripePriceId).filter(Boolean);
+  }
+
+  // Fetch prices from Stripe if we have price IDs
+  if (priceIds.length > 0) {
+    const prices = await getStripePrices(priceIds);
+    prices.forEach((price, priceId) => {
+      if (price.unit_amount) {
+        priceMap.set(priceId, price.unit_amount);
+      }
+    });
+  }
+
+  // Also populate priceMap from sizes.price if available (for backward compatibility)
+  if (blend.sizes) {
+    blend.sizes.forEach((size: any) => {
+      if (size.stripePriceId && size.price && !priceMap.has(size.stripePriceId)) {
+        // Convert dollar amount to cents
+        priceMap.set(size.stripePriceId, Math.round(size.price * 100));
+      }
+    });
   }
 
   const labelColorMap: Record<string, string> = {
@@ -325,7 +342,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
                           {sizeData.servingsPerBottle} servings per bottle
                         </p>
                       )}
-                      {blend.stripeProduct?.variants && sizeData.stripePriceId && priceMap.has(sizeData.stripePriceId) ? (
+                      {sizeData.stripePriceId && priceMap.has(sizeData.stripePriceId) ? (
                         <AddToCartButton
                           priceId={sizeData.stripePriceId}
                           productName={`${blend.name} - ${sizeData.name}`}
@@ -333,7 +350,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
                           amount={priceMap.get(sizeData.stripePriceId)!}
                           image={blend.image ? urlFor(blend.image).url() : undefined}
                           blendSlug={params.slug}
-                          sizeKey={item.sizeKey}
+                          sizeKey={blend.stripeProduct?.variants ? item.sizeKey : sizeData._id}
                           variantLabel={sizeData.name}
                         />
                       ) : (
