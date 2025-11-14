@@ -140,7 +140,7 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
                     href={
                       link.reference?.slug?.current
                         ? `/${link.reference.slug.current}`
-                        : '#'
+                        : link.externalUrl || '#'
                     }
                     className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
                   >

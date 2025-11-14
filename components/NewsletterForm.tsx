@@ -78,8 +78,8 @@ export function NewsletterForm({ listId = DEFAULT_LIST_ID, className = '' }: New
 
   return (
     <div className={className}>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <div className="flex gap-2">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex flex-col sm:flex-row gap-3">
           <input
             type="email"
             value={email}
@@ -87,19 +87,19 @@ export function NewsletterForm({ listId = DEFAULT_LIST_ID, className = '' }: New
             placeholder="Enter your email"
             required
             disabled={status === 'loading'}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+            className="flex-1 px-4 py-3 sm:px-6 sm:py-4 rounded-xl border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-accent-primary bg-white shadow-md text-base sm:text-lg disabled:opacity-50 transition-all"
           />
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-accent-primary text-white rounded-xl font-bold hover:bg-accent-primary/90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-base sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+            {status === 'loading' ? 'Entering...' : 'Enter Long Life Mode'}
           </button>
         </div>
 
         {message && (
-          <p className={`text-sm ${status === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+          <p className={`text-sm font-medium ${status === 'success' ? 'text-green-600' : 'text-red-600'}`}>
             {message}
           </p>
         )}

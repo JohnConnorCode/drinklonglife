@@ -145,7 +145,7 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                 >
                   <Link
                     href="/login"
-                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-black transition-colors"
+                    className="px-4 py-2 text-sm font-semibold text-gray-900 hover:text-accent-primary transition-colors"
                   >
                     Login
                   </Link>
