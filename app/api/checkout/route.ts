@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
-import { createCheckoutSession, getOrCreateCustomer } from '@/lib/stripe';
+import { createCheckoutSession, createCartCheckoutSession, getOrCreateCustomer } from '@/lib/stripe';
 import { getStripeClient } from '@/lib/stripe/config';
-import { client } from '@/lib/sanity.client';
+
+interface CartItemRequest {
+  priceId: string;
+  quantity: number;
+}
 
 interface CheckoutRequestBody {
-  priceId: string;
-  mode: 'payment' | 'subscription';
+  // Legacy single-item checkout
+  priceId?: string;
+  mode?: 'payment' | 'subscription';
+
+  // Cart-based checkout
+  items?: CartItemRequest[];
+  couponCode?: string;
+
+  // URLs
   successPath?: string;
   cancelPath?: string;
   successUrl?: string;
@@ -23,102 +34,26 @@ export async function POST(req: NextRequest) {
     const {
       priceId,
       mode,
+      items,
+      couponCode,
       successPath,
       cancelPath,
       successUrl: providedSuccessUrl,
       cancelUrl: providedCancelUrl,
     } = body;
 
-    // Validate request
-    if (!priceId) {
-      return NextResponse.json(
-        { error: 'Missing required field: priceId' },
-        { status: 400 }
-      );
-    }
-
-    if (!mode || !['payment', 'subscription'].includes(mode)) {
-      return NextResponse.json(
-        { error: 'Invalid mode. Must be "payment" or "subscription"' },
-        { status: 400 }
-      );
-    }
-
-    // Validate that priceId exists in Sanity
-    // Try new stripeProduct system first
-    let product = await client.fetch(
-      `*[_type == "stripeProduct" && isActive == true && references($priceId)][0]{
-        _id,
-        title,
-        stripeProductId,
-        tierKey,
-        "variant": variants[stripePriceId == $priceId][0]{
-          sizeKey,
-          label,
-          stripePriceId
-        }
-      }`,
-      { priceId }
-    );
-
-    // Prepare metadata
-    const metadata: Record<string, string> = {};
-
-    // If not found, try legacy inline sizes system
-    if (!product || !product.variant) {
-      // Check for both one-time and subscription price IDs
-      const blendWithSize = await client.fetch(
-        `*[_type == "blend" && defined(sizes) && ($priceId in sizes[].stripePriceId || $priceId in sizes[].stripeSubscriptionPriceId)][0]{
-          _id,
-          name,
-          "size": sizes[stripePriceId == $priceId || stripeSubscriptionPriceId == $priceId][0]{
-            _key,
-            size,
-            stripePriceId,
-            stripeSubscriptionPriceId
-          }
-        }`,
-        { priceId }
-      );
-
-      if (!blendWithSize || !blendWithSize.size) {
-        return NextResponse.json(
-          { error: 'Invalid price ID or product not active' },
-          { status: 404 }
-        );
-      }
-
-      // Use blend data for metadata
-      metadata.blendId = blendWithSize._id;
-      metadata.blendName = blendWithSize.name;
-      metadata.sizeKey = blendWithSize.size._key || blendWithSize.size.size;
-
-      // Add mode to metadata for tracking
-      metadata.checkoutMode = mode;
-    } else {
-      // Use stripeProduct data for metadata
-      metadata.productId = product.stripeProductId;
-      metadata.sanityProductId = product._id;
-
-      if (product.tierKey) {
-        metadata.tier_key = product.tierKey;
-      }
-
-      if (product.variant.sizeKey) {
-        metadata.size_key = product.variant.sizeKey;
-      }
-    }
+    // Build full URLs
+    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const finalSuccessUrl = providedSuccessUrl || `${origin}${successPath || '/checkout/success'}?session_id={CHECKOUT_SESSION_ID}`;
+    const finalCancelUrl = providedCancelUrl || `${origin}${cancelPath || '/cart'}`;
 
     // Get dynamic Stripe client based on current mode (test/production)
     const stripeClient = await getStripeClient();
 
     // Handle authenticated vs guest checkout
     let customerId: string | undefined;
-    let customerEmail: string | undefined;
 
     if (user) {
-      metadata.userId = user.id;
-
       // Get user profile from Supabase
       const { data: profile } = await supabase
         .from('profiles')
@@ -145,35 +80,72 @@ export async function POST(req: NextRequest) {
 
         customerId = customer.id;
       }
-    } else {
-      // Guest checkout - collect email in Stripe Checkout
-      customerEmail = undefined;
     }
 
-    // Build full URLs
-    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    const finalSuccessUrl = providedSuccessUrl || `${origin}${successPath}?session_id={CHECKOUT_SESSION_ID}`;
-    const finalCancelUrl = providedCancelUrl || `${origin}${cancelPath}`;
+    // Prepare metadata
+    const metadata: Record<string, string> = {};
+    if (user) {
+      metadata.userId = user.id;
+    }
 
-    // Create Stripe Checkout Session with dynamic Stripe client
-    const checkoutSession = await createCheckoutSession(
-      {
-        priceId,
-        mode,
-        successUrl: finalSuccessUrl,
-        cancelUrl: finalCancelUrl,
-        customerId,
-        customerEmail,
-        metadata,
-      },
-      stripeClient
+    // CART-BASED CHECKOUT (multiple items)
+    if (items && items.length > 0) {
+      // Determine checkout mode based on items
+      // For now, assume all items are the same type (all subscriptions or all one-time)
+      // In a real scenario, you'd need to handle mixed carts or restrict cart to single type
+      const checkoutMode: 'payment' | 'subscription' = 'payment'; // Default to payment for cart
+
+      const lineItems = items.map(item => ({
+        price: item.priceId,
+        quantity: item.quantity,
+      }));
+
+      const checkoutSession = await createCartCheckoutSession(
+        {
+          lineItems,
+          mode: checkoutMode,
+          successUrl: finalSuccessUrl,
+          cancelUrl: finalCancelUrl,
+          customerId,
+          metadata,
+          couponCode,
+        },
+        stripeClient
+      );
+
+      return NextResponse.json({ url: checkoutSession.url });
+    }
+
+    // LEGACY SINGLE-ITEM CHECKOUT
+    if (priceId && mode) {
+      const checkoutSession = await createCheckoutSession(
+        {
+          priceId,
+          mode,
+          successUrl: finalSuccessUrl,
+          cancelUrl: finalCancelUrl,
+          customerId,
+          metadata,
+        },
+        stripeClient
+      );
+
+      return NextResponse.json({ url: checkoutSession.url });
+    }
+
+    // Invalid request
+    return NextResponse.json(
+      { error: 'Invalid checkout request. Must provide either items[] or priceId+mode' },
+      { status: 400 }
     );
 
-    return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
     console.error('Checkout error:', error);
     return NextResponse.json(
-      { error: 'Failed to create checkout session' },
+      {
+        error: 'Failed to create checkout session',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

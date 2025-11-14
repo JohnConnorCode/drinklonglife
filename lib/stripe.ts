@@ -163,6 +163,78 @@ export async function createCheckoutSession(
 }
 
 /**
+ * Create a Stripe Checkout Session for cart with multiple items
+ * Optionally pass a Stripe client for dynamic key support.
+ */
+export async function createCartCheckoutSession(
+  {
+    lineItems,
+    mode,
+    successUrl,
+    cancelUrl,
+    customerId,
+    customerEmail,
+    metadata = {},
+    couponCode,
+  }: {
+    lineItems: Array<{ price: string; quantity: number }>;
+    mode: 'payment' | 'subscription';
+    successUrl: string;
+    cancelUrl: string;
+    customerId?: string;
+    customerEmail?: string;
+    metadata?: Record<string, string>;
+    couponCode?: string;
+  },
+  stripeClient?: Stripe
+): Promise<Stripe.Checkout.Session> {
+  const client = stripeClient || stripe;
+
+  const sessionParams: Stripe.Checkout.SessionCreateParams = {
+    mode,
+    line_items: lineItems,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+    metadata,
+  };
+
+  // Add customer if provided
+  if (customerId) {
+    sessionParams.customer = customerId;
+  } else if (customerEmail) {
+    sessionParams.customer_email = customerEmail;
+  } else {
+    // For guest checkout, allow Stripe to collect email
+    sessionParams.customer_creation = 'always';
+  }
+
+  // Add discount/coupon if provided
+  if (couponCode) {
+    sessionParams.discounts = [{ coupon: couponCode }];
+  }
+
+  // Add subscription-specific settings
+  if (mode === 'subscription') {
+    sessionParams.subscription_data = {
+      metadata,
+    };
+  } else {
+    sessionParams.payment_intent_data = {
+      metadata,
+    };
+  }
+
+  // Enable shipping address collection for one-time payments
+  if (mode === 'payment') {
+    sessionParams.shipping_address_collection = {
+      allowed_countries: ['US', 'CA'],
+    };
+  }
+
+  return await client.checkout.sessions.create(sessionParams);
+}
+
+/**
  * Create a Billing Portal session for subscription management
  * Optionally pass a Stripe client for dynamic key support.
  */
