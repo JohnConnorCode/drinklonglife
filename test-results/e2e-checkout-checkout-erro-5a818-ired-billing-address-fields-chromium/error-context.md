@@ -6,7 +6,7 @@
     - banner [ref=e6]:
       - generic [ref=e8]:
         - link "Back to Montoya Capital LLC" [ref=e9] [cursor=pointer]:
-          - /url: http://localhost:3000/blends/green-bomb
+          - /url: http://localhost:3000/blends/yellow-bomb
           - generic [ref=e11]:
             - img [ref=e12]
             - generic [ref=e14]: Back
@@ -32,7 +32,7 @@
       - list [ref=e50]:
         - listitem [ref=e51]:
           - generic [ref=e53]:
-            - generic [ref=e57]: Green Bomb - Shot
+            - generic [ref=e57]: Yellow Bomb - Shot
             - generic [ref=e60]: IDR 86,860.30
   - generic [ref=e62]:
     - main [ref=e63]:

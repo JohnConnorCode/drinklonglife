@@ -20,26 +20,25 @@
         - group "Choose a currency:" [ref=e31]:
           - generic [ref=e32]:
             - generic [ref=e34]:
-              - button "ID IDR 521,667.74" [disabled] [ref=e36] [cursor=pointer]:
+              - button "ID IDR 86,860.30" [disabled] [ref=e36] [cursor=pointer]:
                 - generic [ref=e38]:
                   - img "ID" [ref=e39]
-                  - generic [ref=e40]: IDR 521,667.74
-              - button "US $29.99" [ref=e42] [cursor=pointer]:
+                  - generic [ref=e40]: IDR 86,860.30
+              - button "US $5.00" [ref=e42] [cursor=pointer]:
                 - generic [ref=e44]:
                   - img "US" [ref=e45]
-                  - generic [ref=e46]: $29.99
-            - generic [ref=e48]: 1 USD = 17,394.7229 IDR
+                  - generic [ref=e46]: $5.00
+            - generic [ref=e48]: 1 USD = 17,372.0600 IDR
       - list [ref=e50]:
         - listitem [ref=e51]:
           - generic [ref=e53]:
-            - generic [ref=e57]: Green Bomb - 8oz
-            - generic [ref=e62]: 8oz Green Bomb Blend
-            - generic [ref=e65]: IDR 521,667.74
-  - generic [ref=e67]:
-    - main [ref=e68]:
-      - generic [ref=e69]:
-        - generic [ref=e73]:
-          - iframe [ref=e79]:
+            - generic [ref=e57]: Green Bomb - Shot
+            - generic [ref=e60]: IDR 86,860.30
+  - generic [ref=e62]:
+    - main [ref=e63]:
+      - generic [ref=e64]:
+        - generic [ref=e68]:
+          - iframe [ref=e74]:
             - button "Pay with Link" [ref=f1e7] [cursor=pointer]:
               - generic [ref=f1e8]:
                 - generic [ref=f1e9]:
@@ -49,24 +48,24 @@
                   - img [ref=f1e14]
                   - generic [ref=f1e17]:
                     - img [ref=f1e19]
-                    - generic [ref=f1e29]: "0000"
-          - generic [ref=e80]:
-            - separator [ref=e81]
-            - paragraph [ref=e82]: Or
-        - generic [ref=e86]:
-          - generic [ref=e87]:
-            - generic [ref=e89]:
-              - generic [ref=e91]: Email
-              - textbox "Email" [ref=e98]:
+                    - generic [ref=f1e28]: "0000"
+          - generic [ref=e75]:
+            - separator [ref=e76]
+            - paragraph [ref=e77]: Or
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - generic [ref=e84]:
+              - generic [ref=e86]: Email
+              - textbox "Email" [ref=e93]:
                 - /placeholder: email@example.com
-            - heading "Payment method" [level=2] [ref=e100]
-          - generic [ref=e103]:
-            - generic [ref=e105]:
-              - generic [ref=e107]: Card information
-              - group [ref=e108]:
-                - generic [ref=e109]:
-                  - generic [ref=e111]:
-                    - textbox "Card number" [ref=e114]:
+            - heading "Payment method" [level=2] [ref=e95]
+          - generic [ref=e98]:
+            - generic [ref=e100]:
+              - generic [ref=e102]: Card information
+              - group [ref=e103]:
+                - generic [ref=e104]:
+                  - generic [ref=e106]:
+                    - textbox "Card number" [ref=e109]:
                       - /placeholder: 1234 1234 1234 1234
                     - generic:
                       - generic:
@@ -82,23 +81,23 @@
                         - img "JCB"
                         - img "Discover"
                         - img "Diners Club"
-                  - textbox "Expiration" [ref=e119]:
+                  - textbox "Expiration" [ref=e114]:
                     - /placeholder: MM / YY
-                  - generic [ref=e121]:
-                    - textbox "CVC" [ref=e124]
+                  - generic [ref=e116]:
+                    - textbox "CVC" [ref=e119]
                     - generic:
                       - generic:
                         - img "Credit or debit card CVC"
-            - group "Billing address" [ref=e130]:
-              - generic [ref=e131]:
-                - generic [ref=e133]:
-                  - generic [ref=e135]: Cardholder name
-                  - textbox "Cardholder name" [ref=e142]:
+            - group "Billing address" [ref=e125]:
+              - generic [ref=e126]:
+                - generic [ref=e128]:
+                  - generic [ref=e130]: Cardholder name
+                  - textbox "Cardholder name" [ref=e137]:
                     - /placeholder: Full name on card
-                - generic [ref=e144]:
-                  - generic [ref=e146]: Country or region
-                  - generic [ref=e152]:
-                    - combobox "Country or region" [ref=e153]:
+                - generic [ref=e139]:
+                  - generic [ref=e141]: Country or region
+                  - generic [ref=e147]:
+                    - combobox "Country or region" [ref=e148]:
                       - option "Afghanistan"
                       - option "Åland Islands"
                       - option "Albania"
@@ -337,25 +336,25 @@
                       - option "Zambia"
                       - option "Zimbabwe"
                     - img
-            - generic [ref=e163]:
-              - checkbox "Save my information for faster checkout" [ref=e165] [cursor=pointer]
-              - generic [ref=e166]:
-                - generic [ref=e169] [cursor=pointer]: Save my information for faster checkout
-                - generic [ref=e171]: Pay securely at Montoya Capital LLC and everywhere Link is accepted.
-          - button "Pay" [ref=e176] [cursor=pointer]:
+            - generic [ref=e158]:
+              - checkbox "Save my information for faster checkout" [ref=e160] [cursor=pointer]
+              - generic [ref=e161]:
+                - generic [ref=e164] [cursor=pointer]: Save my information for faster checkout
+                - generic [ref=e166]: Pay securely at Montoya Capital LLC and everywhere Link is accepted.
+          - button "Pay" [ref=e171] [cursor=pointer]:
             - generic:
-              - generic [ref=e178]: Pay
-              - generic [ref=e179]: Processing
+              - generic [ref=e173]: Pay
+              - generic [ref=e174]: Processing
+            - img [ref=e179]
             - img [ref=e184]
-            - img [ref=e189]
-    - contentinfo [ref=e192]:
-      - link "Powered by Stripe" [ref=e194] [cursor=pointer]:
+    - contentinfo [ref=e187]:
+      - link "Powered by Stripe" [ref=e189] [cursor=pointer]:
         - /url: https://stripe.com
-        - generic [ref=e195]:
+        - generic [ref=e190]:
           - text: Powered by
-          - img "Stripe" [ref=e197]
-      - link "Terms" [ref=e200] [cursor=pointer]:
+          - img "Stripe" [ref=e192]
+      - link "Terms" [ref=e195] [cursor=pointer]:
         - /url: https://stripe.com/legal/end-users
-      - link "Privacy" [ref=e201] [cursor=pointer]:
+      - link "Privacy" [ref=e196] [cursor=pointer]:
         - /url: https://stripe.com/privacy
 ```

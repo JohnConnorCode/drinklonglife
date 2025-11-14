@@ -9,6 +9,8 @@ interface ReserveBlendButtonProps {
     price: number;
     stripePriceId?: string;
     stripeSubscriptionPriceId?: string;
+    paymentLinkUrl?: string;
+    subscriptionPaymentLinkUrl?: string;
   };
   blendSlug: string;
   isPopular?: boolean;
@@ -24,7 +26,20 @@ export function ReserveBlendButton({
   const [isSubscription, setIsSubscription] = useState(false);
 
   const handleReserve = async () => {
-    // Determine which price ID to use based on payment mode
+    // Check if Payment Links are available (priority over price IDs)
+    const paymentLinkUrl = isSubscription
+      ? size.subscriptionPaymentLinkUrl
+      : size.paymentLinkUrl;
+
+    // If Payment Link is available, redirect directly
+    if (paymentLinkUrl) {
+      setIsLoading(true);
+      setError(null);
+      window.location.href = paymentLinkUrl;
+      return;
+    }
+
+    // Fallback to custom checkout with price IDs
     const priceId = isSubscription ? size.stripeSubscriptionPriceId : size.stripePriceId;
     const mode = isSubscription ? 'subscription' : 'payment';
 

@@ -1,0 +1,323 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - link "Long Life Logo Long Life" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]:
+          - generic:
+            - generic:
+              - img "Long Life Logo"
+          - generic [ref=e7]:
+            - generic [ref=e8]: Long
+            - generic [ref=e9]: Life
+      - navigation [ref=e10]:
+        - link "Blends" [ref=e12] [cursor=pointer]:
+          - /url: /blends
+          - text: Blends
+        - link "How We Make It" [ref=e14] [cursor=pointer]:
+          - /url: /how-we-make-it
+          - text: How We Make It
+        - link "Ingredients" [ref=e16] [cursor=pointer]:
+          - /url: /ingredients
+          - text: Ingredients
+        - link "Journal" [ref=e18] [cursor=pointer]:
+          - /url: /journal
+          - text: Journal
+        - link "FAQ" [ref=e20] [cursor=pointer]:
+          - /url: /faq
+          - text: FAQ
+      - generic [ref=e21]:
+        - link "Login" [ref=e23] [cursor=pointer]:
+          - /url: /login
+        - link "Sign Up" [ref=e26] [cursor=pointer]:
+          - /url: /signup
+        - link "Reserve This Week" [ref=e29] [cursor=pointer]:
+          - /url: /blends
+  - main [ref=e30]:
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - img "Peak Performance Starts Here" [ref=e34]
+        - generic [ref=e38]:
+          - heading "Peak Performance Starts Here" [level=1] [ref=e39]
+          - paragraph [ref=e40]: Cold-pressed, small-batch juices crafted for serious athletes and health-conscious humans.
+          - link "Shop Blends" [ref=e42] [cursor=pointer]:
+            - /url: /blends
+      - generic [ref=e43]:
+        - img "Real Ingredients. Real Results." [ref=e45]
+        - generic [ref=e49]:
+          - heading "Real Ingredients. Real Results." [level=1] [ref=e50]
+          - paragraph [ref=e51]: No concentrates. No shortcuts. Just whole fruits, roots, and greens pressed fresh weekly.
+          - link "Our Process" [ref=e53] [cursor=pointer]:
+            - /url: /how-we-make-it
+      - generic [ref=e54]:
+        - img "Small-Batch Integrity" [ref=e56]
+        - generic [ref=e60]:
+          - heading "Small-Batch Integrity" [level=1] [ref=e61]
+          - paragraph [ref=e62]: Limited runs. First come, first served. Made in Indiana with ingredients you can trace.
+          - link "Learn More" [ref=e64] [cursor=pointer]:
+            - /url: /about
+      - button "Previous slide" [ref=e65] [cursor=pointer]:
+        - img [ref=e66]
+      - button "Next slide" [ref=e68] [cursor=pointer]:
+        - img [ref=e69]
+      - generic [ref=e71]:
+        - button "Go to slide 1" [ref=e72] [cursor=pointer]
+        - button "Go to slide 2" [ref=e73] [cursor=pointer]
+        - button "Go to slide 3" [ref=e74] [cursor=pointer]
+      - img [ref=e76]
+    - generic [ref=e80]:
+      - generic [ref=e82] [cursor=pointer]:
+        - img "Nothing fake" [ref=e84]
+        - generic [ref=e86]:
+          - heading "Nothing fake" [level=3] [ref=e87]
+          - paragraph [ref=e88]: Only whole fruits, roots, and greens. No concentrates. No fillers.
+      - generic [ref=e92] [cursor=pointer]:
+        - img "Pressed for power" [ref=e94]
+        - generic [ref=e96]:
+          - heading "Pressed for power" [level=3] [ref=e97]
+          - paragraph [ref=e98]: Cold-pressed to preserve flavor and nutrients.
+      - generic [ref=e102] [cursor=pointer]:
+        - img "Small-batch integrity" [ref=e104]
+        - generic [ref=e106]:
+          - heading "Small-batch integrity" [level=3] [ref=e107]
+          - paragraph [ref=e108]: Made in limited runs. First come, first served.
+    - generic [ref=e115]:
+      - generic [ref=e116]:
+        - heading "Featured Blends" [level=2] [ref=e117]
+        - paragraph [ref=e118]: Sold in weekly drops. Reserve early.
+      - generic [ref=e119]:
+        - link "Yellow Bomb Yellow Bomb Glow & Thrive Immunity Digestion Glow" [ref=e120] [cursor=pointer]:
+          - /url: /blends/yellow-bomb
+          - generic [ref=e121]:
+            - img "Yellow Bomb" [ref=e124]
+            - heading "Yellow Bomb" [level=3] [ref=e125]
+            - paragraph [ref=e126]: Glow & Thrive
+            - generic [ref=e127]:
+              - generic [ref=e128]: Immunity
+              - generic [ref=e129]: Digestion
+              - generic [ref=e130]: Glow
+        - link "Red Bomb Red Bomb Boost & Rejuvenate Antioxidants Heart Health Vitality" [ref=e131] [cursor=pointer]:
+          - /url: /blends/red-bomb
+          - generic [ref=e132]:
+            - img "Red Bomb" [ref=e135]
+            - heading "Red Bomb" [level=3] [ref=e136]
+            - paragraph [ref=e137]: Boost & Rejuvenate
+            - generic [ref=e138]:
+              - generic [ref=e139]: Antioxidants
+              - generic [ref=e140]: Heart Health
+              - generic [ref=e141]: Vitality
+        - link "Green Bomb Green Bomb Energize & Refresh Energy Detox Immunity" [ref=e142] [cursor=pointer]:
+          - /url: /blends/green-bomb
+          - generic [ref=e143]:
+            - img "Green Bomb" [ref=e146]
+            - heading "Green Bomb" [level=3] [ref=e147]
+            - paragraph [ref=e148]: Energize & Refresh
+            - generic [ref=e149]:
+              - generic [ref=e150]: Energy
+              - generic [ref=e151]: Detox
+              - generic [ref=e152]: Immunity
+      - generic [ref=e153]:
+        - paragraph [ref=e154]: "Sizes: 1-Gallon $50 • ½-Gallon $35 • Shot $5"
+        - paragraph [ref=e155]: Pickup or local delivery during weekly windows. Shipments coming soon.
+        - link "Reserve This Week" [ref=e156] [cursor=pointer]:
+          - /url: /blends
+    - generic [ref=e162]:
+      - heading "By the Numbers" [level=2] [ref=e164]
+      - generic [ref=e166]:
+        - generic [ref=e167]:
+          - generic [ref=e169]: 1,200+
+          - paragraph [ref=e170]: Customers Served
+        - generic [ref=e171]:
+          - generic [ref=e173]: 450+
+          - paragraph [ref=e174]: Batches Made
+        - generic [ref=e175]:
+          - generic [ref=e177]: "2"
+          - paragraph [ref=e178]: Years Crafting
+        - generic [ref=e179]:
+          - generic [ref=e181]: 4,800+
+          - paragraph [ref=e182]: Bottles Produced
+    - generic [ref=e184]:
+      - generic [ref=e185]:
+        - heading "What People Say" [level=2] [ref=e186]
+        - paragraph [ref=e187]: Real results from real humans.
+      - generic [ref=e188]:
+        - generic [ref=e189]:
+          - img "Sarah M." [ref=e191]
+          - paragraph [ref=e192]: "\"The Red Bomb is my go-to after long runs. I actually feel the difference in recovery time.\""
+          - generic [ref=e193]:
+            - paragraph [ref=e194]: Sarah M.
+            - paragraph [ref=e195]: Marathon Runner
+        - generic [ref=e196]:
+          - button "Go to testimonial 1" [ref=e197] [cursor=pointer]
+          - button "Go to testimonial 2" [ref=e198] [cursor=pointer]
+          - button "Go to testimonial 3" [ref=e199] [cursor=pointer]
+          - button "Go to testimonial 4" [ref=e200] [cursor=pointer]
+          - button "Go to testimonial 5" [ref=e201] [cursor=pointer]
+    - generic [ref=e206]:
+      - generic [ref=e207]:
+        - heading "How We Make It" [level=2] [ref=e208]
+        - paragraph [ref=e209]: We care about every detail, from farm to bottle. Here's our process.
+      - generic [ref=e210]:
+        - generic [ref=e212]:
+          - generic [ref=e214]:
+            - generic [ref=e215]:
+              - generic [ref=e217]: "1"
+              - generic [ref=e218]: Step 1
+            - heading "Source" [level=3] [ref=e219]
+            - paragraph [ref=e222]: Partner with regenerative organic farms. Every ingredient traced to origin.
+          - generic [ref=e225]:
+            - img "Source" [ref=e227]
+            - img [ref=e231]
+        - generic [ref=e236]:
+          - generic [ref=e238]:
+            - generic [ref=e239]:
+              - generic [ref=e241]: "2"
+              - generic [ref=e242]: Step 2
+            - heading "Cold-Press" [level=3] [ref=e243]
+            - paragraph [ref=e246]: Hydraulic press extracts maximum nutrients without heat or oxidation.
+          - generic [ref=e249]:
+            - img "Cold-Press" [ref=e251]
+            - img [ref=e255]
+        - generic [ref=e260]:
+          - generic [ref=e262]:
+            - generic [ref=e263]:
+              - generic [ref=e265]: "3"
+              - generic [ref=e266]: Step 3
+            - heading "Freeze Within Hours" [level=3] [ref=e267]
+            - paragraph [ref=e270]: Flash-frozen to lock in peak freshness and enzyme activity.
+          - generic [ref=e273]:
+            - img "Freeze Within Hours" [ref=e275]
+            - img [ref=e279]
+        - generic [ref=e284]:
+          - generic [ref=e286]:
+            - generic [ref=e287]:
+              - generic [ref=e289]: "4"
+              - generic [ref=e290]: Step 4
+            - heading "Ship Direct" [level=3] [ref=e291]
+            - paragraph [ref=e294]: Delivered frozen to your door. No preservatives, ever.
+          - generic [ref=e297]:
+            - img "Ship Direct" [ref=e299]
+            - img [ref=e303]
+    - generic [ref=e309]:
+      - generic [ref=e310]:
+        - generic [ref=e311]:
+          - heading "Get first access to drops and new blends" [level=2] [ref=e312]
+          - paragraph [ref=e313]: Enter your email to reserve before batches sell out.
+        - generic [ref=e314]:
+          - generic [ref=e315]:
+            - img [ref=e317]
+            - generic [ref=e319]:
+              - paragraph [ref=e320]: Early Access
+              - paragraph [ref=e321]: Reserve before public
+          - generic [ref=e322]:
+            - img [ref=e324]
+            - generic [ref=e326]:
+              - paragraph [ref=e327]: Exclusive Drops
+              - paragraph [ref=e328]: Members-only blends
+          - generic [ref=e329]:
+            - img [ref=e331]
+            - generic [ref=e333]:
+              - paragraph [ref=e334]: New Recipes
+              - paragraph [ref=e335]: Be first to try
+          - generic [ref=e336]:
+            - img [ref=e338]
+            - generic [ref=e340]:
+              - paragraph [ref=e341]: Weekly Updates
+              - paragraph [ref=e342]: Fresh batch alerts
+        - generic [ref=e343]:
+          - generic [ref=e346]:
+            - textbox "Enter your email" [ref=e347]
+            - button "Subscribe" [ref=e348] [cursor=pointer]
+          - generic [ref=e349]:
+            - paragraph [ref=e350]:
+              - img [ref=e351]
+              - text: No spam, unsubscribe anytime
+            - paragraph [ref=e353]:
+              - text: Join
+              - generic [ref=e355]: 1,200+
+              - text: subscribers
+        - paragraph [ref=e356]: We grow by word of mouth. Taste it. Share it. Bring a friend to pickup day.
+      - generic [ref=e357]:
+        - img "Peak Performance Starts Here" [ref=e359]
+        - img "Real Ingredients. Real Results" [ref=e361]
+        - img "Small-Batch Integrity" [ref=e363]
+  - contentinfo [ref=e364]:
+    - generic [ref=e366]:
+      - generic [ref=e367]:
+        - generic [ref=e369]:
+          - generic [ref=e371]:
+            - generic:
+              - generic:
+                - img "Long Life Logo"
+            - generic [ref=e372]:
+              - generic [ref=e373]: Long
+              - generic [ref=e374]: Life
+          - paragraph [ref=e375]: Real juice. Real people.
+          - generic [ref=e376]:
+            - link "Instagram" [ref=e377] [cursor=pointer]:
+              - /url: https://instagram.com/drinklonglife
+              - img [ref=e378]
+            - link "TikTok" [ref=e380] [cursor=pointer]:
+              - /url: https://tiktok.com/@drinklonglife
+              - img [ref=e381]
+            - link "YouTube" [ref=e383] [cursor=pointer]:
+              - /url: https://youtube.com/@drinklonglife
+              - img [ref=e384]
+        - generic [ref=e387]:
+          - heading "Explore" [level=4] [ref=e388]
+          - list [ref=e389]:
+            - listitem [ref=e390]:
+              - link "All Blends" [ref=e391] [cursor=pointer]:
+                - /url: /blends
+                - text: All Blends
+            - listitem [ref=e392]:
+              - link "Subscriptions" [ref=e393] [cursor=pointer]:
+                - /url: /subscriptions
+                - text: Subscriptions
+            - listitem [ref=e394]:
+              - link "Wholesale" [ref=e395] [cursor=pointer]:
+                - /url: /wholesale
+                - text: Wholesale
+            - listitem [ref=e396]:
+              - link "How We Make It" [ref=e397] [cursor=pointer]:
+                - /url: /how-we-make-it
+                - text: How We Make It
+            - listitem [ref=e398]:
+              - link "Sourcing Standards" [ref=e399] [cursor=pointer]:
+                - /url: /ingredients
+                - text: Sourcing Standards
+            - listitem [ref=e400]:
+              - link "Journal" [ref=e401] [cursor=pointer]:
+                - /url: /journal
+                - text: Journal
+            - listitem [ref=e402]:
+              - link "FAQ" [ref=e403] [cursor=pointer]:
+                - /url: /faq
+                - text: FAQ
+            - listitem [ref=e404]:
+              - link "Contact" [ref=e405] [cursor=pointer]:
+                - /url: /contact
+                - text: Contact
+        - generic [ref=e407]:
+          - heading "Contact" [level=4] [ref=e408]
+          - paragraph [ref=e409]:
+            - link "hello@drinklonglife.com" [ref=e410] [cursor=pointer]:
+              - /url: mailto:hello@drinklonglife.com
+              - text: hello@drinklonglife.com
+          - paragraph [ref=e411]: Indiana, USA
+        - generic [ref=e413]:
+          - heading "Legal" [level=4] [ref=e414]
+          - list [ref=e415]:
+            - listitem [ref=e416]:
+              - link "Terms" [ref=e417] [cursor=pointer]:
+                - /url: "#"
+                - text: Terms
+            - listitem [ref=e418]:
+              - link "Privacy" [ref=e419] [cursor=pointer]:
+                - /url: "#"
+                - text: Privacy
+      - paragraph [ref=e422]: © 2025 Long Life. All rights reserved.
+```

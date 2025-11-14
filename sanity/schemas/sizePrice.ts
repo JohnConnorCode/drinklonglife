@@ -43,5 +43,17 @@ export default defineType({
           return true;
         }),
     }),
+    defineField({
+      name: 'paymentLinkUrl',
+      title: 'Payment Link URL (One-Time)',
+      type: 'url',
+      description: 'Stripe Payment Link URL for one-time purchases (e.g., https://buy.stripe.com/xxxxx). This takes priority over stripePriceId.',
+    }),
+    defineField({
+      name: 'subscriptionPaymentLinkUrl',
+      title: 'Payment Link URL (Subscription)',
+      type: 'url',
+      description: 'Stripe Payment Link URL for subscriptions (e.g., https://buy.stripe.com/xxxxx). This takes priority over stripeSubscriptionPriceId.',
+    }),
   ],
 });

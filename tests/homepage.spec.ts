@@ -178,4 +178,13 @@ test.describe('Homepage Content Visibility and Aesthetics', () => {
       }
     }
   });
+
+  test('klaviyo embed placeholder renders', async ({ page }) => {
+    const embed = page.locator('.klaviyo-form-StpCUy').first();
+    await embed.scrollIntoViewIfNeeded();
+    await expect(embed).toBeVisible();
+
+    const isKlaviyoDefined = await page.evaluate(() => typeof window.klaviyo !== 'undefined');
+    expect(isKlaviyoDefined).toBeTruthy();
+  });
 });
