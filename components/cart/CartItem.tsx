@@ -78,7 +78,7 @@ export function CartItem({ item }: CartItemProps) {
           >
             <Minus className="w-4 h-4" />
           </button>
-          <span className="w-8 text-center font-semibold">{item.quantity}</span>
+          <span className="w-12 text-center font-semibold">Qty: {item.quantity}</span>
           <button
             onClick={handleIncrement}
             className="p-2 hover:bg-white rounded-md transition-colors"
@@ -94,6 +94,7 @@ export function CartItem({ item }: CartItemProps) {
           <button
             onClick={handleRemove}
             className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1 transition-colors"
+            aria-label="Remove item"
           >
             <Trash2 className="w-4 h-4" />
             Remove
@@ -104,6 +105,7 @@ export function CartItem({ item }: CartItemProps) {
         <button
           onClick={handleRemove}
           className="md:hidden text-sm text-red-600 hover:text-red-700 flex items-center gap-1 transition-colors mt-2"
+          aria-label="Remove item"
         >
           <Trash2 className="w-4 h-4" />
           Remove

@@ -83,7 +83,7 @@ test.describe('Shopping Cart - Cart Page', () => {
     // Verify order summary exists
     await expect(page.locator('h2:has-text("Order Summary")')).toBeVisible();
     await expect(page.locator('text=Subtotal')).toBeVisible();
-    await expect(page.locator('text=Shipping')).toBeVisible();
+    await expect(page.locator('.space-y-3 >> text=Shipping')).toBeVisible();
     await expect(page.locator('text=Total')).toBeVisible();
   });
 
