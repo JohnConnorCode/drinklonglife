@@ -1,0 +1,244 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - link "Long Life Logo Long Life" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]:
+          - img "Long Life Logo" [ref=e9]
+          - generic [ref=e10]:
+            - generic [ref=e11]: Long
+            - generic [ref=e12]: Life
+      - navigation [ref=e13]:
+        - link "Blends" [ref=e15] [cursor=pointer]:
+          - /url: /blends
+          - text: Blends
+        - link "How We Make It" [ref=e18] [cursor=pointer]:
+          - /url: /how-we-make-it
+          - text: How We Make It
+        - link "Ingredients" [ref=e20] [cursor=pointer]:
+          - /url: /ingredients
+          - text: Ingredients
+        - link "Journal" [ref=e22] [cursor=pointer]:
+          - /url: /journal
+          - text: Journal
+        - link "FAQ" [ref=e24] [cursor=pointer]:
+          - /url: /faq
+          - text: FAQ
+      - generic [ref=e25]:
+        - link "Login" [ref=e27] [cursor=pointer]:
+          - /url: /login
+        - link "Sign Up" [ref=e30] [cursor=pointer]:
+          - /url: /signup
+        - link "Reserve This Week" [ref=e33] [cursor=pointer]:
+          - /url: /blends
+  - main [ref=e34]:
+    - generic [ref=e39]:
+      - img "Green Bomb" [ref=e43]
+      - generic [ref=e45]:
+        - generic [ref=e49]: Fresh Weekly Batch
+        - heading "Green Bomb" [level=1] [ref=e51]
+        - paragraph [ref=e53]: Energize & Refresh
+        - generic [ref=e55]:
+          - generic [ref=e56]: Energy
+          - generic [ref=e57]: Detox
+          - generic [ref=e58]: Immunity
+        - link "Reserve This Batch" [ref=e60] [cursor=pointer]:
+          - /url: "#pricing"
+    - generic [ref=e65]:
+      - generic [ref=e66]:
+        - heading "What's inside" [level=2] [ref=e67]
+        - paragraph [ref=e68]: Sourced from trusted regenerative farms
+      - generic [ref=e69]:
+        - generic [ref=e71]:
+          - generic [ref=e73]: C
+          - heading "Celery" [level=3] [ref=e74]
+          - generic [ref=e75]:
+            - img [ref=e77]
+            - generic [ref=e79]:
+              - img [ref=e80]
+              - generic [ref=e82]: Year-round
+          - generic [ref=e83]:
+            - paragraph [ref=e84]: Farm Partners
+            - list [ref=e85]:
+              - listitem [ref=e86]:
+                - img [ref=e87]
+                - generic [ref=e90]:
+                  - strong [ref=e91]: Ojai Greens Collective
+                  - generic [ref=e92]: • Ojai, CA
+        - generic [ref=e94]:
+          - generic [ref=e96]: L
+          - heading "Lacinato Kale" [level=3] [ref=e97]
+          - generic [ref=e98]:
+            - img [ref=e100]
+            - generic [ref=e102]:
+              - img [ref=e103]
+              - generic [ref=e105]: Fall–spring (best flavor after frost)
+          - generic [ref=e106]:
+            - paragraph [ref=e107]: Farm Partners
+            - list [ref=e108]:
+              - listitem [ref=e109]:
+                - img [ref=e110]
+                - generic [ref=e113]:
+                  - strong [ref=e114]: Ojai Greens Collective
+                  - generic [ref=e115]: • Ojai, CA
+        - generic [ref=e117]:
+          - generic [ref=e119]: M
+          - heading "Meyer Lemon" [level=3] [ref=e120]
+          - generic [ref=e121]:
+            - img [ref=e123]
+            - generic [ref=e125]:
+              - img [ref=e126]
+              - generic [ref=e128]: Winter peak (December–March)
+          - generic [ref=e129]:
+            - paragraph [ref=e130]: Farm Partners
+            - list [ref=e131]:
+              - listitem [ref=e132]:
+                - img [ref=e133]
+                - generic [ref=e136]:
+                  - strong [ref=e137]: Central Coast Citrus Co.
+                  - generic [ref=e138]: • Ventura County, CA
+        - generic [ref=e140]:
+          - generic [ref=e142]: F
+          - heading "Fresh Ginger" [level=3] [ref=e143]
+          - generic [ref=e144]:
+            - img [ref=e146]
+            - generic [ref=e148]:
+              - img [ref=e149]
+              - generic [ref=e151]: Harvested fall, available year-round
+          - generic [ref=e152]:
+            - paragraph [ref=e153]: Farm Partners
+            - list [ref=e154]:
+              - listitem [ref=e155]:
+                - img [ref=e156]
+                - generic [ref=e159]:
+                  - strong [ref=e160]: Sonoma Roots
+                  - generic [ref=e161]: • Sonoma County, CA
+    - generic [ref=e165]:
+      - generic [ref=e166]:
+        - heading "Choose your size" [level=2] [ref=e167]
+        - paragraph [ref=e168]: Fresh-pressed and ready for pickup or delivery
+      - generic [ref=e169]:
+        - generic [ref=e171]:
+          - generic [ref=e172]:
+            - heading "Shot" [level=3] [ref=e173]
+            - paragraph
+          - generic [ref=e175]: $5
+          - generic [ref=e176]:
+            - generic [ref=e177]:
+              - button "One-Time" [ref=e178] [cursor=pointer]
+              - button "Monthly" [ref=e179] [cursor=pointer]
+            - generic [ref=e180]:
+              - paragraph [ref=e181]: $5
+              - paragraph [ref=e182]: One-time purchase
+            - button "Reserve Now" [ref=e183] [cursor=pointer]
+        - generic [ref=e185]:
+          - generic [ref=e186]: Most Popular
+          - generic [ref=e187]:
+            - heading "Half Gallon" [level=3] [ref=e188]
+            - paragraph
+          - generic [ref=e190]: $35
+          - generic [ref=e191]:
+            - generic [ref=e192]:
+              - button "One-Time" [ref=e193] [cursor=pointer]
+              - button "Monthly" [ref=e194] [cursor=pointer]
+            - generic [ref=e195]:
+              - paragraph [ref=e196]: $35
+              - paragraph [ref=e197]: One-time purchase
+            - button "Reserve Now" [ref=e198] [cursor=pointer]
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - heading "Gallon" [level=3] [ref=e202]
+            - paragraph
+          - generic [ref=e204]: $50
+          - generic [ref=e205]:
+            - generic [ref=e206]:
+              - button "One-Time" [ref=e207] [cursor=pointer]
+              - button "Monthly" [ref=e208] [cursor=pointer]
+            - generic [ref=e209]:
+              - paragraph [ref=e210]: $50
+              - paragraph [ref=e211]: One-time purchase
+            - button "Reserve Now" [ref=e212] [cursor=pointer]
+      - paragraph [ref=e214]: Free delivery over $40 • Pickup available at all locations
+    - link "Explore All Blends" [ref=e218] [cursor=pointer]:
+      - /url: /blends
+      - img [ref=e219]
+      - generic [ref=e221]: Explore All Blends
+  - contentinfo [ref=e222]:
+    - generic [ref=e224]:
+      - generic [ref=e225]:
+        - generic [ref=e227]:
+          - generic [ref=e229]:
+            - img "Long Life Logo" [ref=e232]
+            - generic [ref=e233]:
+              - generic [ref=e234]: Long
+              - generic [ref=e235]: Life
+          - paragraph [ref=e236]: Real juice. Real people.
+          - generic [ref=e237]:
+            - link "Instagram" [ref=e238] [cursor=pointer]:
+              - /url: https://instagram.com/drinklonglife
+              - img [ref=e239]
+            - link "TikTok" [ref=e241] [cursor=pointer]:
+              - /url: https://tiktok.com/@drinklonglife
+              - img [ref=e242]
+            - link "YouTube" [ref=e244] [cursor=pointer]:
+              - /url: https://youtube.com/@drinklonglife
+              - img [ref=e245]
+        - generic [ref=e248]:
+          - heading "Explore" [level=4] [ref=e249]
+          - list [ref=e250]:
+            - listitem [ref=e251]:
+              - link "All Blends" [ref=e252] [cursor=pointer]:
+                - /url: /blends
+                - text: All Blends
+            - listitem [ref=e253]:
+              - link "Subscriptions" [ref=e254] [cursor=pointer]:
+                - /url: /subscriptions
+                - text: Subscriptions
+            - listitem [ref=e255]:
+              - link "Wholesale" [ref=e256] [cursor=pointer]:
+                - /url: /wholesale
+                - text: Wholesale
+            - listitem [ref=e257]:
+              - link "How We Make It" [ref=e258] [cursor=pointer]:
+                - /url: /how-we-make-it
+                - text: How We Make It
+            - listitem [ref=e259]:
+              - link "Sourcing Standards" [ref=e260] [cursor=pointer]:
+                - /url: /ingredients
+                - text: Sourcing Standards
+            - listitem [ref=e261]:
+              - link "Journal" [ref=e262] [cursor=pointer]:
+                - /url: /journal
+                - text: Journal
+            - listitem [ref=e263]:
+              - link "FAQ" [ref=e264] [cursor=pointer]:
+                - /url: /faq
+                - text: FAQ
+            - listitem [ref=e265]:
+              - link "Contact" [ref=e266] [cursor=pointer]:
+                - /url: /contact
+                - text: Contact
+        - generic [ref=e268]:
+          - heading "Contact" [level=4] [ref=e269]
+          - paragraph [ref=e270]:
+            - link "hello@drinklonglife.com" [ref=e271] [cursor=pointer]:
+              - /url: mailto:hello@drinklonglife.com
+              - text: hello@drinklonglife.com
+          - paragraph [ref=e272]: Indiana, USA
+        - generic [ref=e274]:
+          - heading "Legal" [level=4] [ref=e275]
+          - list [ref=e276]:
+            - listitem [ref=e277]:
+              - link "Terms" [ref=e278] [cursor=pointer]:
+                - /url: "#"
+                - text: Terms
+            - listitem [ref=e279]:
+              - link "Privacy" [ref=e280] [cursor=pointer]:
+                - /url: "#"
+                - text: Privacy
+      - paragraph [ref=e283]: © 2025 Long Life. All rights reserved.
+  - alert [ref=e284]
+```

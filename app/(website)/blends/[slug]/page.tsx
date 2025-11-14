@@ -8,6 +8,8 @@ import { RichText } from '@/components/RichText';
 import { urlFor } from '@/lib/image';
 import { FadeIn, StaggerContainer, FloatingElement } from '@/components/animations';
 import { ReserveBlendButton } from '@/components/blends/ReserveBlendButton';
+import { AddToCartButton } from '@/components/cart/AddToCartButton';
+import { getStripePrices } from '@/lib/stripe';
 
 export const revalidate = 60;
 
@@ -79,6 +81,20 @@ export default async function BlendPage({ params }: BlendPageProps) {
         </div>
       </Section>
     );
+  }
+
+  // Fetch Stripe prices for all variants
+  const priceMap = new Map<string, number>();
+  if (blend.stripeProduct?.variants) {
+    const priceIds = blend.stripeProduct.variants.map((v: any) => v.stripePriceId).filter(Boolean);
+    if (priceIds.length > 0) {
+      const prices = await getStripePrices(priceIds);
+      prices.forEach((price, priceId) => {
+        if (price.unit_amount) {
+          priceMap.set(priceId, price.unit_amount);
+        }
+      });
+    }
   }
 
   const labelColorMap: Record<string, string> = {
@@ -309,11 +325,24 @@ export default async function BlendPage({ params }: BlendPageProps) {
                           {sizeData.servingsPerBottle} servings per bottle
                         </p>
                       )}
-                      <ReserveBlendButton
-                        size={sizeData}
-                        blendSlug={params.slug}
-                        isPopular={isPopular}
-                      />
+                      {blend.stripeProduct?.variants && sizeData.stripePriceId && priceMap.has(sizeData.stripePriceId) ? (
+                        <AddToCartButton
+                          priceId={sizeData.stripePriceId}
+                          productName={`${blend.name} - ${sizeData.name}`}
+                          productType="one-time"
+                          amount={priceMap.get(sizeData.stripePriceId)!}
+                          image={blend.image ? urlFor(blend.image).url() : undefined}
+                          blendSlug={params.slug}
+                          sizeKey={item.sizeKey}
+                          variantLabel={sizeData.name}
+                        />
+                      ) : (
+                        <ReserveBlendButton
+                          size={sizeData}
+                          blendSlug={params.slug}
+                          isPopular={isPopular}
+                        />
+                      )}
                     </div>
                   );
                 })}
