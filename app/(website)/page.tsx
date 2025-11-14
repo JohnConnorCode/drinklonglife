@@ -11,6 +11,7 @@ import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 import { StatsSection } from '@/components/StatsSection';
 import { HeroSlider } from '@/components/HeroSlider';
 import { NewsletterForm } from '@/components/NewsletterForm';
+import { NewsletterSection } from '@/components/NewsletterSection';
 
 export const revalidate = 60;
 

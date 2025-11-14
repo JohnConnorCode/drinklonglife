@@ -6,7 +6,7 @@ import { postsQuery } from '@/lib/sanity.queries';
 import { Section } from '@/components/Section';
 import { FadeIn, StaggerContainer } from '@/components/animations';
 import { urlFor } from '@/lib/image';
-import { NewsletterForm } from '@/components/NewsletterForm';
+import { NewsletterSection } from '@/components/NewsletterSection';
 
 export const revalidate = 60;
 
@@ -193,31 +193,9 @@ export default async function JournalPage() {
 
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <FadeIn direction="up">
-            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md">
-              <svg className="w-5 h-5 text-accent-primary" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
-              <span className="text-sm font-semibold text-accent-primary">Stay Connected</span>
+            <div className="max-w-3xl mx-auto text-center">
+              <NewsletterSection />
             </div>
-            <h2 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Get Wellness Insights & Recipe Ideas
-            </h2>
-            <p className="text-xl text-gray-700 mb-8 leading-relaxed max-w-2xl mx-auto">
-              Join our community and be the first to know about new recipes, wellness tips, and exclusive drops.
-            </p>
-          </FadeIn>
-
-          <FadeIn direction="up" delay={0.2}>
-            <div className="max-w-xl mx-auto mb-6">
-              <NewsletterForm />
-            </div>
-            <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              No spam, unsubscribe anytime
-            </p>
           </FadeIn>
         </div>
       </Section>
