@@ -1,7 +1,7 @@
 # Page snapshot
 
 ```yaml
-- generic [active] [ref=e1]:
+- generic [ref=e1]:
   - banner [ref=e2]:
     - generic [ref=e4]:
       - link "Long Life Logo Long Life" [ref=e5] [cursor=pointer]:
@@ -56,14 +56,14 @@
             - paragraph [ref=e54]: One-time purchase
           - generic [ref=e55]:
             - generic [ref=e56]:
-              - button "Decrease quantity" [disabled] [ref=e57]:
+              - button "Decrease quantity" [ref=e57] [cursor=pointer]:
                 - img [ref=e58]
-              - generic [ref=e59]: "1"
-              - button "Increase quantity" [ref=e60] [cursor=pointer]:
+              - generic [ref=e59]: "Qty: 2"
+              - button "Increase quantity" [active] [ref=e60] [cursor=pointer]:
                 - img [ref=e61]
             - generic [ref=e62]:
-              - paragraph [ref=e63]: $5.00
-              - button "Remove" [ref=e64] [cursor=pointer]:
+              - paragraph [ref=e63]: $10.00
+              - button "Remove item" [ref=e64] [cursor=pointer]:
                 - img [ref=e65]
                 - text: Remove
         - generic [ref=e69]:
@@ -74,13 +74,13 @@
           - generic [ref=e76]:
             - generic [ref=e77]:
               - generic [ref=e78]: Subtotal
-              - generic [ref=e79]: $5.00
+              - generic [ref=e79]: $10.00
             - generic [ref=e80]:
               - generic [ref=e81]: Shipping
               - generic [ref=e82]: Calculated at checkout
           - generic [ref=e83]:
             - generic [ref=e84]: Total
-            - generic [ref=e85]: $5.00
+            - generic [ref=e85]: $10.00
           - button "Proceed to Checkout" [ref=e86] [cursor=pointer]
           - button "Clear Cart" [ref=e87] [cursor=pointer]
           - generic [ref=e89]:
