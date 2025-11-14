@@ -1,68 +1,108 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, FormEvent } from 'react';
 
-interface KlaviyoFormProps {
-  formId?: string;
+interface NewsletterFormProps {
+  listId?: string;
   className?: string;
 }
 
-export function NewsletterForm({ formId = 'StpCUy', className = '' }: KlaviyoFormProps) {
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+const COMPANY_ID = process.env.NEXT_PUBLIC_KLAVIYO_COMPANY_ID || 'WCHubr';
+const API_ENDPOINT = `https://a.klaviyo.com/client/subscriptions/?company_id=${COMPANY_ID}`;
 
-    console.log('[Klaviyo Debug] Checking Klaviyo SDK status...');
-    console.log('[Klaviyo Debug] Form ID:', formId);
-    console.log('[Klaviyo Debug] window.klaviyo exists:', !!window.klaviyo);
-    console.log('[Klaviyo Debug] window._klOnsite exists:', !!window._klOnsite);
+export function NewsletterForm({ listId, className = '' }: NewsletterFormProps) {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
 
-    // Check for form div in DOM
-    const formDiv = document.querySelector(`.klaviyo-form-${formId}`);
-    console.log('[Klaviyo Debug] Form div found in DOM:', !!formDiv);
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('loading');
+    setMessage('');
 
-    if (formDiv) {
-      console.log('[Klaviyo Debug] Form div innerHTML:', formDiv.innerHTML || '(empty)');
-      console.log('[Klaviyo Debug] Form div children count:', formDiv.children.length);
+    try {
+      const payload: any = {
+        data: {
+          type: 'subscription',
+          attributes: {
+            profile: {
+              data: {
+                type: 'profile',
+                attributes: {
+                  email: email,
+                },
+              },
+            },
+          },
+        },
+      };
+
+      // Add list relationship if listId provided
+      if (listId) {
+        payload.data.relationships = {
+          list: {
+            data: {
+              type: 'list',
+              id: listId,
+            },
+          },
+        };
+      }
+
+      const response = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'revision': '2024-10-15',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok || response.status === 202) {
+        setStatus('success');
+        setMessage('Thanks for subscribing!');
+        setEmail('');
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Klaviyo API error:', errorData);
+        setStatus('error');
+        setMessage('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Newsletter signup error:', error);
+      setStatus('error');
+      setMessage('Something went wrong. Please try again.');
     }
-
-    // Wait for Klaviyo SDK to fully load and inject form
-    const checkInterval = setInterval(() => {
-      const formDiv = document.querySelector(`.klaviyo-form-${formId}`);
-      if (formDiv && formDiv.children.length > 0) {
-        console.log('[Klaviyo Debug] ✓ Form successfully injected by Klaviyo SDK');
-        clearInterval(checkInterval);
-      }
-    }, 500);
-
-    // Stop checking after 10 seconds
-    setTimeout(() => {
-      clearInterval(checkInterval);
-      const formDiv = document.querySelector(`.klaviyo-form-${formId}`);
-      if (!formDiv || formDiv.children.length === 0) {
-        console.error('[Klaviyo Debug] ✗ Form failed to load after 10 seconds');
-        console.error('[Klaviyo Debug] Possible issues:');
-        console.error('  1. Form ID "' + formId + '" does not exist in Klaviyo dashboard');
-        console.error('  2. Form is not published/live in Klaviyo');
-        console.error('  3. Form targeting settings prevent display on this domain');
-        console.error('  4. Company ID mismatch (check NEXT_PUBLIC_KLAVIYO_COMPANY_ID)');
-      }
-    }, 10000);
-
-    return () => clearInterval(checkInterval);
-  }, [formId]);
+  };
 
   return (
-    <div className={`klaviyo-form-embed ${className}`}>
-      {/* Klaviyo will inject the form here based on your Klaviyo dashboard settings */}
-      <div className={`klaviyo-form-${formId}`} />
+    <div className={className}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <div className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            required
+            disabled={status === 'loading'}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+          </button>
+        </div>
+
+        {message && (
+          <p className={`text-sm ${status === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+            {message}
+          </p>
+        )}
+      </form>
     </div>
   );
-}
-
-// Type declaration for Klaviyo
-declare global {
-  interface Window {
-    klaviyo: any;
-    _klOnsite: any[];
-  }
 }
