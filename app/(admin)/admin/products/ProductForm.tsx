@@ -10,6 +10,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { useDropzone } from 'react-dropzone';
 import { createClient } from '@/lib/supabase/client';
 import Image from 'next/image';
+import { VariantsManager } from './VariantsManager';
 
 // Form validation schema
 const productSchema = z.object({
@@ -47,6 +48,7 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
   const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>(
     ingredients?.map((i: any) => i.ingredient) || []
   );
+  const [productVariants, setProductVariants] = useState<any[]>(variants || []);
 
   // Rich text editors
   const descriptionEditor = useEditor({
@@ -168,49 +170,33 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
         meta_title: data.meta_title || null,
         meta_description: data.meta_description || null,
         published_at: data.publish ? new Date().toISOString() : null,
-        updated_at: new Date().toISOString(),
       };
 
-      let productId = product?.id;
+      // Prepare request body
+      const requestBody = {
+        product: productData,
+        ingredients: selectedIngredients.map(i => i.id),
+        variants: productVariants,
+      };
 
-      // Insert or update product
-      if (product) {
-        const { error: updateError } = await supabase
-          .from('products')
-          .update(productData)
-          .eq('id', product.id);
+      // Call API route
+      const url = product
+        ? `/api/admin/products/${product.id}`
+        : '/api/admin/products';
 
-        if (updateError) throw updateError;
-      } else {
-        const { data: newProduct, error: insertError } = await supabase
-          .from('products')
-          .insert(productData)
-          .select()
-          .single();
+      const method = product ? 'PATCH' : 'POST';
 
-        if (insertError) throw insertError;
-        productId = newProduct.id;
-      }
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
 
-      // Update ingredients
-      // First, delete existing relationships
-      if (product) {
-        await supabase.from('product_ingredients').delete().eq('product_id', productId);
-      }
-
-      // Then, insert new relationships
-      if (selectedIngredients.length > 0) {
-        const ingredientLinks = selectedIngredients.map((ing, index) => ({
-          product_id: productId,
-          ingredient_id: ing.id,
-          display_order: index + 1,
-        }));
-
-        const { error: ingredientsError } = await supabase
-          .from('product_ingredients')
-          .insert(ingredientLinks);
-
-        if (ingredientsError) throw ingredientsError;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save product');
       }
 
       // Success - redirect to products list
@@ -434,6 +420,15 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
             Link to Stripe product for checkout (optional)
           </p>
         </div>
+      </section>
+
+      {/* Product Variants */}
+      <section className="bg-white p-6 rounded-lg shadow">
+        <VariantsManager
+          productId={product?.id}
+          variants={productVariants}
+          onVariantsChange={setProductVariants}
+        />
       </section>
 
       {/* Settings */}
