@@ -4,6 +4,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createBrowserClient } from '@supabase/supabase-js';
 
 // =====================================================
 // TYPE DEFINITIONS
@@ -105,6 +106,44 @@ export async function getAllProducts(): Promise<Product[]> {
 
   if (error) {
     console.error('Error fetching products:', error);
+    return [];
+  }
+
+  return data as Product[];
+}
+
+/**
+ * Get all products for static generation (no cookies, uses anon key)
+ * Used in generateStaticParams where cookies() is not available
+ */
+export async function getAllProductsForStaticGen(): Promise<Product[]> {
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  const { data, error } = await supabase
+    .from('products')
+    .select(
+      `
+      id,
+      name,
+      slug,
+      tagline,
+      image_url,
+      image_alt,
+      label_color,
+      function_list,
+      is_featured,
+      display_order
+    `
+    )
+    .eq('is_active', true)
+    .not('published_at', 'is', null)
+    .order('display_order', { ascending: true});
+
+  if (error) {
+    console.error('Error fetching products for static gen:', error);
     return [];
   }
 

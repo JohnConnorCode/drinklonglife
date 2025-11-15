@@ -5,6 +5,7 @@ import { Section } from '@/components/Section';
 import { BlendsGrid } from '@/components/BlendsGrid';
 import { FadeIn } from '@/components/animations';
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
 async function getBlends() {

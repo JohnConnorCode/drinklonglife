@@ -1,13 +1,14 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getProductBySlug, getAllProducts } from '@/lib/supabase/queries/products';
+import { getProductBySlug, getAllProductsForStaticGen } from '@/lib/supabase/queries/products';
 import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
 import { FadeIn, StaggerContainer, FloatingElement } from '@/components/animations';
 import { VariantSelector } from '@/components/blends/VariantSelector';
 import { getStripePrices } from '@/lib/stripe';
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
 interface BlendPageProps {
@@ -25,20 +26,16 @@ async function getBlend(slug: string) {
   }
 }
 
-async function getAllBlendsForStaticGen() {
+export async function generateStaticParams() {
   try {
-    return await getAllProducts();
+    const blends = await getAllProductsForStaticGen();
+    return blends.map((blend: any) => ({
+      slug: blend.slug,
+    }));
   } catch (error) {
-    console.error('Error fetching blends:', error);
+    console.error('Error generating static params:', error);
     return [];
   }
-}
-
-export async function generateStaticParams() {
-  const blends = await getAllBlendsForStaticGen();
-  return blends.map((blend: any) => ({
-    slug: blend.slug,
-  }));
 }
 
 export async function generateMetadata({
