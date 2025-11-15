@@ -57,3 +57,7 @@ export const createServiceRoleClient = () => {
     }
   );
 };
+
+// Alias for compatibility with code expecting 'createClient' import
+// In server-side context, this should use createServerClient with cookies
+export const createClient = createServerClient;

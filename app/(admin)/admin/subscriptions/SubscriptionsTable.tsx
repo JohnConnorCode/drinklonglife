@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 
 interface Subscription {
   id: string;
@@ -35,7 +34,7 @@ export function SubscriptionsTable({ subscriptions }: { subscriptions: Subscript
     return matchesSearch && matchesStatus;
   });
 
-  const handleCancelSubscription = async (subId: string, stripeSubId: string) => {
+  const handleCancelSubscription = async (subId: string, _stripeSubId: string) => {
     if (!confirm('Are you sure you want to cancel this subscription? It will cancel at the end of the billing period.')) {
       return;
     }
@@ -60,12 +59,13 @@ export function SubscriptionsTable({ subscriptions }: { subscriptions: Subscript
     }
   };
 
-  const handlePauseSubscription = async (subId: string, stripeSubId: string) => {
-    if (!confirm('Pause this subscription? (Not implemented - requires Stripe API call)')) {
-      return;
-    }
-    alert('Pause feature coming soon - use Stripe dashboard for now');
-  };
+  // TODO: Implement pause subscription feature when needed
+  // const handlePauseSubscription = async (subId: string, stripeSubId: string) => {
+  //   if (!confirm('Pause this subscription? (Not implemented - requires Stripe API call)')) {
+  //     return;
+  //   }
+  //   alert('Pause feature coming soon - use Stripe dashboard for now');
+  // };
 
   if (subscriptions.length === 0) {
     return (

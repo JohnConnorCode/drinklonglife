@@ -1,66 +1,11 @@
 import { Metadata } from 'next';
-import { getActiveStripeProducts } from '@/lib/supabase/queries/products';
-import { getStripePrices, formatPrice, getBillingInterval } from '@/lib/stripe';
-import { PricingCard } from '@/components/pricing/PricingCard';
+import { getAllProducts } from '@/lib/supabase/queries/products';
 import { Section } from '@/components/Section';
 import { FadeIn, StaggerContainer } from '@/components/animations';
-import type { StripeProduct, EnrichedStripeProduct, EnrichedProductVariant } from '@/types/stripe';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export const revalidate = 3600; // Revalidate every hour
-
-async function getStripeProducts(): Promise<EnrichedStripeProduct[]> {
-  try {
-    // Fetch active products from Supabase
-    const products = await getActiveStripeProducts();
-
-    if (!products || products.length === 0) {
-      return [];
-    }
-
-    // Collect all price IDs from variants
-    const allPriceIds = products.flatMap(p =>
-      p.variants.map(v => v.stripe_price_id)
-    );
-
-    // Fetch all Stripe prices in one batch
-    const stripePrices = await getStripePrices(allPriceIds);
-
-    // Enrich products with Stripe price data
-    const enrichedProducts: EnrichedStripeProduct[] = products.map(product => {
-      const enrichedVariants: EnrichedProductVariant[] = product.variants
-        .map(variant => {
-          const price = stripePrices.get(variant.stripe_price_id);
-          if (!price) return null;
-
-          return {
-            ...variant,
-            stripePriceId: variant.stripe_price_id, // Map to expected field name
-            sizeKey: variant.size_key,
-            isDefault: variant.is_default,
-            uiOrder: variant.display_order,
-            price,
-            formattedPrice: formatPrice(price.unit_amount || 0, price.currency),
-            billingInterval: getBillingInterval(price),
-          };
-        })
-        .filter((v): v is EnrichedProductVariant => v !== null) as EnrichedProductVariant[];
-
-      return {
-        ...product,
-        _id: product.id, // Map to expected field name
-        title: product.name,
-        stripeProductId: product.stripe_product_id,
-        variants: enrichedVariants,
-      } as any;
-    });
-
-    // Filter out products with no valid variants
-    return enrichedProducts.filter(p => p.variants.length > 0);
-  } catch (error) {
-    console.error('Error fetching Stripe products:', error);
-    return [];
-  }
-}
 
 // Pricing page settings - can be moved to database later
 const pageSettings = {
@@ -80,13 +25,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PricingPage() {
-  const products = await getStripeProducts();
+  const products = await getAllProducts();
 
   return (
     <>
       {/* Hero */}
       <Section className="bg-gradient-to-br from-accent-cream via-accent-yellow/20 to-accent-green/20 py-24 relative overflow-hidden">
-        {/* Organic background shapes */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent-yellow/30 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent-green/30 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
 
@@ -96,7 +40,7 @@ export default async function PricingPage() {
               <svg className="w-5 h-5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-sm font-semibold text-gray-700">Simple, transparent pricing</span>
+              <span className="text-sm font-semibold text-gray-700">One-time purchase or monthly subscription</span>
             </div>
           </FadeIn>
           <FadeIn direction="up" delay={0.2}>
@@ -106,13 +50,13 @@ export default async function PricingPage() {
           </FadeIn>
           <FadeIn direction="up" delay={0.3}>
             <p className="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
-              {pageSettings.subtitle}
+              Fresh cold-pressed juices delivered to your door. Choose one-time purchase or save with a monthly subscription.
             </p>
           </FadeIn>
         </div>
       </Section>
 
-      {/* Pricing Cards */}
+      {/* Product Cards - Links to Blend Detail Pages */}
       <Section className="bg-white">
         <div className="max-w-6xl mx-auto">
           {products.length === 0 ? (
@@ -123,9 +67,63 @@ export default async function PricingPage() {
             </div>
           ) : (
             <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {products.map((product) => (
-                <PricingCard key={product._id} product={product} />
-              ))}
+              {products.map((product) => {
+                const gradientMap: Record<string, string> = {
+                  yellow: 'from-accent-yellow/80 to-accent-yellow',
+                  red: 'from-accent-primary/80 to-accent-primary',
+                  green: 'from-accent-green/80 to-accent-green',
+                };
+                const gradient = product.label_color ? gradientMap[product.label_color] || 'from-accent-primary/80 to-accent-primary' : 'from-accent-primary/80 to-accent-primary';
+
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/blends/${product.slug}`}
+                    className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-200 hover:border-accent-primary"
+                  >
+                    {product.image_url && (
+                      <div className="relative h-64 overflow-hidden">
+                        <Image
+                          src={product.image_url}
+                          alt={product.image_alt || product.name}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-t ${gradient} opacity-20`} />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <h3 className="font-heading text-2xl font-bold mb-2 text-gray-900 group-hover:text-accent-primary transition-colors">
+                        {product.name}
+                      </h3>
+                      {product.tagline && (
+                        <p className="text-gray-600 mb-4 line-clamp-2">{product.tagline}</p>
+                      )}
+                      {product.function_list && product.function_list.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {product.function_list.slice(0, 3).map((func: string) => (
+                            <span
+                              key={func}
+                              className="px-3 py-1 bg-gray-100 rounded-full text-xs font-semibold text-gray-700"
+                            >
+                              {func}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between mt-6">
+                        <span className="text-sm text-gray-500">From $12.99</span>
+                        <span className="inline-flex items-center gap-2 text-accent-primary font-semibold group-hover:gap-3 transition-all">
+                          View Options
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
             </StaggerContainer>
           )}
         </div>
@@ -147,14 +145,14 @@ export default async function PricingPage() {
                 description: 'All transactions are encrypted and secured by Stripe',
               },
               {
-                icon: '↩️',
-                title: 'Easy Cancellation',
-                description: 'Cancel anytime. No questions asked.',
+                icon: '🔄',
+                title: 'Flexible Plans',
+                description: 'One-time purchase or save with monthly subscriptions',
               },
               {
                 icon: '⚡',
-                title: 'Instant Access',
-                description: 'Get started immediately after purchase',
+                title: 'Fresh Weekly',
+                description: 'Cold-pressed fresh every week from local ingredients',
               },
             ].map((item, idx) => (
               <div key={idx} className="text-center">

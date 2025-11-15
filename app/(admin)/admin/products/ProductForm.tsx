@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useDropzone } from 'react-dropzone';
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 import Image from 'next/image';
 import { VariantsManager } from './VariantsManager';
 
@@ -39,7 +39,6 @@ interface Ingredient {
 
 export function ProductForm({ product, ingredients, variants, allIngredients }: any) {
   const router = useRouter();
-  const supabase = createClient();
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(product?.image_url || null);
@@ -78,7 +77,6 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     defaultValues: {

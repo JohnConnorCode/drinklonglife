@@ -5,7 +5,7 @@ import { updateOrderStatus, OrderStatus } from '@/lib/admin/orders';
 const validStatuses: OrderStatus[] = ['pending', 'processing', 'completed', 'failed', 'refunded'];
 
 export async function PATCH(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -15,7 +15,7 @@ export async function PATCH(
     const orderId = params.id;
 
     // Parse request body
-    const body = await request.json();
+    const body = await _request.json();
     const { status } = body;
 
     // Validate status

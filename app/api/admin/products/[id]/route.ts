@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 // GET /api/admin/products/[id] - Get single product
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -64,7 +64,7 @@ export async function GET(
 
 // PATCH /api/admin/products/[id] - Update product
 export async function PATCH(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -90,7 +90,7 @@ export async function PATCH(
     }
 
     // Parse and validate request body
-    const body = await request.json();
+    const body = await _request.json();
 
     // Validate product data
     if (body.product) {
@@ -196,7 +196,7 @@ export async function PATCH(
 
 // DELETE /api/admin/products/[id] - Delete product
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

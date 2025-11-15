@@ -25,11 +25,14 @@ interface CheckoutRequestBody {
 }
 
 export async function POST(req: NextRequest) {
+  console.log('🛒 CHECKOUT API CALLED');
   try {
     const supabase = createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
+    console.log('🔐 User authenticated:', !!user, user?.email);
 
     const body: CheckoutRequestBody = await req.json();
+    console.log('📦 Checkout request body:', JSON.stringify(body, null, 2));
 
     const {
       priceId,
@@ -48,7 +51,7 @@ export async function POST(req: NextRequest) {
     const finalCancelUrl = providedCancelUrl || `${origin}${cancelPath || '/cart'}`;
 
     // Get dynamic Stripe client based on current mode (test/production)
-    const stripeClient = await getStripeClient();
+    const stripeClient = getStripeClient();
 
     // Handle authenticated vs guest checkout
     let customerId: string | undefined;
@@ -113,6 +116,8 @@ export async function POST(req: NextRequest) {
         stripeClient
       );
 
+      console.log('✅ Checkout session created:', checkoutSession.id);
+      console.log('🔗 Redirect URL:', checkoutSession.url);
       return NextResponse.json({ url: checkoutSession.url });
     }
 

@@ -7,7 +7,7 @@ import { syncProductToStripe } from '@/lib/stripe/product-sync';
  * Sync a product to Stripe (create or update Stripe product and prices)
  */
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

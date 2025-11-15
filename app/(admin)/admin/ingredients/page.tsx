@@ -40,35 +40,6 @@ async function getIngredients() {
   return ingredients;
 }
 
-async function IngredientsContent() {
-  const ingredients = await getIngredients();
-
-  async function handleDelete(id: string) {
-    'use server';
-    const supabase = createClient();
-    await supabase.from('ingredients').delete().eq('id', id);
-  }
-
-  return (
-    <IngredientsTable
-      ingredients={ingredients}
-      onDelete={async (id: string) => {
-        'use client';
-        const response = await fetch(`/api/admin/ingredients/${id}`, {
-          method: 'DELETE',
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.error || 'Failed to delete ingredient');
-        }
-
-        window.location.reload();
-      }}
-    />
-  );
-}
-
 export default async function IngredientsPage() {
   const ingredients = await getIngredients();
 
@@ -123,7 +94,7 @@ export default async function IngredientsPage() {
         <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
           <IngredientsTable
             ingredients={ingredients}
-            onDelete={async (id: string) => {
+            onDelete={async (_id: string) => {
               'use server';
               // This will be called from the client component
             }}

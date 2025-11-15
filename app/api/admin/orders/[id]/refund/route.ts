@@ -3,7 +3,7 @@ import { requireAdmin } from '@/lib/admin';
 import { processRefund } from '@/lib/admin/orders';
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -13,7 +13,7 @@ export async function POST(
     const orderId = params.id;
 
     // Parse request body
-    const body = await request.json();
+    const body = await _request.json();
     const { amount } = body; // amount in cents, undefined for full refund
 
     // Validate partial refund amount if provided

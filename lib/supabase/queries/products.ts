@@ -67,6 +67,9 @@ export interface ProductVariant {
   is_active: boolean;
   price_usd: number | null;
   sku: string | null;
+  billing_type?: string;
+  recurring_interval?: string;
+  recurring_interval_count?: number;
 }
 
 // =====================================================
@@ -147,7 +150,10 @@ export async function getProductBySlug(
         display_order,
         is_active,
         price_usd,
-        sku
+        sku,
+        billing_type,
+        recurring_interval,
+        recurring_interval_count
       )
     `
     )
@@ -202,7 +208,11 @@ export async function getActiveStripeProducts(): Promise<ProductWithIngredients[
         stripe_price_id,
         is_default,
         display_order,
-        is_active
+        is_active,
+        price_usd,
+        billing_type,
+        recurring_interval,
+        recurring_interval_count
       )
     `
     )

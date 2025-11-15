@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { ingredientSchema } from '@/lib/validations/ingredient';
 
 // GET /api/admin/ingredients - List all ingredients
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = createClient();
 
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Parse query parameters for filtering
-    const searchParams = request.nextUrl.searchParams;
+    const searchParams = _request.nextUrl.searchParams;
     const type = searchParams.get('type');
     const search = searchParams.get('search');
 
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/admin/ingredients - Create a new ingredient
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const supabase = createClient();
 
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse and validate request body
-    const body = await request.json();
+    const body = await _request.json();
 
     // Validate ingredient data
     const validation = ingredientSchema.safeParse(body);

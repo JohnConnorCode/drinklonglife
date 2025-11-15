@@ -5,8 +5,7 @@ import { getProductBySlug, getAllProducts } from '@/lib/supabase/queries/product
 import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
 import { FadeIn, StaggerContainer, FloatingElement } from '@/components/animations';
-import { ReserveBlendButton } from '@/components/blends/ReserveBlendButton';
-import { AddToCartButton } from '@/components/cart/AddToCartButton';
+import { VariantSelector } from '@/components/blends/VariantSelector';
 import { getStripePrices } from '@/lib/stripe';
 
 export const revalidate = 60;
@@ -56,10 +55,10 @@ export async function generateMetadata({
 
   return {
     title: blend.meta_title || `${blend.name} | Long Life`,
-    description: blend.meta_description || blend.tagline,
+    description: blend.meta_description || blend.tagline || undefined,
     openGraph: {
       title: blend.meta_title || blend.name,
-      description: blend.meta_description || blend.tagline,
+      description: blend.meta_description || blend.tagline || undefined,
       images: blend.image_url ? [{ url: blend.image_url }] : [],
     },
   };
@@ -269,7 +268,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
       )}
 
       {/* Pricing */}
-      {(blend.stripeProduct?.variants?.length > 0 || (blend.sizes && blend.sizes.length > 0)) && (
+      {blend.variants && blend.variants.length > 0 && (
         <Section id="pricing" className="bg-white relative overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-accent-yellow/10 to-accent-green/10 rounded-full blur-3xl" />
 
@@ -280,81 +279,13 @@ export default async function BlendPage({ params }: BlendPageProps) {
               </h2>
               <p className="text-xl text-gray-600">Fresh-pressed and ready for pickup or delivery</p>
             </FadeIn>
-            <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {(blend.stripeProduct?.variants?.length > 0 ? blend.stripeProduct.variants : blend.sizes?.filter((item: any) => item && (item.size || item.name)) || []).map((item: any, idx: number) => {
-                  const isPopular = blend.stripeProduct?.variants ? item.isDefault : idx === 1;
-                  const sizeData = blend.stripeProduct?.variants ? {
-                    _id: item.sizeKey,
-                    name: item.label,
-                    stripePriceId: item.stripePriceId,
-                  } : {
-                    ...item,
-                    name: item.size || item.name,
-                    _id: item._key || item._id
-                  };
-
-                  return (
-                    <div
-                      key={sizeData._id}
-                      className={`relative group bg-white rounded-2xl p-8 text-center transition-all duration-300 hover:-translate-y-2 ${
-                        isPopular
-                          ? 'border-4 border-accent-primary shadow-2xl scale-105'
-                          : 'border-2 border-gray-200 shadow-lg hover:border-accent-primary hover:shadow-2xl'
-                      }`}
-                    >
-                      {isPopular && (
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-accent-primary text-white rounded-full text-sm font-bold shadow-lg">
-                          Most Popular
-                        </div>
-                      )}
-                      <div className="mb-4">
-                        <h3 className="font-heading text-2xl font-bold mb-1 text-gray-900">
-                          {sizeData.name}
-                        </h3>
-                        {!blend.stripeProduct?.variants && <p className="text-sm text-gray-600">{sizeData.volume}</p>}
-                      </div>
-                      {!blend.stripeProduct?.variants && sizeData.price && (
-                        <div className="my-6">
-                          <span className="text-5xl font-bold text-accent-primary">
-                            ${sizeData.price}
-                          </span>
-                        </div>
-                      )}
-                      {!blend.stripeProduct?.variants && sizeData.description && (
-                        <p className="text-sm text-gray-600 mb-6">{sizeData.description}</p>
-                      )}
-                      {!blend.stripeProduct?.variants && sizeData.servingsPerBottle && (
-                        <p className="text-xs text-gray-500 mb-6">
-                          {sizeData.servingsPerBottle} servings per bottle
-                        </p>
-                      )}
-                      {sizeData.stripePriceId && priceMap.has(sizeData.stripePriceId) ? (
-                        <AddToCartButton
-                          priceId={sizeData.stripePriceId}
-                          productName={`${blend.name} - ${sizeData.name}`}
-                          productType="one-time"
-                          amount={priceMap.get(sizeData.stripePriceId)!}
-                          image={blend.image ? urlFor(blend.image).url() : undefined}
-                          blendSlug={params.slug}
-                          sizeKey={blend.stripeProduct?.variants ? item.sizeKey : sizeData._id}
-                          variantLabel={sizeData.name}
-                        />
-                      ) : (
-                        <ReserveBlendButton
-                          size={sizeData}
-                          blendSlug={params.slug}
-                          isPopular={isPopular}
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-            </StaggerContainer>
-            <FadeIn direction="up" delay={0.4} className="text-center mt-10">
-              <p className="text-sm text-gray-500">
-                Free delivery over $40 • Pickup available at all locations
-              </p>
-            </FadeIn>
+            <VariantSelector
+              variants={blend.variants}
+              priceMap={priceMap}
+              productName={blend.name}
+              productImage={blend.image_url || undefined}
+              blendSlug={params.slug}
+            />
           </div>
         </Section>
       )}

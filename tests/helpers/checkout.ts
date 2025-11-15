@@ -55,6 +55,33 @@ export async function selectSize(page: Page, sizeName: string): Promise<void> {
 }
 
 /**
+ * Navigate to cart and proceed to checkout
+ */
+export async function proceedToCheckoutFromCart(page: Page): Promise<void> {
+  // Navigate to cart page
+  await page.goto('/cart');
+  await page.waitForLoadState('domcontentloaded');
+
+  // Wait for "Proceed to Checkout" button to be visible
+  const checkoutButton = page.locator('button:has-text("Proceed to Checkout")');
+  await expect(checkoutButton).toBeVisible({ timeout: 10000 });
+
+  // Set up the navigation promise BEFORE clicking (to avoid race condition)
+  const navigationPromise = page.waitForURL('**/checkout.stripe.com/**', { timeout: 30000 });
+
+  // Click the checkout button
+  await checkoutButton.click();
+
+  // Wait for redirect to Stripe Checkout
+  await navigationPromise;
+
+  // Wait for the Stripe checkout form to be ready
+  // Use the textbox role with "Email" accessible name (from the label)
+  const emailInput = page.getByRole('textbox', { name: /email/i });
+  await emailInput.waitFor({ state: 'visible', timeout: 30000 });
+}
+
+/**
  * Wait for Stripe Checkout to load
  */
 export async function waitForStripeCheckout(page: Page, timeoutMs: number = 30000): Promise<void> {
@@ -62,8 +89,8 @@ export async function waitForStripeCheckout(page: Page, timeoutMs: number = 3000
   await page.waitForURL('**/checkout.stripe.com/**', { timeout: timeoutMs });
 
   // Wait for email input to be visible on the page
-  const emailInput = page.locator('input[type="email"]').first();
-  await emailInput.waitFor({ timeout: timeoutMs });
+  const emailInput = page.getByRole('textbox', { name: /email/i });
+  await emailInput.waitFor({ state: 'visible', timeout: timeoutMs });
 }
 
 /**
@@ -72,51 +99,70 @@ export async function waitForStripeCheckout(page: Page, timeoutMs: number = 3000
 export async function fillGuestCheckout(page: Page, details: CheckoutDetails): Promise<void> {
   // Fill email
   if (details.email) {
-    const emailInput = page.locator('input[type="email"]').first();
+    const emailInput = page.getByRole('textbox', { name: /email/i });
+    await emailInput.waitFor({ state: 'visible', timeout: 10000 });
     await emailInput.fill(details.email);
+  }
+
+  // Fill full name
+  if (details.name) {
+    const nameInput = page.getByRole('textbox', { name: /full name/i });
+    await nameInput.waitFor({ state: 'visible', timeout: 10000 });
+    await nameInput.fill(details.name);
   }
 
   // Fill card information
   if (details.card) {
-    const cardInput = page.locator('input[placeholder*="card" i]').first();
+    const cardInput = page.getByRole('textbox', { name: /card number/i });
+    await cardInput.waitFor({ state: 'visible', timeout: 10000 });
     await cardInput.fill(details.card.number);
 
-    const expInput = page.locator('input[placeholder*="expiration" i], input[placeholder*="MM" i]').first();
+    const expInput = page.getByRole('textbox', { name: /expiration/i });
+    await expInput.waitFor({ state: 'visible', timeout: 10000 });
     await expInput.fill(`${details.card.expMonth}/${details.card.expYear}`);
 
-    const cvcInput = page.locator('input[placeholder*="CVC" i], input[placeholder*="CVV" i]').first();
+    const cvcInput = page.getByRole('textbox', { name: /cvc/i });
+    await cvcInput.waitFor({ state: 'visible', timeout: 10000 });
     await cvcInput.fill(details.card.cvc);
   }
 
   // Fill billing address if provided
   if (details.address) {
-    const line1Input = page.locator('input[placeholder*="address" i]').first();
+    const line1Input = page.getByRole('textbox', { name: /address line 1/i });
+    await line1Input.waitFor({ state: 'visible', timeout: 10000 });
     await line1Input.fill(details.address.line1);
 
-    const cityInput = page.locator('input[placeholder*="city" i]').first();
+    const cityInput = page.getByRole('textbox', { name: /city/i });
+    await cityInput.waitFor({ state: 'visible', timeout: 10000 });
     await cityInput.fill(details.address.city);
 
-    const stateInput = page.locator('input[placeholder*="state" i], select[aria-label*="state" i]').first();
-    await stateInput.fill(details.address.state);
-
-    const zipInput = page.locator('input[placeholder*="zip" i], input[placeholder*="postal" i]').first();
+    const zipInput = page.getByRole('textbox', { name: /zip/i });
+    await zipInput.waitFor({ state: 'visible', timeout: 10000 });
     await zipInput.fill(details.address.postalCode);
+
+    const stateInput = page.getByRole('combobox', { name: /state/i });
+    await stateInput.waitFor({ state: 'visible', timeout: 10000 });
+    await stateInput.selectOption(details.address.state);
   }
 }
 
 /**
  * Complete checkout with test card
+ * Note: Assumes item(s) already added to cart via "Add to Cart" button
  */
 export async function completeCheckoutWithTestCard(
   page: Page,
   cardType: keyof typeof STRIPE_TEST_CARDS = 'VISA',
   email?: string
 ): Promise<void> {
-  await waitForStripeCheckout(page);
+  // First, navigate to cart and click "Proceed to Checkout"
+  await proceedToCheckoutFromCart(page);
 
+  // Now we're on Stripe checkout page, fill in payment details
   const card = STRIPE_TEST_CARDS[cardType];
   const checkoutDetails: CheckoutDetails = {
     email: email || `test-${Date.now()}@example.com`,
+    name: 'Test User',
     card: {
       number: card,
       expMonth: STRIPE_TEST_EXPIRY.VALID.month,
@@ -135,12 +181,12 @@ export async function completeCheckoutWithTestCard(
   await fillGuestCheckout(page, checkoutDetails);
 
   // Click Pay button
-  const stripeFrame = page.frameLocator('iframe[src*="stripe"]').first();
-  const payButton = stripeFrame.locator('button:has-text("Pay"), button[type="submit"]').first();
+  const payButton = page.locator('button:has-text("Pay"), button[type="submit"]').first();
   await payButton.click();
 
   // Wait for redirect to success page
-  await page.waitForURL(/\/checkout\/success/, { timeout: 15000 });
+  // Note: Stripe test API can be slow (observed 20+ seconds), so use generous timeout
+  await page.waitForURL(/\/checkout\/success/, { timeout: 45000 });
 }
 
 /**
@@ -166,7 +212,7 @@ export async function isCheckoutSuccessful(page: Page): Promise<boolean> {
 /**
  * Get order/session ID from success page
  */
-export async function getCheckoutSessionId(page: Page): Promise<string | null> {
+export function getCheckoutSessionId(page: Page): string | null {
   try {
     const url = page.url();
     const params = new URLSearchParams(url.split('?')[1]);

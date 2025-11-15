@@ -35,7 +35,7 @@ export function DiscountsTable({ discounts }: { discounts: Discount[] }) {
     } else if (statusFilter === 'used') {
       matchesStatus = !!discount.used_at;
     } else if (statusFilter === 'expired') {
-      matchesStatus = discount.expires_at && new Date(discount.expires_at) < new Date();
+      matchesStatus = !!(discount.expires_at && new Date(discount.expires_at) < new Date());
     }
 
     return matchesSearch && matchesStatus;

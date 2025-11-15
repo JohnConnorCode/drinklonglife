@@ -4,7 +4,7 @@ import { productSchema, variantSchema } from '@/lib/validations/product';
 import { z } from 'zod';
 
 // GET /api/admin/products - List all products
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = createClient();
 
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/admin/products - Create a new product
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const supabase = createClient();
 
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse and validate request body
-    const body = await request.json();
+    const body = await _request.json();
 
     // Validate product data
     const productValidation = productSchema.safeParse(body.product);

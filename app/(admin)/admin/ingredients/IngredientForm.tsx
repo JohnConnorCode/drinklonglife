@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useEditor, EditorContent } from '@tiptap/react';
@@ -28,7 +28,6 @@ export function IngredientForm({ ingredient, mode }: IngredientFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<IngredientFormData>({
     defaultValues: ingredient || {
       type: 'fruit',

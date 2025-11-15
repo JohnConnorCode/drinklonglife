@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { SubscriptionsTable } from './SubscriptionsTable';
-import Link from 'next/link';
 
 export const metadata = {
   title: 'Subscriptions | Admin',

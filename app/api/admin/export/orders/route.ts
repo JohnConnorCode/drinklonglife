@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
  * GET /api/admin/export/orders
  * Export all orders to CSV
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = createClient();
 

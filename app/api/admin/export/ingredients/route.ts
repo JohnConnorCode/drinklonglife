@@ -6,7 +6,7 @@ import { ingredientsToCSV } from '@/lib/admin/csv-export';
  * GET /api/admin/export/ingredients
  * Export all ingredients to CSV
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = createClient();
 

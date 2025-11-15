@@ -1,32 +1,24 @@
-import { client } from '@/lib/sanity.client';
-import { stripeSettingsQuery } from '@/lib/sanity.queries';
 import Stripe from 'stripe';
 
 /**
- * Get the current Stripe mode (test or production)
- * Falls back to environment variable if Sanity is unavailable
+ * Get the current Stripe mode (test or production) from environment variables
  */
-async function getStripeMode(): Promise<'test' | 'production'> {
-  try {
-    const settings = await client.fetch(stripeSettingsQuery);
-    if (settings?.mode === 'production' || settings?.mode === 'test') {
-      return settings.mode;
-    }
-  } catch (error) {
-    console.warn('Failed to fetch Stripe mode from Sanity, falling back to env:', error);
+function getStripeMode(): 'test' | 'production' {
+  const envMode = process.env.STRIPE_MODE as 'test' | 'production' | undefined;
+
+  if (envMode === 'production' || envMode === 'test') {
+    return envMode;
   }
 
-  // Fallback to environment variable
-  // If STRIPE_MODE is not set, default to 'test' for safety
-  const envMode = process.env.STRIPE_MODE as 'test' | 'production' | undefined;
-  return envMode || 'test';
+  // Default to 'test' for safety
+  return 'test';
 }
 
 /**
  * Get Stripe API keys based on current mode
  */
-export async function getStripeKeys() {
-  const mode = await getStripeMode();
+export function getStripeKeys() {
+  const mode = getStripeMode();
 
   if (mode === 'production') {
     return {
@@ -49,8 +41,8 @@ export async function getStripeKeys() {
 /**
  * Initialize Stripe client with correct keys based on mode
  */
-export async function getStripeClient() {
-  const keys = await getStripeKeys();
+export function getStripeClient() {
+  const keys = getStripeKeys();
 
   if (!keys.secretKey) {
     throw new Error('Stripe secret key is not configured');
@@ -67,6 +59,6 @@ export async function getStripeClient() {
 /**
  * Get current Stripe mode for frontend
  */
-export async function getCurrentStripeMode(): Promise<'test' | 'production'> {
+export function getCurrentStripeMode(): 'test' | 'production' {
   return getStripeMode();
 }

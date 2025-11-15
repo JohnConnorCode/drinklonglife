@@ -6,7 +6,7 @@ import { productsToCSV } from '@/lib/admin/csv-export';
  * GET /api/admin/export/products
  * Export all products to CSV
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = createClient();
 

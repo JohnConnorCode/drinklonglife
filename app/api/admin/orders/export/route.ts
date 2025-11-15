@@ -3,13 +3,13 @@ import { requireAdmin } from '@/lib/admin';
 import { getOrders, OrderStatus, PaymentStatus } from '@/lib/admin/orders';
 import { formatDateForCSV } from '@/lib/utils/formatDate';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Require admin authentication
     await requireAdmin();
 
     // Get query parameters for filtering
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(_request.url);
     const status = searchParams.get('status') as OrderStatus | null;
     const payment = searchParams.get('payment') as PaymentStatus | null;
     const search = searchParams.get('search');

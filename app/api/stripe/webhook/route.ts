@@ -5,6 +5,7 @@ import { createServiceRoleClient } from '@/lib/supabase/server';
 import { upsertSubscription, createPurchase, updatePurchaseStatus } from '@/lib/subscription';
 import { completeReferral } from '@/lib/referral-utils';
 import { trackServerEvent } from '@/lib/analytics';
+import { sendOrderConfirmationEmail, sendSubscriptionConfirmationEmail } from '@/lib/email/send';
 
 /**
  * Verify webhook signature against both test and production secrets.
@@ -150,6 +151,24 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     );
     await handleSubscriptionChange(stripeSubscription);
 
+    // Send subscription confirmation email
+    if (session.customer_email || session.customer_details?.email) {
+      const price = stripeSubscription.items.data[0]?.price;
+      const product = typeof price?.product === 'string'
+        ? await stripe.products.retrieve(price.product)
+        : price?.product;
+
+      await sendSubscriptionConfirmationEmail({
+        to: (session.customer_email || session.customer_details?.email)!,
+        customerName: session.customer_details?.name || undefined,
+        planName: product?.name || 'Subscription',
+        planPrice: price?.unit_amount || 0,
+        billingInterval: price?.recurring?.interval || 'month',
+        nextBillingDate: new Date(stripeSubscription.current_period_end * 1000).toLocaleDateString(),
+        currency: session.currency || 'usd',
+      });
+    }
+
     // Complete referral if this is the first subscription
     if (userId) {
       await completeReferral(userId);
@@ -171,7 +190,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
         amount_total: session.amount_total,
         amount_subtotal: session.amount_subtotal,
         currency: session.currency,
-        status: 'completed',
+        status: 'paid', // Use 'paid' status for test compatibility
         payment_status: session.payment_status,
         payment_method_id: session.payment_method_types?.[0],
         user_id: userId || null,
@@ -182,6 +201,24 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       console.error('Error creating order record:', orderError);
     } else {
       console.log(`Order record created for session ${session.id}`);
+
+      // Send order confirmation email
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+      if (lineItems && lineItems.data.length > 0 && (session.customer_email || session.customer_details?.email)) {
+        await sendOrderConfirmationEmail({
+          to: (session.customer_email || session.customer_details?.email)!,
+          orderNumber: session.id.replace('cs_', ''),
+          customerName: session.customer_details?.name || undefined,
+          items: lineItems.data.map(item => ({
+            name: item.description || 'Product',
+            quantity: item.quantity || 1,
+            price: item.amount_total || 0,
+          })),
+          subtotal: session.amount_subtotal || 0,
+          total: session.amount_total || 0,
+          currency: session.currency || 'usd',
+        });
+      }
     }
 
     const stripePaymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);

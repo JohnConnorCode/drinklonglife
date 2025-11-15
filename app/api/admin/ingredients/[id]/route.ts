@@ -4,7 +4,7 @@ import { ingredientSchema } from '@/lib/validations/ingredient';
 
 // GET /api/admin/ingredients/[id] - Get single ingredient
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -55,7 +55,7 @@ export async function GET(
 
 // PATCH /api/admin/ingredients/[id] - Update ingredient
 export async function PATCH(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -81,7 +81,7 @@ export async function PATCH(
     }
 
     // Parse and validate request body
-    const body = await request.json();
+    const body = await _request.json();
 
     // Validate ingredient data
     const validation = ingredientSchema.partial().safeParse(body);
@@ -125,7 +125,7 @@ export async function PATCH(
 
 // DELETE /api/admin/ingredients/[id] - Delete ingredient
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

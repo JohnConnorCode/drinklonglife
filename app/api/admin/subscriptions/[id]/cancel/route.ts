@@ -7,7 +7,7 @@ import { stripe } from '@/lib/stripe';
  * Cancel a subscription at period end
  */
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

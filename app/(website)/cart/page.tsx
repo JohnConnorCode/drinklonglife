@@ -17,6 +17,7 @@ export default function CartPage() {
   const total = getTotal();
 
   const handleCheckout = async () => {
+    console.log('🛒 handleCheckout called');
     setCheckoutError(null);
     setIsProcessing(true);
 
@@ -26,12 +27,15 @@ export default function CartPage() {
         priceId: item.priceId,
         quantity: item.quantity,
       }));
+      console.log('📦 Checkout items:', checkoutItems);
 
       // Get coupon code if applied
       const { coupon } = useCartStore.getState();
       const couponCode = coupon?.valid ? coupon.code : undefined;
+      console.log('🎫 Coupon code:', couponCode);
 
       // Call checkout API
+      console.log('📡 Calling /api/checkout...');
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -41,23 +45,27 @@ export default function CartPage() {
         }),
       });
 
+      console.log('📬 Response status:', response.status, response.ok);
+
       if (!response.ok) {
         const errorData = await response.json();
         const errorMessage = errorData.details || errorData.error || 'Failed to create checkout session';
-        console.error('Checkout error response:', errorData);
+        console.error('❌ Checkout error response:', errorData);
         throw new Error(errorMessage);
       }
 
       const { url } = await response.json();
+      console.log('🔗 Received checkout URL:', url);
 
       // Redirect to Stripe Checkout
       if (url) {
+        console.log('🚀 Redirecting to:', url);
         window.location.href = url;
       } else {
         throw new Error('No checkout URL received from server');
       }
     } catch (error) {
-      console.error('Checkout error:', error);
+      console.error('❌ Checkout error:', error);
       setCheckoutError(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
       setIsProcessing(false);
     }

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
 
 interface ProductVariant {
   id?: string;
@@ -29,7 +28,7 @@ const SIZE_OPTIONS = [
   { value: 'case', label: 'Case' },
 ];
 
-export function VariantsManager({ productId, variants, onVariantsChange }: VariantsManagerProps) {
+export function VariantsManager({ productId: _productId, variants, onVariantsChange }: VariantsManagerProps) {
   const [localVariants, setLocalVariants] = useState<ProductVariant[]>(variants || []);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 

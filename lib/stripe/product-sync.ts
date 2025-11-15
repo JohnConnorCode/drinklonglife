@@ -5,7 +5,6 @@
 
 import { stripe } from './index';
 import { createClient } from '@/lib/supabase/server';
-import type { Product, ProductVariant } from '@/lib/supabase/queries/products';
 
 export interface SyncResult {
   success: boolean;
