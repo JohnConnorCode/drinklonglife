@@ -95,6 +95,32 @@ If you want users to sign up with email:
 3. Configure email templates if desired
 4. Set **Site URL** to your domain
 
+### 6. Configure Supabase MCP Access (Claude Optional)
+
+If you use Claude Desktop/CLI with Model Context Protocol, give it authenticated access to your Supabase project:
+
+1. In the Supabase dashboard click your avatar → **Access Tokens** → **New Token**, scope it to the `qjgenpwbaquqrvyrfsdo` project (or *All projects*), and copy the token (`sbp_...`). You only see it once.
+2. Create or update `.mcp.json` in the repo root (use `.mcp.json.example` as a template, but keep the real file out of git).
+3. Add the `Authorization` header so Claude can call the Supabase MCP gateway:
+
+   ```json
+   {
+     "mcpServers": {
+       "supabase": {
+         "type": "http",
+         "url": "https://mcp.supabase.com/mcp?project_ref=qjgenpwbaquqrvyrfsdo",
+         "headers": {
+           "Authorization": "Bearer sbp_your_access_token"
+         }
+       }
+     }
+   }
+   ```
+
+4. Restart Claude Desktop/CLI so it reloads the MCP config, then run `tools list` (or any Supabase tool) to confirm the provider is available.
+
+> ⚠️ `.mcp.json` contains secrets—ensure it stays untracked (e.g., add to `.gitignore`) and never commit the token to version control.
+
 ---
 
 ## Database Schema

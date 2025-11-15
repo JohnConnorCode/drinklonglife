@@ -3,6 +3,7 @@ import { createServerClient } from '@/lib/supabase/server';
 const ADMIN_EMAILS = [
   'john@acceleratewith.us',
   'mikemontoya@montoyacapital.org',
+  'jt.connor88@gmail.com',
 ];
 
 /**
