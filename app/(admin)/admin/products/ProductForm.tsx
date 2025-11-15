@@ -44,6 +44,8 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(product?.image_url || null);
   const [saving, setSaving] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>(
     ingredients?.map((i: any) => i.ingredient) || []
@@ -409,15 +411,82 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
       {/* Stripe Integration */}
       <section className="bg-white p-6 rounded-lg shadow">
         <h2 className="text-xl font-bold mb-4">Stripe Integration</h2>
+
+        {product?.id && (
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-900 mb-3">
+              {product.stripe_product_id
+                ? 'Sync this product to update Stripe product and prices'
+                : 'Create this product in Stripe with all variants'}
+            </p>
+            <button
+              type="button"
+              onClick={async () => {
+                setSyncing(true);
+                setSyncMessage(null);
+                try {
+                  const response = await fetch(`/api/admin/products/${product.id}/sync-stripe`, {
+                    method: 'POST',
+                  });
+                  const result = await response.json();
+
+                  if (!response.ok) {
+                    throw new Error(result.error || 'Sync failed');
+                  }
+
+                  setSyncMessage(`✓ Synced! Product: ${result.productId}, Prices: ${result.priceIds?.length || 0}`);
+                  setTimeout(() => router.refresh(), 1000);
+                } catch (err: any) {
+                  setSyncMessage(`✗ Error: ${err.message}`);
+                } finally {
+                  setSyncing(false);
+                }
+              }}
+              disabled={syncing || productVariants.length === 0}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2"
+            >
+              {syncing ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                  </svg>
+                  Syncing to Stripe...
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Sync to Stripe
+                </>
+              )}
+            </button>
+            {syncMessage && (
+              <p className={`text-sm mt-2 ${syncMessage.startsWith('✓') ? 'text-green-700' : 'text-red-700'}`}>
+                {syncMessage}
+              </p>
+            )}
+            {productVariants.length === 0 && (
+              <p className="text-sm text-orange-700 mt-2">
+                ⚠️ Add at least one variant before syncing
+              </p>
+            )}
+          </div>
+        )}
+
         <div>
           <label className="block font-medium mb-1">Stripe Product ID</label>
           <input
             {...register('stripe_product_id')}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            placeholder="prod_xxxxx"
+            placeholder="prod_xxxxx (auto-filled after sync)"
+            readOnly={!!product?.stripe_product_id}
           />
           <p className="text-sm text-gray-500 mt-1">
-            Link to Stripe product for checkout (optional)
+            {product?.stripe_product_id
+              ? 'Linked to Stripe (use Sync button to update)'
+              : 'Will be auto-filled after first sync'}
           </p>
         </div>
       </section>
