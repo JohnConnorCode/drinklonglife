@@ -1,19 +1,25 @@
 'use client';
 
+import { useState } from 'react';
 import { useCartStore, formatPrice } from '@/lib/store/cartStore';
 import { CartItem } from '@/components/cart/CartItem';
 import { CouponInput } from '@/components/cart/CouponInput';
 import Link from 'next/link';
-import { ShoppingBag, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, AlertCircle } from 'lucide-react';
 
 export default function CartPage() {
   const { items, getSubtotal, getDiscount, getTotal, clearCart } = useCartStore();
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const subtotal = getSubtotal();
   const discount = getDiscount();
   const total = getTotal();
 
   const handleCheckout = async () => {
+    setCheckoutError(null);
+    setIsProcessing(true);
+
     try {
       // Prepare checkout items
       const checkoutItems = items.map(item => ({
@@ -36,8 +42,10 @@ export default function CartPage() {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to create checkout session');
+        const errorData = await response.json();
+        const errorMessage = errorData.details || errorData.error || 'Failed to create checkout session';
+        console.error('Checkout error response:', errorData);
+        throw new Error(errorMessage);
       }
 
       const { url } = await response.json();
@@ -45,10 +53,13 @@ export default function CartPage() {
       // Redirect to Stripe Checkout
       if (url) {
         window.location.href = url;
+      } else {
+        throw new Error('No checkout URL received from server');
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('Failed to start checkout. Please try again.');
+      setCheckoutError(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
+      setIsProcessing(false);
     }
   };
 
@@ -137,12 +148,28 @@ export default function CartPage() {
                 <span>{formatPrice(total)}</span>
               </div>
 
+              {/* Error Message */}
+              {checkoutError && (
+                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <h3 className="text-sm font-semibold text-red-900 mb-1">
+                        Checkout Error
+                      </h3>
+                      <p className="text-sm text-red-700">{checkoutError}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Checkout Button */}
               <button
                 onClick={handleCheckout}
-                className="w-full bg-accent-primary text-white py-4 rounded-full font-semibold text-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg mb-4"
+                disabled={isProcessing}
+                className="w-full bg-accent-primary text-white py-4 rounded-full font-semibold text-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Proceed to Checkout
+                {isProcessing ? 'Processing...' : 'Proceed to Checkout'}
               </button>
 
               {/* Clear Cart */}

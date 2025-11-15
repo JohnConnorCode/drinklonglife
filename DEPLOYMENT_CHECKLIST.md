@@ -1,359 +1,172 @@
-# Deployment Checklist - Complete E-Commerce Platform
+# Deployment Checklist - Admin Panel Implementation
 
-## ✅ **FEATURES COMPLETED**
+## Pre-Deployment Verification
 
-### 🎯 Core E-Commerce Features
-- [x] Product CRUD with rich text editors (Tiptap)
-- [x] Multi-variant pricing system
-- [x] Ingredient management and linking
-- [x] Draft/publish workflow
-- [x] Display order control
-- [x] SEO metadata fields
-- [x] Image management
+### 1. Code Quality
+- [x] TypeScript build passes without errors (`npm run build`)
+- [ ] All tests pass (`npm run test:e2e`)
+- [x] No console errors in development mode
+- [x] Code reviewed and approved
 
-### 💳 Stripe Integration
-- [x] **Stripe Sync Button** - One-click product sync in UI
-- [x] Auto-create Stripe products and prices
-- [x] Stripe Product ID auto-fill
-- [x] Price validation (regex: `^price_[a-zA-Z0-9]+$`)
-- [x] Webhook integration (already working)
-- [x] Cart uses Stripe Price IDs
+### 2. Database Setup
+- [ ] Run admin user setup SQL script in Supabase Dashboard
+  - Location: `scripts/create-admin-simple.sql`
+  - Verify admin profile created with `is_admin = true`
+  - Verify referral code generated
+  - Verify referral entry created
+- [ ] Verify RLS policies are in place
+  - Run: `node scripts/check-rls-policies.mjs`
+  - Confirm admin_orders_policy exists and is correct
+- [ ] Validate database configuration
+  - Run: `node scripts/validate-database.mjs`
+  - Confirm admin user exists with proper permissions
 
-### 📊 Business Intelligence
-- [x] Analytics dashboard with KPIs
-- [x] Revenue tracking (total, monthly, growth)
-- [x] Order statistics and AOV
-- [x] Product catalog health metrics
-- [x] 30-day revenue trend chart
-- [x] User and subscription metrics
+### 3. Environment Variables
+- [ ] Production environment variables configured in Vercel
+  - NEXT_PUBLIC_SITE_URL
+  - NEXT_PUBLIC_SUPABASE_URL
+  - NEXT_PUBLIC_SUPABASE_ANON_KEY
+  - SUPABASE_SERVICE_ROLE_KEY
+  - STRIPE_SECRET_KEY
+  - STRIPE_WEBHOOK_SECRET
+  - All Sanity CMS variables
+- [ ] Admin emails configured in `lib/auth/admin.ts`
+  - Verify all authorized admin emails are in ADMIN_EMAILS array
 
-### 📦 Orders Management
-- [x] **Orders admin page** (`/admin/orders`)
-- [x] View all orders with search
-- [x] Filter by status (completed/pending/failed)
-- [x] Search by email or session ID
-- [x] Export orders to CSV
-- [x] Direct links to Stripe dashboard
-- [x] Order stats dashboard
+## Deployment Steps
 
-### 🔍 Search & Filtering
-- [x] Product search by name/slug
-- [x] Filter products (published/draft/featured/inactive)
-- [x] Ingredient search and type filtering
-- [x] Order search and status filtering
-- [x] URL-based filters (bookmarkable)
-
-### 📤 Data Export
-- [x] Export products to CSV
-- [x] Export ingredients to CSV
-- [x] Export orders to CSV
-- [x] Proper CSV escaping and formatting
-- [x] Timestamped filenames
-
-### 🛡️ Error Handling
-- [x] React Error Boundaries
-- [x] Loading states and skeletons
-- [x] Next.js error pages
-- [x] API validation with Zod
-- [x] User-friendly error messages
-
-### 🔐 Security
-- [x] Admin authentication checks
-- [x] Row Level Security (RLS) policies
-- [x] API route protection
-- [x] Delete protection (ingredients in products)
-- [x] Transaction safety with rollback
-
----
-
-## 🧪 **PRE-DEPLOYMENT TESTING**
-
-### 1. Database Migration
+### 1. Create Pull Request
 ```bash
-# Run on staging/production Supabase
-psql -h <supabase-host> -U postgres -d postgres -f supabase/migrations/005_ecommerce_products.sql
-
-# Verify tables created
-SELECT table_name FROM information_schema.tables
-WHERE table_schema = 'public'
-AND table_name IN ('products', 'ingredients', 'product_variants', 'product_ingredients');
+git checkout -b feat/admin-panel-implementation
+git add .
+git commit -m "Add comprehensive admin panel for order management"
+git push -u origin feat/admin-panel-implementation
+gh pr create --title "Add Admin Panel for Order Management" --body "..."
 ```
 
-**Expected:** All 4 tables exist with correct columns and RLS policies.
+### 2. Merge to Main
+- [ ] PR approved by team
+- [ ] All CI/CD checks pass
+- [ ] Merge PR to main branch
+- [ ] Pull latest main locally: `git checkout main && git pull`
 
-### 2. Product Management Flow
-```
-Test Steps:
-1. Go to /admin/products
-2. Click "Add Product"
-3. Fill in:
-   - Name: "Test Product"
-   - Slug: "test-product"
-   - Label Color: Yellow
-   - Description (rich text)
-   - At least one variant with price
-4. Click "Create Product"
-5. Verify product appears in list
-6. Edit product
-7. Click "Sync to Stripe" button
-8. Verify:
-   - Success message appears
-   - Stripe Product ID auto-fills
-   - Check Stripe dashboard for product
-9. Publish product
-10. Visit /blends - verify product shows
-11. Visit /pricing - verify product shows with pricing
-```
-
-**Expected:** Product flows through entire lifecycle successfully.
-
-### 3. Stripe Integration End-to-End
-```
-Test Steps:
-1. Create product with variants
-2. Set price_usd for each variant (e.g., 49.99)
-3. Click "Sync to Stripe"
-4. Check Stripe dashboard:
-   - Product exists with correct name
-   - Prices created for each variant
-   - Price IDs match database
-5. Add product to cart on website
-6. Complete checkout (use Stripe test card)
-7. Verify webhook creates order in database
-8. Check /admin/orders - verify order appears
-```
-
-**Expected:** Full checkout flow works, order recorded.
-
-### 4. Orders Management
-```
-Test Steps:
-1. Go to /admin/orders
-2. Verify existing orders display
-3. Test search by customer email
-4. Test filter by status
-5. Click "Export Orders CSV"
-6. Open CSV in Excel/Google Sheets
-7. Verify all data present and formatted correctly
-8. Click "View in Stripe" link
-9. Verify opens correct Stripe dashboard page
-```
-
-**Expected:** All order management features work.
-
-### 5. Analytics Dashboard
-```
-Test Steps:
-1. Go to /admin
-2. Verify all metrics display:
-   - Total revenue (from orders table)
-   - This month revenue
-   - Growth percentage
-   - Order count
-   - Product stats
-3. Hover over revenue trend chart
-4. Verify daily revenue shows in tooltip
-5. Check "Missing Variants" alert
-```
-
-**Expected:** Dashboard shows real data, no errors.
-
-### 6. CSV Export
-```
-Test Steps:
-1. Export products CSV
-2. Export ingredients CSV
-3. Export orders CSV
-4. Open each in Excel/Google Sheets
-5. Verify:
-   - Headers correct
-   - Data complete
-   - Special characters handled (commas, quotes)
-   - Dates formatted consistently
-```
-
-**Expected:** All exports work, data intact.
-
-### 7. Search & Filtering
-```
-Test Steps:
-1. Go to /admin/products
-2. Type product name in search
-3. Verify results filter in real-time
-4. Change status filter to "Drafts"
-5. Verify only drafts show
-6. Click "Clear filters"
-7. Verify all products show again
-8. Note URL changes with filters
-9. Refresh page - verify filters persist
-```
-
-**Expected:** Search and filters work smoothly.
-
-### 8. Ingredients Admin
-```
-Test Steps:
-1. Go to /admin/ingredients
-2. Click "Add Ingredient"
-3. Fill in all fields
-4. Use Tiptap editors for rich content
-5. Click "Create Ingredient"
-6. Try to delete ingredient
-7. Link ingredient to product
-8. Try to delete again - should fail
-9. Export ingredients to CSV
-```
-
-**Expected:** Full CRUD works, delete protection works.
-
----
-
-## 🚀 **DEPLOYMENT STEPS**
-
-### Phase 1: Pre-Deploy Preparation
-- [ ] Backup existing Sanity data (if not done)
-- [ ] Export current live products to CSV (backup)
-- [ ] Review all code changes in PR
-- [ ] Merge to main branch
-- [ ] Deploy to staging environment
-
-### Phase 2: Database Migration
-- [ ] Run migration on staging Supabase
-- [ ] Verify tables created correctly
-- [ ] Test RLS policies (try as non-admin user)
-- [ ] Check indexes created
-- [ ] Verify foreign key constraints
-
-### Phase 3: Staging Testing
-- [ ] Run all tests from "Pre-Deployment Testing"
-- [ ] Test with real test orders
-- [ ] Verify Stripe test mode works
-- [ ] Check all admin pages load
-- [ ] Test error scenarios (network errors, validation)
-
-### Phase 4: Production Deployment
-- [ ] Run migration on production Supabase
-- [ ] Deploy application to Vercel/production
-- [ ] Verify environment variables set:
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-  - `SUPABASE_SERVICE_ROLE_KEY`
-  - `STRIPE_SECRET_KEY`
-  - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
-  - `STRIPE_WEBHOOK_SECRET_PRODUCTION`
-
-### Phase 5: Post-Deploy Verification
-- [ ] Test product creation in production
-- [ ] Sync one product to Stripe (live mode)
-- [ ] Complete one real test order
-- [ ] Verify webhook processed correctly
-- [ ] Check /admin/orders shows test order
-- [ ] Monitor error logs for 24 hours
-
-### Phase 6: Migration (Optional)
-- [ ] Run data migration script (if migrating from Sanity)
-- [ ] Verify all products migrated
-- [ ] Verify all ingredients migrated
-- [ ] Check product-ingredient links
-- [ ] Test frontend shows migrated data
-
----
-
-## ⚠️ **KNOWN LIMITATIONS & FUTURE ENHANCEMENTS**
-
-### Current Limitations
-- ❌ No image upload to Supabase Storage (uses URLs only)
-- ❌ No bulk import (CSV → database)
-- ❌ No product duplication/cloning feature
-- ❌ No drag-and-drop product reordering
-- ❌ No audit logging (track who changed what)
-- ❌ No version history for products
-
-### Future Enhancements (Not Critical)
-1. **Image Upload**: Direct upload to Supabase Storage
-2. **Bulk Import**: CSV import for mass product updates
-3. **Product Cloning**: Duplicate products quickly
-4. **Drag-and-Drop**: Reorder products visually
-5. **Audit Logs**: Track all changes with timestamps
-6. **Version History**: Rollback product changes
-7. **Inventory Management**: Stock levels and alerts
-8. **Advanced Analytics**: Top products, customer insights
-9. **Role-Based Access**: Editor vs Admin permissions
-10. **Email Notifications**: Order alerts, low stock warnings
-
----
-
-## 📋 **ROLLBACK PLAN**
-
-If issues occur post-deployment:
-
-### Immediate Rollback
+### 3. Deploy to Production
 ```bash
-# 1. Revert to previous deployment
-vercel rollback
-
-# 2. Or revert database migration
-# Run this SQL to drop new tables:
-DROP TABLE IF EXISTS public.product_variants CASCADE;
-DROP TABLE IF EXISTS public.product_ingredients CASCADE;
-DROP TABLE IF EXISTS public.products CASCADE;
-DROP TABLE IF EXISTS public.ingredient_farms CASCADE;
-DROP TABLE IF EXISTS public.ingredients CASCADE;
-DROP TABLE IF EXISTS public.farms CASCADE;
+vercel deploy --prod
 ```
 
-### Partial Rollback
-- Keep database but disable admin features
-- Redirect /admin/products to old system
-- Maintain webhooks and order processing
+### 4. Post-Deployment Database Migration
+**IMPORTANT: Run this AFTER code is deployed**
 
----
+1. Open Supabase Dashboard
+2. Navigate to SQL Editor
+3. Run `scripts/create-admin-simple.sql`
+4. Verify results with validation queries included in script
 
-## 🎯 **SUCCESS CRITERIA**
+## Post-Deployment Validation
 
-Deployment is successful when:
-- ✅ All 8 pre-deployment tests pass
-- ✅ Admin can create and publish products
-- ✅ Products sync to Stripe correctly
-- ✅ Checkout flow completes end-to-end
-- ✅ Orders appear in admin interface
-- ✅ Analytics dashboard shows real data
-- ✅ No console errors on admin pages
-- ✅ CSV exports work for all data types
-- ✅ Search and filtering work smoothly
-- ✅ Webhooks process without errors
+### 1. Admin Access Verification
+- [ ] Sign in with admin email (jt.connor88@gmail.com)
+- [ ] Navigate to https://drinklonglife.com/admin
+- [ ] Verify NOT redirected to /unauthorized
+- [ ] Verify admin dashboard loads correctly
+- [ ] Check for any console errors
 
----
+### 2. Admin Orders Functionality
+- [ ] Navigate to https://drinklonglife.com/admin/orders
+- [ ] Verify orders list displays
+- [ ] Test order filtering by status
+- [ ] Test order search functionality
+- [ ] Click "View Details" on an order
+- [ ] Verify order details page loads with all information
 
-## 📞 **SUPPORT CONTACTS**
+### 3. Order Management Actions
+- [ ] Test order status update (pending → processing)
+- [ ] Verify status badge updates correctly
+- [ ] Test refund functionality
+- [ ] Verify Stripe mode toggle works (Test/Live)
+- [ ] Check that all Stripe API calls use correct mode
 
-- **Stripe Issues**: dashboard.stripe.com/support
-- **Supabase Issues**: app.supabase.com/support
-- **Application Errors**: Check Vercel logs
-- **Database Issues**: Supabase SQL Editor
+### 4. Security Verification
+- [ ] Sign out
+- [ ] Try accessing /admin as non-admin user
+- [ ] Verify redirect to /unauthorized
+- [ ] Try accessing /admin/orders directly
+- [ ] Verify unauthorized access is blocked
+- [ ] Test API endpoints return 401 for non-admin users
 
----
+### 5. Database Validation
+Run validation script:
+```bash
+node scripts/validate-database.mjs
+```
 
-## 📝 **POST-DEPLOYMENT CHECKLIST**
+Expected output:
+- ✅ Admin user configured correctly
+- ✅ Orders exist in database
+- ✅ Payment methods are tracked
+- ✅ RLS policies are in place
 
-After 24 hours:
-- [ ] Review error logs (Vercel, Supabase)
-- [ ] Check Stripe webhook delivery
-- [ ] Verify all orders processed correctly
-- [ ] Monitor admin page performance
-- [ ] Review analytics data accuracy
-- [ ] Test CSV exports still working
-- [ ] Confirm search performance acceptable
-- [ ] Check mobile admin experience
+## Rollback Procedure
 
-After 1 week:
-- [ ] Gather user feedback
-- [ ] Identify any missing features
-- [ ] Plan next iteration
-- [ ] Document lessons learned
-- [ ] Update team on new workflows
+If issues are detected after deployment:
 
----
+### 1. Immediate Rollback
+```bash
+# Revert to previous deployment in Vercel dashboard
+# OR redeploy previous commit
+git log --oneline -10  # Find previous commit
+vercel deploy --prod <previous-commit-sha>
+```
 
-*Last Updated: 2025-11-15*
-*Version: 1.0 - Complete E-Commerce Platform*
+### 2. Database Rollback
+If admin user needs to be removed:
+```sql
+-- Run in Supabase SQL Editor
+DELETE FROM public.referrals
+WHERE referrer_id = '13356806-31ef-4ea8-8c2a-9dff3189894e';
+
+UPDATE public.profiles
+SET is_admin = false
+WHERE id = '13356806-31ef-4ea8-8c2a-9dff3189894e';
+```
+
+### 3. Code Rollback
+```bash
+git revert <commit-sha>
+git push origin main
+vercel deploy --prod
+```
+
+## Success Criteria
+
+Deployment is considered successful when:
+
+1. ✅ Build completes without errors
+2. ✅ All E2E tests pass
+3. ✅ Admin user can access /admin and /admin/orders
+4. ✅ Non-admin users are blocked from admin routes
+5. ✅ Order management functionality works correctly
+6. ✅ Status updates and refunds process successfully
+7. ✅ No console errors in production
+8. ✅ Database validation script passes all checks
+9. ✅ RLS policies are enforced correctly
+10. ✅ Stripe API integration works in both test and live modes
+
+## Monitoring
+
+After deployment, monitor:
+
+- Vercel deployment logs for errors
+- Supabase logs for database errors
+- Stripe webhook logs for payment processing issues
+- Browser console for client-side errors
+- User reports of issues accessing admin panel
+
+## Notes
+
+- Admin panel requires both database `is_admin = true` AND email in `ADMIN_EMAILS` array
+- Database trigger issues were resolved by temporarily disabling triggers during admin setup
+- RLS policy `admin_orders_policy` allows admins to view all orders
+- Order status updates use Supabase service role client to bypass RLS
+- Refund functionality integrates directly with Stripe API

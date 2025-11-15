@@ -10,6 +10,8 @@ import { StaggerContainer } from './animations';
 import { RippleEffect } from './RippleEffect';
 import { supabase } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
+import { useCartStore } from '@/lib/store/cartStore';
+import { ShoppingCart } from 'lucide-react';
 
 interface HeaderProps {
   siteSettings?: any;
@@ -24,6 +26,7 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const headerLinks = navigation?.primaryLinks || [];
+  const cartItemCount = useCartStore((state) => state.getItemCount());
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -131,6 +134,29 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
 
           {/* Desktop Auth & CTA */}
           <div className="hidden md:flex items-center gap-4">
+            {/* Cart Button */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.4,
+                delay: 1.0 + headerLinks.length * 0.1,
+                ease: 'easeOut',
+              }}
+            >
+              <Link
+                href="/cart"
+                className="relative p-2 text-gray-700 hover:text-black transition-colors"
+              >
+                <ShoppingCart className="w-6 h-6" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
+              </Link>
+            </motion.div>
+
             {!user ? (
               // Not logged in - show Login and Sign Up buttons
               <>
@@ -323,6 +349,27 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                   </Link>
                 );
               })}
+
+              {/* Mobile Cart Link */}
+              <Link
+                href="/cart"
+                className={clsx(
+                  'flex items-center justify-between px-4 py-3 text-lg font-medium rounded-lg transition-all duration-300',
+                  pathname === '/cart'
+                    ? 'bg-gradient-to-r from-accent-yellow/20 to-accent-green/20 text-accent-primary'
+                    : 'text-gray-700 hover:bg-gray-50 hover:translate-x-1'
+                )}
+              >
+                <span className="flex items-center gap-2">
+                  <ShoppingCart className="w-5 h-5" />
+                  Cart
+                </span>
+                {cartItemCount > 0 && (
+                  <span className="bg-accent-primary text-white text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
+              </Link>
 
               {/* Mobile Auth */}
               {!user ? (
