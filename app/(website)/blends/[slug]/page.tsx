@@ -1,11 +1,9 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { client } from '@/lib/sanity.client';
-import { blendQuery, blendsQuery } from '@/lib/sanity.queries';
+import { getProductBySlug, getAllProducts } from '@/lib/supabase/queries/products';
 import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
-import { urlFor } from '@/lib/image';
 import { FadeIn, StaggerContainer, FloatingElement } from '@/components/animations';
 import { ReserveBlendButton } from '@/components/blends/ReserveBlendButton';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
@@ -21,7 +19,7 @@ interface BlendPageProps {
 
 async function getBlend(slug: string) {
   try {
-    return await client.fetch(blendQuery, { slug });
+    return await getProductBySlug(slug);
   } catch (error) {
     console.error('Error fetching blend:', error);
     return null;
@@ -30,7 +28,7 @@ async function getBlend(slug: string) {
 
 async function getAllBlendsForStaticGen() {
   try {
-    return await client.fetch(blendsQuery);
+    return await getAllProducts();
   } catch (error) {
     console.error('Error fetching blends:', error);
     return [];
@@ -40,7 +38,7 @@ async function getAllBlendsForStaticGen() {
 export async function generateStaticParams() {
   const blends = await getAllBlendsForStaticGen();
   return blends.map((blend: any) => ({
-    slug: blend.slug.current,
+    slug: blend.slug,
   }));
 }
 
@@ -57,12 +55,12 @@ export async function generateMetadata({
   }
 
   return {
-    title: blend.seo?.metaTitle || `${blend.name} | Long Life`,
-    description: blend.seo?.metaDescription || blend.tagline,
+    title: blend.meta_title || `${blend.name} | Long Life`,
+    description: blend.meta_description || blend.tagline,
     openGraph: {
-      title: blend.seo?.metaTitle || blend.name,
-      description: blend.seo?.metaDescription || blend.tagline,
-      images: blend.image ? [{ url: urlFor(blend.image).url() }] : [],
+      title: blend.meta_title || blend.name,
+      description: blend.meta_description || blend.tagline,
+      images: blend.image_url ? [{ url: blend.image_url }] : [],
     },
   };
 }
@@ -83,15 +81,13 @@ export default async function BlendPage({ params }: BlendPageProps) {
     );
   }
 
-  // Fetch Stripe prices - support both stripeProduct.variants and sizes structures
+  // Fetch Stripe prices from product variants
   const priceMap = new Map<string, number>();
 
-  // Collect price IDs from either stripeProduct.variants or sizes
+  // Collect price IDs from variants
   let priceIds: string[] = [];
-  if (blend.stripeProduct?.variants) {
-    priceIds = blend.stripeProduct.variants.map((v: any) => v.stripePriceId).filter(Boolean);
-  } else if (blend.sizes) {
-    priceIds = blend.sizes.map((s: any) => s.stripePriceId).filter(Boolean);
+  if (blend.variants && blend.variants.length > 0) {
+    priceIds = blend.variants.map((v: any) => v.stripe_price_id).filter(Boolean);
   }
 
   // Fetch prices from Stripe if we have price IDs
@@ -104,23 +100,13 @@ export default async function BlendPage({ params }: BlendPageProps) {
     });
   }
 
-  // Also populate priceMap from sizes.price if available (for backward compatibility)
-  if (blend.sizes) {
-    blend.sizes.forEach((size: any) => {
-      if (size.stripePriceId && size.price && !priceMap.has(size.stripePriceId)) {
-        // Convert dollar amount to cents
-        priceMap.set(size.stripePriceId, Math.round(size.price * 100));
-      }
-    });
-  }
-
   const labelColorMap: Record<string, string> = {
     yellow: 'from-accent-yellow/80 to-accent-yellow',
     red: 'from-accent-primary/80 to-accent-primary',
     green: 'from-accent-green/80 to-accent-green',
   };
 
-  const gradientClass = blend.labelColor ? labelColorMap[blend.labelColor] || 'from-accent-primary/80 to-accent-primary' : 'from-accent-primary/80 to-accent-primary';
+  const gradientClass = blend.label_color ? labelColorMap[blend.label_color] || 'from-accent-primary/80 to-accent-primary' : 'from-accent-primary/80 to-accent-primary';
 
   return (
     <>
@@ -131,13 +117,13 @@ export default async function BlendPage({ params }: BlendPageProps) {
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent-green/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
 
         <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
-          {blend.image && (
+          {blend.image_url && (
             <FadeIn direction="left">
               <FloatingElement yOffset={15} duration={6}>
                 <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
                   <Image
-                    src={urlFor(blend.image).url()}
-                    alt={blend.name}
+                    src={blend.image_url}
+                    alt={blend.image_alt || blend.name}
                     fill
                     className="object-cover"
                     priority
@@ -166,9 +152,9 @@ export default async function BlendPage({ params }: BlendPageProps) {
               )}
             </FadeIn>
             <FadeIn direction="right" delay={0.4}>
-              {blend.functionList && blend.functionList.length > 0 && (
+              {blend.function_list && blend.function_list.length > 0 && (
                 <div className="flex flex-wrap gap-3 mb-8">
-                  {blend.functionList.map((func: string) => (
+                  {blend.function_list.map((func: string) => (
                     <span
                       key={func}
                       className="px-4 py-2 bg-white backdrop-blur-sm rounded-full text-sm font-semibold text-gray-800 shadow-md border-2 border-accent-yellow/30"
