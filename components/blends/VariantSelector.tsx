@@ -18,7 +18,6 @@ interface Variant {
 
 interface VariantSelectorProps {
   variants: Variant[];
-  priceMap: Map<string, number>;
   productName: string;
   productImage?: string;
   blendSlug: string;
@@ -26,7 +25,6 @@ interface VariantSelectorProps {
 
 export function VariantSelector({
   variants,
-  priceMap,
   productName,
   productImage,
   blendSlug,

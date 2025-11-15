@@ -6,7 +6,6 @@ import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
 import { FadeIn, StaggerContainer, FloatingElement } from '@/components/animations';
 import { VariantSelector } from '@/components/blends/VariantSelector';
-import { getStripePrices } from '@/lib/stripe';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
@@ -75,25 +74,6 @@ export default async function BlendPage({ params }: BlendPageProps) {
         </div>
       </Section>
     );
-  }
-
-  // Fetch Stripe prices from product variants
-  const priceMap = new Map<string, number>();
-
-  // Collect price IDs from variants
-  let priceIds: string[] = [];
-  if (blend.variants && blend.variants.length > 0) {
-    priceIds = blend.variants.map((v: any) => v.stripe_price_id).filter(Boolean);
-  }
-
-  // Fetch prices from Stripe if we have price IDs
-  if (priceIds.length > 0) {
-    const prices = await getStripePrices(priceIds);
-    prices.forEach((price, priceId) => {
-      if (price.unit_amount) {
-        priceMap.set(priceId, price.unit_amount);
-      }
-    });
   }
 
   const labelColorMap: Record<string, string> = {
@@ -281,7 +261,6 @@ export default async function BlendPage({ params }: BlendPageProps) {
             </FadeIn>
             <VariantSelector
               variants={blend.variants}
-              priceMap={priceMap}
               productName={blend.name}
               productImage={blend.image_url || undefined}
               blendSlug={params.slug}
