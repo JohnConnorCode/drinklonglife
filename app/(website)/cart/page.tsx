@@ -22,6 +22,17 @@ export default function CartPage() {
     setIsProcessing(true);
 
     try {
+      // Validate all items have valid price IDs
+      const invalidItems = items.filter(item =>
+        !item.priceId || !item.priceId.startsWith('price_') || item.priceId.length < 20
+      );
+
+      if (invalidItems.length > 0) {
+        console.error('Invalid items in cart:', invalidItems);
+        clearCart();
+        throw new Error('Your cart contains invalid items. Cart has been cleared. Please add items again.');
+      }
+
       // Prepare checkout items
       const checkoutItems = items.map(item => ({
         priceId: item.priceId,

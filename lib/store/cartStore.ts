@@ -82,6 +82,12 @@ export const useCartStore = create<CartStore>()(
 
       // Add item to cart
       addItem: (item) => {
+        // Validate price ID before adding
+        if (!item.priceId || !item.priceId.startsWith('price_') || item.priceId.length < 20) {
+          console.error('Invalid priceId:', item.priceId);
+          set({ error: 'Invalid product data. Please refresh the page.' });
+          return;
+        }
         const id = generateCartItemId(item.priceId, item.metadata);
         const existingItem = get().items.find((i) => i.id === id);
 
