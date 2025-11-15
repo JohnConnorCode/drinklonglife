@@ -1,6 +1,15 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { getAdminStats } from '@/lib/admin';
+import { getAnalyticsMetrics } from '@/lib/supabase/queries/analytics';
+import {
+  DollarSign,
+  ShoppingCart,
+  Package,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+} from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard | Long Life',
@@ -9,6 +18,7 @@ export const metadata: Metadata = {
 
 export default async function AdminDashboard() {
   const stats = await getAdminStats();
+  const ecommerceMetrics = await getAnalyticsMetrics();
 
   return (
     <div className="space-y-8">
@@ -18,8 +28,123 @@ export default async function AdminDashboard() {
           Admin Dashboard
         </h1>
         <p className="text-gray-600">
-          System health, user stats, and quick actions
+          E-commerce performance, system health, and user stats
         </p>
+      </div>
+
+      {/* E-commerce Metrics */}
+      <div>
+        <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
+          E-commerce Performance
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-green-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">Total Revenue</h3>
+              <DollarSign className="w-8 h-8 text-green-500" />
+            </div>
+            <p className="text-3xl font-bold text-gray-900">
+              ${ecommerceMetrics.revenue.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </p>
+            <p className={`text-sm mt-1 flex items-center ${
+              ecommerceMetrics.revenue.growth > 0 ? 'text-green-600' : 'text-red-600'
+            }`}>
+              {ecommerceMetrics.revenue.growth > 0 ? (
+                <TrendingUp className="w-4 h-4 mr-1" />
+              ) : (
+                <TrendingDown className="w-4 h-4 mr-1" />
+              )}
+              {ecommerceMetrics.revenue.growth > 0 && '+'}
+              {ecommerceMetrics.revenue.growth.toFixed(1)}% vs last month
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-blue-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">This Month</h3>
+              <DollarSign className="w-8 h-8 text-blue-500" />
+            </div>
+            <p className="text-3xl font-bold text-gray-900">
+              ${ecommerceMetrics.revenue.thisMonth.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">{ecommerceMetrics.orders.thisMonth} orders</p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-purple-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">Total Orders</h3>
+              <ShoppingCart className="w-8 h-8 text-purple-500" />
+            </div>
+            <p className="text-3xl font-bold text-gray-900">{ecommerceMetrics.orders.total}</p>
+            <p className="text-sm text-gray-500 mt-1">All-time purchases</p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-orange-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">Avg Order Value</h3>
+              <Activity className="w-8 h-8 text-orange-500" />
+            </div>
+            <p className="text-3xl font-bold text-gray-900">
+              ${ecommerceMetrics.orders.averageValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">Per transaction</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Product Stats */}
+      <div>
+        <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
+          Product Catalog
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-gray-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">Total Products</h3>
+              <Package className="w-8 h-8 text-gray-500" />
+            </div>
+            <p className="text-3xl font-bold text-gray-900">{ecommerceMetrics.products.total}</p>
+            <Link
+              href="/admin/products"
+              className="text-sm text-accent-primary hover:underline mt-2 inline-block"
+            >
+              Manage →
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-green-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">Published</h3>
+              <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p className="text-3xl font-bold text-gray-900">{ecommerceMetrics.products.published}</p>
+            <p className="text-sm text-gray-500 mt-1">Live on site</p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-yellow-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">Drafts</h3>
+              <svg className="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <p className="text-3xl font-bold text-gray-900">{ecommerceMetrics.products.drafts}</p>
+            <p className="text-sm text-gray-500 mt-1">Not published</p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-red-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">Missing Variants</h3>
+              <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-3xl font-bold text-gray-900">{ecommerceMetrics.products.withoutVariants}</p>
+            <p className="text-sm text-gray-500 mt-1">Need pricing</p>
+          </div>
+        </div>
       </div>
 
       {/* Health Check Stats */}
@@ -96,7 +221,37 @@ export default async function AdminDashboard() {
         <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
           Quick Actions
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Link
+            href="/admin/products/new"
+            className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-accent-primary transition-colors group"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-accent-primary/10 group-hover:bg-accent-primary/20 rounded-lg flex items-center justify-center transition-colors">
+                <Package className="w-6 h-6 text-accent-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Add Product</h3>
+                <p className="text-sm text-gray-600">Create new product</p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/ingredients/new"
+            className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-orange-500 transition-colors group"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-orange-100 group-hover:bg-orange-200 rounded-lg flex items-center justify-center transition-colors">
+                <Activity className="w-6 h-6 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Add Ingredient</h3>
+                <p className="text-sm text-gray-600">Create ingredient</p>
+              </div>
+            </div>
+          </Link>
+
           <Link
             href="/admin/users"
             className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-blue-500 transition-colors group"
@@ -109,7 +264,7 @@ export default async function AdminDashboard() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Manage Users</h3>
-                <p className="text-sm text-gray-600">Search, view, and update user accounts</p>
+                <p className="text-sm text-gray-600">View user accounts</p>
               </div>
             </div>
           </Link>
@@ -126,7 +281,7 @@ export default async function AdminDashboard() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">View Discounts</h3>
-                <p className="text-sm text-gray-600">See active discount codes and usage</p>
+                <p className="text-sm text-gray-600">Discount codes</p>
               </div>
             </div>
           </Link>
