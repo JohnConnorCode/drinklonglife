@@ -206,6 +206,27 @@ export const useCartStore = create<CartStore>()(
     {
       name: 'cart-storage', // localStorage key
       storage: createJSONStorage(() => localStorage),
+      version: 2, // Increment to clear old cart data
+      migrate: (persistedState: any, version: number) => {
+        // Clear cart if version is old or if items have invalid priceIds
+        if (version < 2) {
+          return {
+            items: [],
+            coupon: undefined,
+          };
+        }
+
+        // Filter out items with invalid priceIds
+        if (persistedState?.items) {
+          persistedState.items = persistedState.items.filter((item: any) =>
+            item.priceId &&
+            item.priceId.startsWith('price_') &&
+            item.priceId.length > 20
+          );
+        }
+
+        return persistedState;
+      },
       // Only persist items and coupon, not loading/error states
       partialize: (state) => ({
         items: state.items,
