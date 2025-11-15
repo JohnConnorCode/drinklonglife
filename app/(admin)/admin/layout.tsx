@@ -41,6 +41,18 @@ export default async function AdminLayout({
                   Dashboard
                 </Link>
                 <Link
+                  href="/admin/products"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Products
+                </Link>
+                <Link
+                  href="/admin/ingredients"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Ingredients
+                </Link>
+                <Link
                   href="/admin/users"
                   className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
                 >
