@@ -123,12 +123,12 @@ export function VariantSelector({
                 </div>
               )}
 
-              {variant.stripe_price_id && priceMap.has(variant.stripe_price_id) && (
+              {variant.stripe_price_id && variant.price_usd && (
                 <AddToCartButton
                   priceId={variant.stripe_price_id}
                   productName={`${productName} - ${variant.label}`}
                   productType={isSubscription ? 'subscription' : 'one-time'}
-                  amount={priceMap.get(variant.stripe_price_id)!}
+                  amount={variant.price_usd * 100}
                   image={productImage}
                   blendSlug={blendSlug}
                   sizeKey={variant.size_key}
