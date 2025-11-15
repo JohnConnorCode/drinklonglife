@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { client } from '@/lib/sanity.client';
-import { blendsQuery, blendsPageQuery } from '@/lib/sanity.queries';
+import { getAllProducts } from '@/lib/supabase/queries/products';
 import { Section } from '@/components/Section';
 import { BlendsGrid } from '@/components/BlendsGrid';
 import { FadeIn } from '@/components/animations';
@@ -10,34 +9,32 @@ export const revalidate = 60;
 
 async function getBlends() {
   try {
-    return await client.fetch(blendsQuery);
+    return await getAllProducts();
   } catch (error) {
     console.error('Error fetching blends:', error);
     return [];
   }
 }
 
-async function getBlendsPage() {
-  try {
-    return await client.fetch(blendsPageQuery);
-  } catch (error) {
-    console.error('Error fetching blends page:', error);
-    return null;
-  }
-}
+// Blends page settings - can be moved to database later
+const blendsPageSettings = {
+  heading: 'Our Blends',
+  subheading: 'Each blend is carefully crafted with cold-pressed organic ingredients to support your wellness journey.',
+  seo: {
+    metaTitle: 'Our Blends | Long Life',
+    metaDescription: 'Explore our cold-pressed juice blends, each crafted for specific wellness functions.',
+  },
+};
 
 export async function generateMetadata(): Promise<Metadata> {
-  const blendsPage = await getBlendsPage();
-
   return {
-    title: blendsPage?.seo?.metaTitle || 'Our Blends | Long Life',
-    description: blendsPage?.seo?.metaDescription || 'Explore our cold-pressed juice blends, each crafted for specific wellness functions.',
+    title: blendsPageSettings.seo.metaTitle,
+    description: blendsPageSettings.seo.metaDescription,
   };
 }
 
 export default async function BlendsPage() {
   const blends = await getBlends();
-  const blendsPage = await getBlendsPage();
 
   return (
     <>
@@ -75,12 +72,12 @@ export default async function BlendsPage() {
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <FadeIn direction="up" delay={0.1}>
             <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight text-white">
-              {blendsPage?.heading || 'Our Blends'}
+              {blendsPageSettings.heading}
             </h1>
           </FadeIn>
           <FadeIn direction="up" delay={0.2}>
             <p className="text-xl sm:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto">
-              {blendsPage?.subheading || 'Each blend is carefully crafted with cold-pressed organic ingredients to support your wellness journey.'}
+              {blendsPageSettings.subheading}
             </p>
           </FadeIn>
 

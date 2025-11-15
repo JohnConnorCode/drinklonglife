@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { client } from '@/lib/sanity.client';
+import { getActiveStripeProducts } from '@/lib/supabase/queries/products';
 import { getStripePrices, formatPrice, getBillingInterval } from '@/lib/stripe';
 import { PricingCard } from '@/components/pricing/PricingCard';
 import { Section } from '@/components/Section';
@@ -10,42 +10,17 @@ export const revalidate = 3600; // Revalidate every hour
 
 async function getStripeProducts(): Promise<EnrichedStripeProduct[]> {
   try {
-    // Fetch active products from Sanity
-    const products: StripeProduct[] = await client.fetch(
-      `*[_type == "stripeProduct" && isActive == true] | order(uiOrder asc) {
-        _id,
-        _type,
-        title,
-        slug,
-        description,
-        badge,
-        featured,
-        isActive,
-        stripeProductId,
-        tierKey,
-        variants[] {
-          sizeKey,
-          label,
-          stripePriceId,
-          isDefault,
-          uiOrder
-        },
-        uiOrder,
-        image {
-          asset,
-          alt
-        },
-        ctaLabel,
-        notes
-      }`
-    );
+    // Fetch active products from Supabase
+    const products = await getActiveStripeProducts();
 
     if (!products || products.length === 0) {
       return [];
     }
 
-    // Collect all price IDs
-    const allPriceIds = products.flatMap(p => p.variants.map(v => v.stripePriceId));
+    // Collect all price IDs from variants
+    const allPriceIds = products.flatMap(p =>
+      p.variants.map(v => v.stripe_price_id)
+    );
 
     // Fetch all Stripe prices in one batch
     const stripePrices = await getStripePrices(allPriceIds);
@@ -54,11 +29,15 @@ async function getStripeProducts(): Promise<EnrichedStripeProduct[]> {
     const enrichedProducts: EnrichedStripeProduct[] = products.map(product => {
       const enrichedVariants: EnrichedProductVariant[] = product.variants
         .map(variant => {
-          const price = stripePrices.get(variant.stripePriceId);
+          const price = stripePrices.get(variant.stripe_price_id);
           if (!price) return null;
 
           return {
             ...variant,
+            stripePriceId: variant.stripe_price_id, // Map to expected field name
+            sizeKey: variant.size_key,
+            isDefault: variant.is_default,
+            uiOrder: variant.display_order,
             price,
             formattedPrice: formatPrice(price.unit_amount || 0, price.currency),
             billingInterval: getBillingInterval(price),
@@ -68,8 +47,11 @@ async function getStripeProducts(): Promise<EnrichedStripeProduct[]> {
 
       return {
         ...product,
+        _id: product.id, // Map to expected field name
+        title: product.name,
+        stripeProductId: product.stripe_product_id,
         variants: enrichedVariants,
-      };
+      } as any;
     });
 
     // Filter out products with no valid variants
@@ -80,37 +62,25 @@ async function getStripeProducts(): Promise<EnrichedStripeProduct[]> {
   }
 }
 
-async function getPageSettings() {
-  try {
-    return await client.fetch(
-      `*[_type == "subscriptionPageSettings"][0] {
-        title,
-        subtitle,
-        showBillingToggle,
-        monthlyLabel,
-        yearlyLabel,
-        yearlyDiscountBadge,
-        seo
-      }`
-    );
-  } catch (error) {
-    console.error('Error fetching page settings:', error);
-    return null;
-  }
-}
+// Pricing page settings - can be moved to database later
+const pageSettings = {
+  title: 'Choose Your Plan',
+  subtitle: 'Simple, transparent pricing for your wellness journey',
+  seo: {
+    metaTitle: 'Pricing | Long Life',
+    metaDescription: 'Choose the perfect plan for your wellness journey.',
+  },
+};
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getPageSettings();
-
   return {
-    title: settings?.seo?.metaTitle || 'Pricing | Long Life',
-    description: settings?.seo?.metaDescription || 'Choose the perfect plan for your wellness journey.',
+    title: pageSettings.seo.metaTitle,
+    description: pageSettings.seo.metaDescription,
   };
 }
 
 export default async function PricingPage() {
   const products = await getStripeProducts();
-  const settings = await getPageSettings();
 
   return (
     <>
@@ -131,15 +101,13 @@ export default async function PricingPage() {
           </FadeIn>
           <FadeIn direction="up" delay={0.2}>
             <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight">
-              {settings?.title || 'Choose Your Plan'}
+              {pageSettings.title}
             </h1>
           </FadeIn>
           <FadeIn direction="up" delay={0.3}>
-            {settings?.subtitle && (
-              <p className="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
-                {settings.subtitle}
-              </p>
-            )}
+            <p className="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+              {pageSettings.subtitle}
+            </p>
           </FadeIn>
         </div>
       </Section>

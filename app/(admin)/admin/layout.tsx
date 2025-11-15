@@ -41,10 +41,34 @@ export default async function AdminLayout({
                   Dashboard
                 </Link>
                 <Link
-                  href="/admin/users"
+                  href="/admin/orders"
                   className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
                 >
-                  Users
+                  Orders
+                </Link>
+                <Link
+                  href="/admin/subscriptions"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Subscriptions
+                </Link>
+                <Link
+                  href="/admin/products"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Products
+                </Link>
+                <Link
+                  href="/admin/ingredients"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Ingredients
+                </Link>
+                <Link
+                  href="/admin/referrals"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Referrals
                 </Link>
                 <Link
                   href="/admin/discounts"
@@ -53,10 +77,10 @@ export default async function AdminLayout({
                   Discounts
                 </Link>
                 <Link
-                  href="/admin/settings"
+                  href="/admin/users"
                   className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
                 >
-                  Settings
+                  Users
                 </Link>
               </nav>
             </div>
