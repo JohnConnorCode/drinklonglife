@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { AnimatedLogo } from './AnimatedLogo';
 import { StaggerContainer } from './animations';
 import { RippleEffect } from './RippleEffect';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/browser';
 import type { User } from '@supabase/supabase-js';
 import { useCartStore } from '@/lib/store/cartStore';
 import { ShoppingCart } from 'lucide-react';
@@ -57,6 +57,8 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
 
   // Check authentication state
   useEffect(() => {
+    const supabase = createClient();
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);

@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useDropzone } from 'react-dropzone';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/browser';
 import Image from 'next/image';
 import { VariantsManager } from './VariantsManager';
 
@@ -128,6 +128,7 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
       // Upload image if new file selected
       let imageUrl = product?.image_url;
       if (imageFile) {
+        const supabase = createClient();
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
         const filePath = `products/${fileName}`;

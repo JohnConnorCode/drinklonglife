@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/browser';
 
 interface LoginFormProps {
   redirectTo?: string;
@@ -23,6 +23,7 @@ export function LoginForm({ redirectTo = '/account' }: LoginFormProps) {
     const password = formData.get('password') as string;
 
     try {
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -49,6 +50,7 @@ export function LoginForm({ redirectTo = '/account' }: LoginFormProps) {
     setError(null);
 
     try {
+      const supabase = createClient();
       const origin = window.location.origin;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',

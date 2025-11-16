@@ -16,8 +16,11 @@ const labelColorMap = {
 };
 
 export function BlendCard({ blend }: BlendCardProps) {
+  const slug = typeof blend.slug === 'string' ? blend.slug : blend.slug?.current;
+  const imageUrl = blend.image_url || blend.image?.asset?.url;
+
   return (
-    <Link href={`/blends/${blend.slug}`}>
+    <Link href={`/blends/${slug}`}>
       <motion.div
         className="group cursor-pointer"
         initial={{ opacity: 0, y: 20 }}
@@ -30,13 +33,13 @@ export function BlendCard({ blend }: BlendCardProps) {
           className="relative overflow-hidden rounded-lg bg-gray-100 mb-4 shadow-md"
           whileHover={{ boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
         >
-          {blend.image_url ? (
+          {imageUrl ? (
             <motion.div
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
               <Image
-                src={blend.image_url}
+                src={imageUrl}
                 alt={blend.image_alt || blend.name}
                 width={800}
                 height={600}
@@ -48,11 +51,11 @@ export function BlendCard({ blend }: BlendCardProps) {
               <span className="font-heading text-4xl font-bold text-gray-400">{blend.name}</span>
             </div>
           )}
-          {blend.label_color && (
+          {(blend.label_color || blend.labelColor) && (
             <motion.div
               className={clsx(
                 'absolute top-3 right-3 w-8 h-8 rounded-full',
-                labelColorMap[blend.label_color as keyof typeof labelColorMap]
+                labelColorMap[(blend.label_color || blend.labelColor) as keyof typeof labelColorMap]
               )}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -62,9 +65,9 @@ export function BlendCard({ blend }: BlendCardProps) {
         </motion.div>
         <h3 className="font-heading text-lg font-bold mb-1">{blend.name}</h3>
         <p className="text-sm text-muted mb-3">{blend.tagline}</p>
-        {blend.function_list && blend.function_list.length > 0 && (
+        {(blend.function_list || blend.functionList) && (blend.function_list || blend.functionList).length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {blend.function_list.slice(0, 3).map((func: string, idx: number) => (
+            {(blend.function_list || blend.functionList).slice(0, 3).map((func: string, idx: number) => (
               <motion.span
                 key={func}
                 initial={{ opacity: 0, scale: 0.8 }}

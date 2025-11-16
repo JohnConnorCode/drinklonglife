@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/browser';
 
 interface SignupFormProps {
   redirectTo?: string;
@@ -33,6 +33,7 @@ export function SignupForm({ redirectTo = '/account', referralCode }: SignupForm
     }
 
     try {
+      const supabase = createClient();
       const origin = window.location.origin;
       const { data, error } = await supabase.auth.signUp({
         email,

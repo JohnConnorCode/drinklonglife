@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/browser';
 
 interface SignOutButtonProps {
   className?: string;
@@ -19,19 +20,23 @@ export function SignOutButton({
     try {
       setLoading(true);
 
-      const response = await fetch('/api/auth/signout', {
-        method: 'POST',
-      });
+      // Sign out on client side - this clears cookies automatically
+      const supabase = createClient();
+      const { error } = await supabase.auth.signOut();
 
-      if (!response.ok) {
-        throw new Error('Failed to sign out');
+      if (error) {
+        console.error('Sign out error:', error);
+        throw error;
       }
 
-      // Redirect to home page after signing out
+      // Redirect and refresh to clear any cached data
       router.push('/');
       router.refresh();
     } catch (error) {
       console.error('Sign out error:', error);
+      // Show user-friendly error
+      const message = error instanceof Error ? error.message : 'Failed to sign out';
+      alert(`Error: ${message}. Please try refreshing the page.`);
       setLoading(false);
     }
   };
