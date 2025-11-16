@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '@/lib/supabase/server';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 /**
  * Validates and sanitizes redirect paths to prevent open redirect vulnerabilities
@@ -44,9 +45,43 @@ export async function GET(req: NextRequest) {
   const origin = requestUrl.origin;
 
   if (code) {
-    const supabase = createServerClient();
+    const cookieStore = cookies();
 
-    // Exchange code for session
+    // CRITICAL: Create response object FIRST so we can set cookies on it
+    let response = NextResponse.redirect(`${origin}${next}`);
+
+    // Create Supabase client with cookie handlers that write to the response
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value;
+          },
+          set(name: string, value: string, options: CookieOptions) {
+            try {
+              cookieStore.set({ name, value, ...options });
+            } catch (error) {
+              // cookies() can throw in route handlers - this is expected
+            }
+            // CRITICAL: Also set on the response object we're returning
+            response.cookies.set(name, value, options);
+          },
+          remove(name: string, options: CookieOptions) {
+            try {
+              cookieStore.set({ name, value: '', ...options });
+            } catch (error) {
+              // cookies() can throw in route handlers - this is expected
+            }
+            // CRITICAL: Also remove from the response object
+            response.cookies.set(name, '', options);
+          },
+        },
+      }
+    );
+
+    // Exchange code for session (this will call the set() methods above)
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
@@ -56,8 +91,8 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Successful authentication - redirect to intended destination
-    return NextResponse.redirect(`${origin}${next}`);
+    // Return the response WITH the session cookies
+    return response;
   }
 
   // No code present, redirect to login
