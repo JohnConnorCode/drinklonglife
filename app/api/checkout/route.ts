@@ -32,17 +32,13 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
     console.log('🔐 User authenticated:', !!user, user?.email);
 
-    // CRITICAL SECURITY: Require authentication for checkout
-    // Prevents guest checkout abuse and ensures all orders are associated with users
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Authentication required. Please sign in to continue.' },
-        { status: 401 }
-      );
-    }
-
     // CRITICAL SECURITY: Rate limiting to prevent checkout spam
-    const rateLimitKey = `checkout:${user.id}`;
+    // For authenticated users: rate limit by user ID
+    // For guests: rate limit by IP address
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] ||
+                     req.headers.get('x-real-ip') ||
+                     'unknown';
+    const rateLimitKey = user ? `checkout:user:${user.id}` : `checkout:ip:${clientIp}`;
     const { success, remaining, reset } = rateLimit(rateLimitKey, 20, '5m');
 
     if (!success) {
@@ -118,6 +114,10 @@ export async function POST(req: NextRequest) {
     const metadata: Record<string, string> = {};
     if (user) {
       metadata.userId = user.id;
+    } else {
+      // For guest checkout, track IP for security monitoring
+      metadata.guestCheckout = 'true';
+      metadata.clientIp = clientIp;
     }
 
     // CART-BASED CHECKOUT (multiple items)
