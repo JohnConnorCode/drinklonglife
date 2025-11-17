@@ -148,17 +148,17 @@ export default async function AccountPage() {
         <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Main Content - Left Column */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Profile Completion */}
-            {showProfileCompletion && (
+            {/* Ambassador/Referral Section - Featured First */}
+            {referralStats && user.referral_code && (
               <FadeIn direction="up" delay={0.15}>
-                <ProfileCompletionCard completion={profileCompletion} />
+                <ReferralShareCard referralCode={user.referral_code} stats={referralStats} />
               </FadeIn>
             )}
 
-            {/* Referral Stats */}
-            {referralStats && user.referral_code && (
+            {/* Profile Completion - Hidden for now */}
+            {false && showProfileCompletion && (
               <FadeIn direction="up" delay={0.17}>
-                <ReferralShareCard referralCode={user.referral_code} stats={referralStats} />
+                <ProfileCompletionCard completion={profileCompletion} />
               </FadeIn>
             )}
 
