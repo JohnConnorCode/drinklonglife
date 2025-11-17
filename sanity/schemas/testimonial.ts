@@ -41,11 +41,11 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'blend',
-      title: 'Related Blend',
+      name: 'product',
+      title: 'Related Product',
       type: 'reference',
-      to: { type: 'blend' },
-      description: 'Optional: Link to the specific blend they\'re talking about',
+      to: { type: 'product' },
+      description: 'Optional: Link to the specific product they\'re talking about',
     }),
     defineField({
       name: 'isFeatured',

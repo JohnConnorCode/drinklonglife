@@ -158,10 +158,12 @@ export default defineType({
       name: 'featuredBlends',
       title: 'Featured Blends',
       type: 'array',
+      description: 'Legacy field - use products instead',
+      hidden: true,
       of: [
         {
           type: 'reference',
-          to: { type: 'blend' },
+          to: { type: 'product' },
         },
       ],
     }),
@@ -211,10 +213,11 @@ export default defineType({
       name: 'sizesPricing',
       title: 'Sizes & Pricing',
       type: 'array',
+      description: 'Legacy field - pricing now managed in Stripe',
+      hidden: true,
       of: [
         {
-          type: 'reference',
-          to: { type: 'sizePrice' },
+          type: 'string',
         },
       ],
     }),
