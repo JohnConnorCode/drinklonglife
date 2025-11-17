@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  webpack: (config, { isServer }) => {
+    // Suppress webpack cache warnings for large strings
+    config.infrastructureLogging = {
+      level: 'error',
+    };
+    return config;
+  },
   images: {
     remotePatterns: [
       {
