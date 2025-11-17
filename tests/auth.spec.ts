@@ -44,7 +44,7 @@ test.describe('Authentication', () => {
     await expect(page).toHaveURL(/\/login/);
   });
 
-  test('logout button should work', async ({ page, context }) => {
+  test('logout button should work', async ({ page }) => {
     // First, we need to be logged in
     // For now, just check that sign out button exists when we have a session
 

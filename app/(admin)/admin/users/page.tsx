@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { createServerClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Suspense } from 'react';
+import { requireAdmin } from '@/lib/admin';
 
 export const metadata: Metadata = {
   title: 'User Management | Admin',
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 async function UserList({ searchQuery }: { searchQuery?: string }) {
-  const supabase = createServerClient();
+  const supabase = createServiceRoleClient();
 
   let query = supabase
     .from('profiles')
@@ -127,6 +128,8 @@ export default async function UsersPage({
 }: {
   searchParams: { search?: string };
 }) {
+  await requireAdmin();
+
   return (
     <div className="space-y-6">
       {/* Header */}

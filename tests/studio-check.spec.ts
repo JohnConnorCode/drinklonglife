@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 
 test('verify Sanity Studio loads', async ({ page }) => {
   await page.goto('http://localhost:8080/studio');

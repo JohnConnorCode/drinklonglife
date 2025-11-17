@@ -5,6 +5,7 @@
 
 import { stripe } from './index';
 import { createClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
 
 export interface SyncResult {
   success: boolean;
@@ -95,7 +96,7 @@ export async function syncProductToStripe(productId: string): Promise<SyncResult
       priceIds,
     };
   } catch (error: any) {
-    console.error('Error syncing product to Stripe:', error);
+    logger.error('Error syncing product to Stripe:', error);
     return {
       success: false,
       error: error.message || 'Failed to sync product',
@@ -117,7 +118,7 @@ async function syncVariantToStripe(
         await stripe.prices.retrieve(variant.stripe_price_id);
         return variant.stripe_price_id; // Price exists, no need to create
       } catch (error) {
-        console.log(`Price ${variant.stripe_price_id} not found, creating new one`);
+        logger.info(`Price ${variant.stripe_price_id} not found, creating new one`);
       }
     }
 
@@ -127,7 +128,7 @@ async function syncVariantToStripe(
       : null;
 
     if (!unitAmount) {
-      console.warn(`Variant ${variant.id} has no price, skipping`);
+      logger.warn(`Variant ${variant.id} has no price, skipping`);
       return null;
     }
 
@@ -146,7 +147,7 @@ async function syncVariantToStripe(
 
     return price.id;
   } catch (error: any) {
-    console.error('Error syncing variant to Stripe:', error);
+    logger.error('Error syncing variant to Stripe:', error);
     return null;
   }
 }
@@ -161,7 +162,7 @@ export async function archiveStripeProduct(stripeProductId: string): Promise<boo
     });
     return true;
   } catch (error) {
-    console.error('Error archiving Stripe product:', error);
+    logger.error('Error archiving Stripe product:', error);
     return false;
   }
 }
@@ -182,7 +183,7 @@ export async function getStripeProduct(stripeProductId: string) {
       prices: prices.data,
     };
   } catch (error) {
-    console.error('Error fetching Stripe product:', error);
+    logger.error('Error fetching Stripe product:', error);
     return null;
   }
 }
@@ -198,7 +199,7 @@ export async function getStripePrices(priceIds: string[]) {
       const price = await stripe.prices.retrieve(priceId);
       prices.set(priceId, price);
     } catch (error) {
-      console.error(`Error fetching price ${priceId}:`, error);
+      logger.error(`Error fetching price ${priceId}:`, error);
     }
   }
 

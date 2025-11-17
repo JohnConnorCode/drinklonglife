@@ -1,4 +1,5 @@
 import { createServiceRoleClient } from './supabase/server';
+import { logger } from './logger';
 
 export interface Subscription {
   id: string;
@@ -51,13 +52,13 @@ export async function isUserSubscribedToTier(
       .limit(1);
 
     if (error) {
-      console.error(`Error checking subscription for user ${userId}:`, error);
+      logger.error(`Error checking subscription for user ${userId}:`, error);
       return false;
     }
 
     return (data?.length ?? 0) > 0;
   } catch (error) {
-    console.error(`Error checking subscription for user ${userId}:`, error);
+    logger.error(`Error checking subscription for user ${userId}:`, error);
     return false;
   }
 }
@@ -77,13 +78,13 @@ export async function hasActiveSubscription(userId: string): Promise<boolean> {
       .limit(1);
 
     if (error) {
-      console.error(`Error checking active subscription for user ${userId}:`, error);
+      logger.error(`Error checking active subscription for user ${userId}:`, error);
       return false;
     }
 
     return (data?.length ?? 0) > 0;
   } catch (error) {
-    console.error(`Error checking active subscription for user ${userId}:`, error);
+    logger.error(`Error checking active subscription for user ${userId}:`, error);
     return false;
   }
 }
@@ -107,13 +108,13 @@ export async function hasUserPurchasedVariant(
       .limit(1);
 
     if (error) {
-      console.error(`Error checking variant purchase for user ${userId}:`, error);
+      logger.error(`Error checking variant purchase for user ${userId}:`, error);
       return false;
     }
 
     return (data?.length ?? 0) > 0;
   } catch (error) {
-    console.error(`Error checking variant purchase for user ${userId}:`, error);
+    logger.error(`Error checking variant purchase for user ${userId}:`, error);
     return false;
   }
 }
@@ -137,13 +138,13 @@ export async function hasOneTimePurchase(
       .limit(1);
 
     if (error) {
-      console.error(`Error checking one-time purchase for user ${userId}:`, error);
+      logger.error(`Error checking one-time purchase for user ${userId}:`, error);
       return false;
     }
 
     return (data?.length ?? 0) > 0;
   } catch (error) {
-    console.error(`Error checking one-time purchase for user ${userId}:`, error);
+    logger.error(`Error checking one-time purchase for user ${userId}:`, error);
     return false;
   }
 }
@@ -162,13 +163,13 @@ export async function getUserSubscriptions(userId: string): Promise<Subscription
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error(`Error fetching subscriptions for user ${userId}:`, error);
+      logger.error(`Error fetching subscriptions for user ${userId}:`, error);
       return [];
     }
 
     return data || [];
   } catch (error) {
-    console.error(`Error fetching subscriptions for user ${userId}:`, error);
+    logger.error(`Error fetching subscriptions for user ${userId}:`, error);
     return [];
   }
 }
@@ -188,13 +189,13 @@ export async function getUserPurchases(userId: string): Promise<Purchase[]> {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error(`Error fetching purchases for user ${userId}:`, error);
+      logger.error(`Error fetching purchases for user ${userId}:`, error);
       return [];
     }
 
     return data || [];
   } catch (error) {
-    console.error(`Error fetching purchases for user ${userId}:`, error);
+    logger.error(`Error fetching purchases for user ${userId}:`, error);
     return [];
   }
 }
@@ -222,13 +223,13 @@ export async function getActiveSubscription(
         // No rows returned
         return null;
       }
-      console.error(`Error fetching active subscription for user ${userId}:`, error);
+      logger.error(`Error fetching active subscription for user ${userId}:`, error);
       return null;
     }
 
     return data;
   } catch (error) {
-    console.error(`Error fetching active subscription for user ${userId}:`, error);
+    logger.error(`Error fetching active subscription for user ${userId}:`, error);
     return null;
   }
 }
@@ -251,7 +252,7 @@ export async function isSubscriptionExpiringSoon(userId: string): Promise<boolea
 
     return daysUntilExpiry <= 7 && daysUntilExpiry > 0;
   } catch (error) {
-    console.error(`Error checking subscription expiry for user ${userId}:`, error);
+    logger.error(`Error checking subscription expiry for user ${userId}:`, error);
     return false;
   }
 }
@@ -275,13 +276,13 @@ export async function getSubscriptionByStripeId(
       if (error.code === 'PGRST116') {
         return null;
       }
-      console.error(`Error fetching subscription ${stripeSubscriptionId}:`, error);
+      logger.error(`Error fetching subscription ${stripeSubscriptionId}:`, error);
       return null;
     }
 
     return data;
   } catch (error) {
-    console.error(`Error fetching subscription ${stripeSubscriptionId}:`, error);
+    logger.error(`Error fetching subscription ${stripeSubscriptionId}:`, error);
     return null;
   }
 }
@@ -316,7 +317,7 @@ export async function upsertSubscription(data: {
         .single();
 
       if (!profile) {
-        console.error(
+        logger.error(
           `Cannot upsert subscription: no user found for customer ${data.stripeCustomerId}`
         );
         return null;
@@ -349,13 +350,13 @@ export async function upsertSubscription(data: {
       .single();
 
     if (error) {
-      console.error('Error upserting subscription:', error);
+      logger.error('Error upserting subscription:', error);
       return null;
     }
 
     return result;
   } catch (error) {
-    console.error('Error upserting subscription:', error);
+    logger.error('Error upserting subscription:', error);
     return null;
   }
 }
@@ -394,13 +395,13 @@ export async function createPurchase(data: {
       .single();
 
     if (error) {
-      console.error('Error creating purchase:', error);
+      logger.error('Error creating purchase:', error);
       return null;
     }
 
     return result;
   } catch (error) {
-    console.error('Error creating purchase:', error);
+    logger.error('Error creating purchase:', error);
     return null;
   }
 }
@@ -423,13 +424,13 @@ export async function updatePurchaseStatus(
       .single();
 
     if (error) {
-      console.error(`Error updating purchase ${stripePaymentIntentId}:`, error);
+      logger.error(`Error updating purchase ${stripePaymentIntentId}:`, error);
       return null;
     }
 
     return data;
   } catch (error) {
-    console.error(`Error updating purchase ${stripePaymentIntentId}:`, error);
+    logger.error(`Error updating purchase ${stripePaymentIntentId}:`, error);
     return null;
   }
 }

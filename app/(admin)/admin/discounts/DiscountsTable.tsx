@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Discount {
   id: string;
@@ -20,8 +21,52 @@ interface Discount {
 }
 
 export function DiscountsTable({ discounts }: { discounts: Discount[] }) {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
+  const handleToggleActive = async (id: string, currentState: boolean) => {
+    setLoadingId(id);
+    try {
+      const response = await fetch(`/api/admin/discounts/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ active: !currentState }),
+      });
+
+      if (!response.ok) throw new Error('Failed to update');
+
+      router.refresh();
+    } catch (error) {
+      console.error('Error toggling discount:', error);
+      alert('Failed to update discount');
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
+  const handleDelete = async (id: string, code: string) => {
+    if (!confirm(`Are you sure you want to delete discount code "${code}"?`)) {
+      return;
+    }
+
+    setLoadingId(id);
+    try {
+      const response = await fetch(`/api/admin/discounts/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete');
+
+      router.refresh();
+    } catch (error) {
+      console.error('Error deleting discount:', error);
+      alert('Failed to delete discount');
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   const filteredDiscounts = discounts.filter((discount) => {
     const matchesSearch =
@@ -97,6 +142,9 @@ export function DiscountsTable({ discounts }: { discounts: Discount[] }) {
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Used
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                Actions
               </th>
             </tr>
           </thead>
@@ -180,6 +228,30 @@ export function DiscountsTable({ discounts }: { discounts: Discount[] }) {
                     ) : (
                       <span className="text-gray-400">—</span>
                     )}
+                  </td>
+                  <td className="px-6 py-4 text-right text-sm font-medium">
+                    <div className="flex items-center justify-end gap-2">
+                      {!isUsed && (
+                        <button
+                          onClick={() => handleToggleActive(discount.id, discount.active)}
+                          disabled={loadingId === discount.id}
+                          className="px-3 py-1 text-xs font-medium rounded-md transition-colors disabled:opacity-50"
+                          style={{
+                            backgroundColor: discount.active ? '#fef3c7' : '#d1fae5',
+                            color: discount.active ? '#92400e' : '#065f46',
+                          }}
+                        >
+                          {loadingId === discount.id ? '...' : discount.active ? 'Deactivate' : 'Activate'}
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDelete(discount.id, discount.discount_code)}
+                        disabled={loadingId === discount.id}
+                        className="px-3 py-1 text-xs font-medium rounded-md bg-red-100 text-red-700 hover:bg-red-200 transition-colors disabled:opacity-50"
+                      >
+                        {loadingId === discount.id ? '...' : 'Delete'}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );

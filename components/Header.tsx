@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase/browser';
 import type { User } from '@supabase/supabase-js';
 import { useCartStore } from '@/lib/store/cartStore';
 import { ShoppingCart } from 'lucide-react';
+import { SignOutButton } from './auth/SignOutButton';
 
 interface HeaderProps {
   siteSettings?: any;
@@ -132,11 +133,8 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                 </motion.div>
               );
             })}
-          </nav>
 
-          {/* Desktop Auth & CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            {/* Cart Button */}
+            {/* Ambassadors Link (hardcoded) */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -147,17 +145,47 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
               }}
             >
               <Link
-                href="/cart"
-                className="relative p-2 text-gray-700 hover:text-black transition-colors"
+                href="/referral"
+                className={clsx(
+                  'group text-sm font-heading font-medium transition-colors relative',
+                  pathname === '/referral' ? 'text-accent-primary' : 'text-gray-700 hover:text-black'
+                )}
               >
-                <ShoppingCart className="w-6 h-6" />
-                {cartItemCount > 0 && (
+                Ambassadors
+                <span
+                  className={clsx(
+                    'absolute -bottom-1 left-0 h-0.5 bg-accent-primary transition-all duration-300',
+                    pathname === '/referral' ? 'w-full' : 'w-0 group-hover:w-full'
+                  )}
+                />
+              </Link>
+            </motion.div>
+          </nav>
+
+          {/* Desktop Auth & CTA */}
+          <div className="hidden md:flex items-center gap-4">
+            {/* Cart Button - Only show if cart has items */}
+            {cartItemCount > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 1.0 + headerLinks.length * 0.1,
+                  ease: 'easeOut',
+                }}
+              >
+                <Link
+                  href="/cart"
+                  className="relative p-2 text-gray-700 hover:text-black transition-colors"
+                >
+                  <ShoppingCart className="w-6 h-6" />
                   <span className="absolute top-0 right-0 bg-accent-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center transform translate-x-1/4 -translate-y-1/4">
                     {cartItemCount}
                   </span>
-                )}
-              </Link>
-            </motion.div>
+                </Link>
+              </motion.div>
+            )}
 
             {!user ? (
               // Not logged in - show Login and Sign Up buttons
@@ -248,14 +276,9 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                       >
                         My Account
                       </Link>
-                      <form action="/api/auth/signout" method="POST">
-                        <button
-                          type="submit"
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
-                        >
-                          Sign Out
-                        </button>
-                      </form>
+                      <SignOutButton className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors">
+                        Sign Out
+                      </SignOutButton>
                     </div>
                   </>
                 )}
@@ -352,26 +375,39 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                 );
               })}
 
-              {/* Mobile Cart Link */}
+              {/* Ambassadors Link (hardcoded) */}
               <Link
-                href="/cart"
+                href="/referral"
                 className={clsx(
-                  'flex items-center justify-between px-4 py-3 text-lg font-medium rounded-lg transition-all duration-300',
-                  pathname === '/cart'
+                  'block px-4 py-3 text-lg font-medium rounded-lg transition-all duration-300',
+                  pathname === '/referral'
                     ? 'bg-gradient-to-r from-accent-yellow/20 to-accent-green/20 text-accent-primary'
                     : 'text-gray-700 hover:bg-gray-50 hover:translate-x-1'
                 )}
               >
-                <span className="flex items-center gap-2">
-                  <ShoppingCart className="w-5 h-5" />
-                  Cart
-                </span>
-                {cartItemCount > 0 && (
+                Ambassadors
+              </Link>
+
+              {/* Mobile Cart Link - Only show if cart has items */}
+              {cartItemCount > 0 && (
+                <Link
+                  href="/cart"
+                  className={clsx(
+                    'flex items-center justify-between px-4 py-3 text-lg font-medium rounded-lg transition-all duration-300',
+                    pathname === '/cart'
+                      ? 'bg-gradient-to-r from-accent-yellow/20 to-accent-green/20 text-accent-primary'
+                      : 'text-gray-700 hover:bg-gray-50 hover:translate-x-1'
+                  )}
+                >
+                  <span className="flex items-center gap-2">
+                    <ShoppingCart className="w-5 h-5" />
+                    Cart
+                  </span>
                   <span className="bg-accent-primary text-white text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center">
                     {cartItemCount}
                   </span>
-                )}
-              </Link>
+                </Link>
+              )}
 
               {/* Mobile Auth */}
               {!user ? (
@@ -406,14 +442,9 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
                   >
                     My Account
                   </Link>
-                  <form action="/api/auth/signout" method="POST">
-                    <button
-                      type="submit"
-                      className="w-full block px-6 py-3 text-center rounded-full border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300"
-                    >
-                      Sign Out
-                    </button>
-                  </form>
+                  <SignOutButton className="w-full block px-6 py-3 text-center rounded-full border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300">
+                    Sign Out
+                  </SignOutButton>
                 </div>
               )}
 

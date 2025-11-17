@@ -55,7 +55,7 @@ test.describe('Sanity CMS Production Data Verification', () => {
     }
 
     stripe = new Stripe(process.env.STRIPE_SECRET_KEY_PRODUCTION!, {
-      apiVersion: '2024-12-18.acacia',
+      apiVersion: '2025-10-29.clover',
     });
 
     console.log('\n==============================================');
@@ -92,8 +92,8 @@ test.describe('Sanity CMS Production Data Verification', () => {
       const slug = product.slug.current;
 
       // Check if we have an expected ID for this product
-      if (EXPECTED_PRODUCTION.products[slug]) {
-        expect(product.stripeProductIdProduction).toBe(EXPECTED_PRODUCTION.products[slug]);
+      if (EXPECTED_PRODUCTION.products[slug as keyof typeof EXPECTED_PRODUCTION.products]) {
+        expect(product.stripeProductIdProduction).toBe(EXPECTED_PRODUCTION.products[slug as keyof typeof EXPECTED_PRODUCTION.products]);
 
         // Verify this product exists in Stripe
         const stripeProduct = await stripe.products.retrieve(product.stripeProductIdProduction);

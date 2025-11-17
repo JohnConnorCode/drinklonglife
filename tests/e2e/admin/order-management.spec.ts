@@ -129,7 +129,7 @@ test.describe('Admin Order Management', () => {
       if (await statusFilter.isVisible()) {
         // Select "completed" status
         await statusFilter.click();
-        await page.click('text=Completed, text=completed').first();
+        await page.locator('text=Completed, text=completed').first().click();
 
         // Wait for URL to update with filter
         await page.waitForURL(/status=completed/i, { timeout: 5000 });
@@ -382,7 +382,7 @@ test.describe('Admin Order Management', () => {
 
         // Update status
         await statusSelect.click();
-        await page.click(`text=${newStatus}`).first();
+        await page.locator(`text=${newStatus}`).first().click();
 
         // Look for update/save button
         const updateButton = page.locator('button:has-text("Update"), button:has-text("Save")');
@@ -463,7 +463,7 @@ test.describe('Admin Order Management', () => {
       await expect(errorMessage).toBeVisible({ timeout: 10000 });
     });
 
-    test('should handle failed refund gracefully', async ({ page }) => {
+    test('should handle failed refund gracefully', async ({ page: _page }) => {
       // This test would attempt to refund an order that can't be refunded
       // (e.g., already refunded or payment failed)
       // Implementation depends on actual error states in the system

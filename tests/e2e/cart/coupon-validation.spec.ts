@@ -55,7 +55,7 @@ test.describe('Coupon Validation', () => {
     await couponInput.fill('testcoupon');
 
     // Get the value (Zustand store should uppercase it)
-    const value = await couponInput.inputValue();
+    await couponInput.inputValue();
 
     // Input might show lowercase, but API call should be uppercase
     // This is verified by watching network requests
@@ -119,7 +119,7 @@ test.describe('Coupon Applied State', () => {
     await expect(orderSummary).toBeVisible();
   });
 
-  test('should show remove button for applied coupon', async ({ page }) => {
+  test('should show remove button for applied coupon', async ({ page: _page }) => {
     // Skip this test if no valid coupon is available
     // The UI should show an X button to remove the coupon
   });
@@ -177,11 +177,11 @@ test.describe('Discount Display', () => {
 });
 
 test.describe('Coupon Persistence', () => {
-  test('should maintain coupon through page reload', async ({ page }) => {
+  test('should maintain coupon through page reload', async ({ page: _page }) => {
     // Skip - requires valid coupon setup
   });
 
-  test('should send coupon code to checkout', async ({ page }) => {
+  test('should send coupon code to checkout', async ({ page: _page }) => {
     // This will be tested in the checkout flow tests
     // Verify that coupon code is included in checkout request
   });

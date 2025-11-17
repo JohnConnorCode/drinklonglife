@@ -26,10 +26,16 @@ async function getIngredients() {
     redirect('/');
   }
 
-  // Fetch all ingredients
+  // Fetch all ingredients with product counts
   const { data: ingredients, error } = await supabase
     .from('ingredients')
-    .select('*')
+    .select(`
+      *,
+      product_ingredients(
+        count,
+        product:products(id, name)
+      )
+    `)
     .order('name', { ascending: true });
 
   if (error) {

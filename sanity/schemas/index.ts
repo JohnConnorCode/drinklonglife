@@ -3,10 +3,7 @@ import siteSettings from './siteSettings';
 import navigation from './navigation';
 import homePage from './homePage';
 import page from './page';
-import blend from './blend';
-import ingredient from './ingredient';
-import farm from './farm';
-import sizePrice from './sizePrice';
+import blendsPage from './blendsPage';
 import processStep from './processStep';
 import standard from './standard';
 import post from './post';
@@ -16,7 +13,6 @@ import testimonial from './testimonial';
 import teamMember from './teamMember';
 import aboutPage from './aboutPage';
 import socialProof from './socialProof';
-import blendsPage from './blendsPage';
 import faqPage from './faqPage';
 import processPage from './processPage';
 import ingredientsSourcingPage from './ingredientsSourcingPage';
@@ -44,10 +40,6 @@ export const schemaTypes = [
   wholesalePage,
   socialProof,
   page,
-  blend,
-  ingredient,
-  farm,
-  sizePrice,
   processStep,
   standard,
   post,

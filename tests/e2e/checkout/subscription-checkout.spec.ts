@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { completeCheckoutWithTestCard, isCheckoutSuccessful, getCheckoutSessionId } from '../../helpers/checkout';
 
 test.describe('Subscription Checkout Flow', () => {
   test('should toggle between one-time and subscription options', async ({ page }) => {

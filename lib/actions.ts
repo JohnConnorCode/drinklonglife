@@ -1,6 +1,9 @@
 'use server';
 
 import { z } from 'zod';
+import { resend, EMAIL_CONFIG } from './email/client';
+import NewsletterWelcomeEmail from './email/templates/newsletter-welcome';
+import ContactFormEmail from './email/templates/contact-form';
 
 // Newsletter subscription schema
 const newsletterSchema = z.object({
@@ -24,13 +27,15 @@ export async function submitNewsletter(formData: FormData) {
   try {
     const validatedData = newsletterSchema.parse({ email });
 
-    // TODO: Integrate with email service provider (e.g., Mailchimp, SendGrid, ConvertKit)
-    console.log('Newsletter signup:', validatedData);
+    // Send welcome email via Resend
+    await resend.emails.send({
+      from: EMAIL_CONFIG.from,
+      to: validatedData.email,
+      subject: 'Welcome to Long Life! 🌱',
+      react: NewsletterWelcomeEmail({ email: validatedData.email }),
+    });
 
-    // Placeholder: In a real app, you would:
-    // - Save to database
-    // - Send confirmation email
-    // - Integrate with ESP
+    // TODO: Save to database/Klaviyo for ongoing campaigns
 
     return {
       success: true,
@@ -72,13 +77,21 @@ export async function submitWholesaleInquiry(formData: FormData) {
   try {
     const validatedData = wholesaleSchema.parse(data);
 
-    // TODO: Integrate with email service or CRM
-    console.log('Wholesale inquiry:', validatedData);
+    // Send to sales team via Resend
+    await resend.emails.send({
+      from: EMAIL_CONFIG.from,
+      to: EMAIL_CONFIG.supportEmail,
+      replyTo: validatedData.email,
+      subject: `Wholesale Inquiry from ${validatedData.name}`,
+      react: ContactFormEmail({
+        name: validatedData.name,
+        email: validatedData.email,
+        message: `Company: ${validatedData.company}\nLocation: ${validatedData.location}\nExpected Volume: ${validatedData.expectedVolume}\n\n${validatedData.message}`,
+        timestamp: new Date().toISOString(),
+      }),
+    });
 
-    // Placeholder: In a real app, you would:
-    // - Save to database/CRM
-    // - Send confirmation email
-    // - Send notification to sales team
+    // TODO: Save to database/CRM for tracking
 
     return {
       success: true,

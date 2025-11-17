@@ -51,7 +51,7 @@ test.describe('Production API Validation (No Charges)', () => {
     }
 
     stripe = new Stripe(process.env.STRIPE_SECRET_KEY_PRODUCTION!, {
-      apiVersion: '2024-12-18.acacia',
+      apiVersion: '2025-10-29.clover',
     });
 
     console.log('\n==============================================');

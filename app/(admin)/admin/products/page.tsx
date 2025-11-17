@@ -11,13 +11,14 @@ export const metadata = {
 export default async function ProductsAdminPage() {
   const supabase = createClient();
 
-  // Fetch all products with variant counts
+  // Fetch all products with variant counts and ingredient counts
   const { data: products, error } = await supabase
     .from('products')
     .select(
       `
       *,
-      variants:product_variants(count)
+      variants:product_variants(count),
+      product_ingredients(count)
     `
     )
     .order('display_order', { ascending: true});

@@ -5,7 +5,7 @@ const KLAVIYO_API_KEY = process.env.KLAVIYO_PRIVATE_API_KEY;
 const KLAVIYO_LIST_ID = process.env.KLAVIYO_LIST_ID || 'VFxqc9';
 const KLAVIYO_API_VERSION = '2024-10-15';
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   // Check if user is authenticated
   const supabase = createServerClient();
   const { data: { user } } = await supabase.auth.getUser();

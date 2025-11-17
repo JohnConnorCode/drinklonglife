@@ -15,6 +15,7 @@ interface Product {
   published_at: string | null;
   display_order: number;
   variants: Array<{ count: number }>;
+  product_ingredients: Array<{ count: number }>;
 }
 
 export function ProductsTable({ products }: { products: Product[] }) {
@@ -65,6 +66,7 @@ export function ProductsTable({ products }: { products: Product[] }) {
               <th className="text-left p-4 text-sm font-medium text-gray-700">Name</th>
               <th className="text-left p-4 text-sm font-medium text-gray-700">Status</th>
               <th className="text-left p-4 text-sm font-medium text-gray-700">Featured</th>
+              <th className="text-left p-4 text-sm font-medium text-gray-700">Ingredients</th>
               <th className="text-left p-4 text-sm font-medium text-gray-700">Variants</th>
               <th className="text-left p-4 text-sm font-medium text-gray-700">Order</th>
               <th className="text-right p-4 text-sm font-medium text-gray-700">Actions</th>
@@ -73,7 +75,7 @@ export function ProductsTable({ products }: { products: Product[] }) {
           <tbody className="divide-y divide-gray-200">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={7} className="p-8 text-center text-gray-500">
+                <td colSpan={8} className="p-8 text-center text-gray-500">
                   {search ? 'No products match your search' : 'No products yet'}
                 </td>
               </tr>
@@ -121,6 +123,14 @@ export function ProductsTable({ products }: { products: Product[] }) {
                     ) : (
                       <span className="text-gray-300">☆</span>
                     )}
+                  </td>
+                  <td className="p-4">
+                    <Link
+                      href={`/admin/products/${product.id}`}
+                      className="text-accent-primary hover:text-accent-primary/80 font-medium"
+                    >
+                      {product.product_ingredients[0]?.count || 0} ingredients
+                    </Link>
                   </td>
                   <td className="p-4 text-gray-700">{product.variants[0]?.count || 0}</td>
                   <td className="p-4 text-gray-700">{product.display_order}</td>

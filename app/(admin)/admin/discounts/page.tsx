@@ -1,6 +1,7 @@
-import { createClient } from '@/lib/supabase/server';
-import { redirect } from 'next/navigation';
+import { createServiceRoleClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/admin';
 import { DiscountsTable } from './DiscountsTable';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Discounts | Admin',
@@ -8,29 +9,14 @@ export const metadata = {
 };
 
 async function getDiscounts() {
-  const supabase = createClient();
+  const supabase = createServiceRoleClient();
 
-  // Check admin
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect('/login');
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .single();
-
-  if (!profile?.is_admin) redirect('/');
-
-  // Fetch user discounts
+  // Fetch user discounts - fix: only select full_name, not name
   const { data: discounts, error } = await supabase
     .from('user_discounts')
     .select(`
       *,
-      profile:profiles(id, email, full_name, name)
+      profile:profiles(id, email, full_name)
     `)
     .order('created_at', { ascending: false })
     .limit(500);
@@ -44,6 +30,8 @@ async function getDiscounts() {
 }
 
 export default async function DiscountsPage() {
+  await requireAdmin();
+
   const discounts = await getDiscounts();
 
   const activeCount = discounts.filter((d) => d.active).length;
@@ -63,16 +51,27 @@ export default async function DiscountsPage() {
               Manage user discount codes and coupons
             </p>
           </div>
-          <div className="text-sm text-gray-500">
-            Note: Create discount codes in{' '}
-            <a
-              href="https://dashboard.stripe.com/coupons"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+          <div className="flex items-center gap-4">
+            <Link
+              href="/admin/discounts/create"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors inline-flex items-center gap-2"
             >
-              Stripe Dashboard →
-            </a>
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Create Discount
+            </Link>
+            <div className="text-sm text-gray-500">
+              Or create in{' '}
+              <a
+                href="https://dashboard.stripe.com/coupons"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                Stripe →
+              </a>
+            </div>
           </div>
         </div>
       </div>

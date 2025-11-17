@@ -6,9 +6,10 @@ import { FadeIn } from './animations';
 
 interface BlendsGridProps {
   blends: any[];
+  showFilters?: boolean;
 }
 
-export function BlendsGrid({ blends }: BlendsGridProps) {
+export function BlendsGrid({ blends, showFilters = true }: BlendsGridProps) {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
   // Extract all unique functions from all blends
@@ -35,7 +36,7 @@ export function BlendsGrid({ blends }: BlendsGridProps) {
   return (
     <>
       {/* Filter Section */}
-      {allFunctions.length > 0 && (
+      {showFilters && allFunctions.length > 0 && (
         <FadeIn direction="up" className="mb-12">
           <div className="flex flex-col items-center gap-4">
             <h2 className="font-heading text-2xl font-bold text-gray-900">

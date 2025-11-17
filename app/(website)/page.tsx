@@ -4,13 +4,14 @@ import { client } from '@/lib/sanity.client';
 import { homePageQuery } from '@/lib/sanity.queries';
 import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
-import { BlendCard } from '@/components/BlendCard';
+import { BlendsGrid } from '@/components/BlendsGrid';
 import { urlFor } from '@/lib/image';
 import { FadeIn, StaggerContainer, FloatingElement, ParallaxElement } from '@/components/animations';
 import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 import { StatsSection } from '@/components/StatsSection';
 import { HeroSlider } from '@/components/HeroSlider';
 import { NewsletterForm } from '@/components/NewsletterForm';
+import { getFeaturedProducts } from '@/lib/supabase/queries/products';
 
 export const revalidate = 60;
 
@@ -23,8 +24,18 @@ async function getHomePage() {
   }
 }
 
+async function getFeaturedBlends() {
+  try {
+    return await getFeaturedProducts();
+  } catch (error) {
+    console.error('Error fetching featured blends:', error);
+    return [];
+  }
+}
+
 export default async function Home() {
   const homePage = await getHomePage();
+  const featuredBlends = await getFeaturedBlends();
 
   if (!homePage) {
     return (
@@ -39,7 +50,6 @@ export default async function Home() {
     valueProps,
     featuredBlendsHeading,
     featuredBlendsSubheading,
-    featuredBlends,
     featuredBlendsCtaText,
     featuredBlendsSizingText,
     featuredBlendsDeliveryText,
@@ -49,11 +59,11 @@ export default async function Home() {
     processHeading,
     processIntro,
     processSteps,
-    newsletterHeading,
-    newsletterSubheading,
+    newsletterHeading: _newsletterHeading,
+    newsletterSubheading: _newsletterSubheading,
     newsletterPlaceholder: _newsletterPlaceholder,
     newsletterButtonText: _newsletterButtonText,
-    communityBlurb,
+    communityBlurb: _communityBlurb,
     socialProof
   } = homePage;
 
@@ -263,11 +273,7 @@ export default async function Home() {
                 {featuredBlendsSubheading || 'Sold in weekly drops. Reserve early.'}
               </p>
             </FadeIn>
-            <div className="grid md:grid-cols-3 gap-8">
-              {featuredBlends.map((blend: any) => (
-                <BlendCard key={blend._id} blend={blend} />
-              ))}
-            </div>
+            <BlendsGrid blends={featuredBlends} showFilters={false} />
             <div className="text-center mt-12">
               {featuredBlendsSizingText && (
                 <p className="text-muted mb-4">
@@ -486,91 +492,26 @@ export default async function Home() {
 
         <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
           {/* Left Side - Content & Form */}
-          <FadeIn direction="right" className="space-y-8">
+          <FadeIn direction="right" className="space-y-6">
             <div>
-              <h2 className="font-heading text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                {newsletterHeading || 'Get first access to drops and new blends'}
+              <h2 className="font-heading text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                Join the Long Life Newsletter
               </h2>
-              <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-                {newsletterSubheading || 'Enter your email to reserve before batches sell out.'}
+              <p className="text-lg text-gray-700 leading-relaxed">
+                Be the first to know about new Bombs, pop-up events, weekly batch drops, giveaways, and behind-the-scenes lab work.
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed mt-2">
+                Your health journey deserves front-row access.
               </p>
             </div>
 
-            {/* Benefits List */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8">
-              <div className="flex items-start gap-2 sm:gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-accent-yellow flex items-center justify-center flex-shrink-0">
-                  <svg className="w-7 h-7 text-accent-primary" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Early Access</p>
-                  <p className="text-sm text-gray-600">Reserve before public</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2 sm:gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-accent-green flex items-center justify-center flex-shrink-0">
-                  <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Exclusive Drops</p>
-                  <p className="text-sm text-gray-600">Members-only blends</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2 sm:gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-accent-primary flex items-center justify-center flex-shrink-0">
-                  <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">New Recipes</p>
-                  <p className="text-sm text-gray-600">Be first to try</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2 sm:gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-accent-yellow/70 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-7 h-7 text-accent-primary" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Weekly Updates</p>
-                  <p className="text-sm text-gray-600">Fresh batch alerts</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Klaviyo Newsletter Form */}
-            <div className="space-y-4">
+            {/* Newsletter Form */}
+            <div className="space-y-3">
               <NewsletterForm />
-              <div className="flex items-center justify-between text-sm">
-                <p className="text-gray-600 flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  No spam, unsubscribe anytime
-                </p>
-                {socialProof?.stats?.customersServed && (
-                  <p className="font-semibold text-gray-900">
-                    Join{' '}
-                    <span className="text-accent-primary">
-                      {socialProof.stats.customersServed.toLocaleString()}+
-                    </span>
-                    {' '}subscribers
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {communityBlurb && (
-              <p className="text-sm text-gray-600 italic">
-                {communityBlurb}
+              <p className="text-sm text-gray-600">
+                We send only value — fresh drops, no spam.
               </p>
-            )}
+            </div>
           </FadeIn>
 
           {/* Right Side - Product Imagery */}

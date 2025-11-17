@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getProductBySlug, getAllProductsForStaticGen } from '@/lib/supabase/queries/products';
+import { getProductBySlug, getAllProductsForStaticGen, getAllProducts } from '@/lib/supabase/queries/products';
 import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
 import { FadeIn, StaggerContainer, FloatingElement } from '@/components/animations';
 import { VariantSelector } from '@/components/blends/VariantSelector';
+import { BlendCard } from '@/components/BlendCard';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
@@ -62,6 +63,10 @@ export async function generateMetadata({
 
 export default async function BlendPage({ params }: BlendPageProps) {
   const blend = await getBlend(params.slug);
+  const allBlends = await getAllProducts();
+
+  // Get other blends (exclude current one)
+  const otherBlends = allBlends.filter((b: any) => b.slug !== params.slug).slice(0, 3);
 
   if (!blend) {
     return (
@@ -86,54 +91,56 @@ export default async function BlendPage({ params }: BlendPageProps) {
 
   return (
     <>
-      {/* Hero Section */}
-      <Section className={`bg-gradient-to-br from-accent-cream via-accent-yellow/10 to-accent-green/10 py-20 relative overflow-hidden`}>
+      {/* Hero Section - Compact & Focused */}
+      <Section className={`bg-gradient-to-br from-accent-cream via-accent-yellow/10 to-accent-green/10 py-12 sm:py-16 relative overflow-hidden`}>
         {/* Organic background shapes */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent-yellow/20 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent-green/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
 
-        <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
           {blend.image_url && (
             <FadeIn direction="left">
-              <FloatingElement yOffset={15} duration={6}>
-                <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-                  <Image
-                    src={blend.image_url}
-                    alt={blend.image_alt || blend.name}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                  {/* Gradient overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-t ${gradientClass} opacity-0 hover:opacity-20 transition-opacity duration-300`} />
-                </div>
-              </FloatingElement>
+              <div className="sticky top-24">
+                <FloatingElement yOffset={15} duration={6}>
+                  <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                    <Image
+                      src={blend.image_url}
+                      alt={blend.image_alt || blend.name}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                    {/* Gradient overlay */}
+                    <div className={`absolute inset-0 bg-gradient-to-t ${gradientClass} opacity-0 hover:opacity-20 transition-opacity duration-300`} />
+                  </div>
+                </FloatingElement>
+              </div>
             </FadeIn>
           )}
-          <div>
+          <div className="space-y-6">
             <FadeIn direction="right" delay={0.1}>
-              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-md">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-md">
                 <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${gradientClass}`} />
                 <span className="text-sm font-semibold text-gray-700">Fresh Weekly Batch</span>
               </div>
             </FadeIn>
             <FadeIn direction="right" delay={0.2}>
-              <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold mb-4 leading-tight">
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
                 {blend.name}
               </h1>
             </FadeIn>
             <FadeIn direction="right" delay={0.3}>
               {blend.tagline && (
-                <p className="text-2xl text-gray-700 mb-8 leading-relaxed">{blend.tagline}</p>
+                <p className="text-xl sm:text-2xl text-gray-700 leading-relaxed">{blend.tagline}</p>
               )}
             </FadeIn>
             <FadeIn direction="right" delay={0.4}>
               {blend.function_list && blend.function_list.length > 0 && (
-                <div className="flex flex-wrap gap-3 mb-8">
+                <div className="flex flex-wrap gap-2">
                   {blend.function_list.map((func: string) => (
                     <span
                       key={func}
-                      className="px-4 py-2 bg-white backdrop-blur-sm rounded-full text-sm font-semibold text-gray-800 shadow-md border-2 border-accent-yellow/30"
+                      className="px-3 py-1.5 bg-white backdrop-blur-sm rounded-full text-sm font-semibold text-gray-800 shadow-sm border border-accent-yellow/30"
                     >
                       {func}
                     </span>
@@ -141,123 +148,135 @@ export default async function BlendPage({ params }: BlendPageProps) {
                 </div>
               )}
             </FadeIn>
-            <FadeIn direction="right" delay={0.5}>
-              <Link
-                href="#pricing"
-                className="inline-block px-8 py-4 bg-accent-primary text-white rounded-full font-semibold text-lg hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Reserve This Batch
-              </Link>
-            </FadeIn>
+
+            {/* Description - Moved up here for better flow */}
+            {blend.description && (
+              <FadeIn direction="right" delay={0.5}>
+                <div className="prose prose-base prose-headings:font-heading prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed max-w-none bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-sm">
+                  <RichText value={blend.description} />
+                </div>
+              </FadeIn>
+            )}
+
+            {/* Quick Pricing Preview */}
+            {blend.variants && blend.variants.length > 0 && (
+              <FadeIn direction="right" delay={0.6}>
+                <div className="bg-white rounded-xl p-6 shadow-md border-2 border-accent-green/20">
+                  <h3 className="font-heading text-lg font-bold mb-3 text-gray-900">Available Sizes</h3>
+                  <div className="space-y-2 mb-4">
+                    {blend.variants.slice(0, 3).map((variant: any) => (
+                      <div key={variant.id} className="flex justify-between items-center text-sm">
+                        <span className="font-medium text-gray-700">{variant.label}</span>
+                        {variant.price_usd && (
+                          <span className="font-bold text-accent-primary">${variant.price_usd}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <Link
+                    href="#pricing"
+                    className="block w-full text-center px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    Reserve This Batch
+                  </Link>
+                </div>
+              </FadeIn>
+            )}
           </div>
         </div>
       </Section>
 
-      {/* Description */}
-      {blend.description && (
-        <Section className="bg-white">
-          <div className="max-w-4xl mx-auto">
-            <FadeIn direction="up">
-              <h2 className="font-heading text-4xl sm:text-5xl font-bold mb-8 text-center leading-tight-90">
-                What makes it special
-              </h2>
-              <div className="prose prose-lg prose-headings:font-heading prose-headings:font-bold prose-p:text-gray-700 prose-p:text-lg prose-p:leading-relaxed max-w-none">
-                <RichText value={blend.description} />
-              </div>
-            </FadeIn>
-          </div>
-        </Section>
-      )}
-
-      {/* Ingredients */}
+      {/* Ingredients - Compact Visual Design */}
       {blend.ingredients && blend.ingredients.length > 0 && (
-        <Section className="bg-gradient-to-b from-accent-cream/30 to-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-accent-green/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent-yellow/10 rounded-full blur-3xl" />
-
+        <Section className="bg-white py-12 sm:py-16">
           <div className="relative z-10">
-            <FadeIn direction="up" className="text-center mb-12">
-              <h2 className="font-heading text-4xl sm:text-5xl font-bold mb-4 leading-tight-90">
-                What's inside
+            <FadeIn direction="up" className="text-center mb-8">
+              <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2 leading-tight">
+                Premium Ingredients
               </h2>
-              <p className="text-xl text-gray-600">Sourced from trusted regenerative farms</p>
+              <p className="text-lg text-gray-600">Sourced from trusted regenerative farms</p>
             </FadeIn>
-            <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {blend.ingredients?.filter((item: any) => item && item.ingredient && item.ingredient.name).map((item: any) => {
-                const ingredient = item.ingredient;
-                return (
-                  <div
-                    key={item.id}
-                    className="group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-accent-green"
-                  >
-                    {/* Icon or initial */}
-                    <div className="w-14 h-14 bg-gradient-to-br from-accent-yellow/30 to-accent-green/30 rounded-full mb-4 flex items-center justify-center">
-                      <span className="text-2xl font-heading font-bold text-accent-primary">
-                        {ingredient.name?.charAt(0) || '?'}
-                      </span>
-                    </div>
 
-                    <h3 className="font-heading text-xl font-bold mb-3 text-gray-900">
-                      {ingredient.name}
-                    </h3>
+            {/* Compact Grid Layout */}
+            <div className="max-w-5xl mx-auto">
+              <StaggerContainer staggerDelay={0.05} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {blend.ingredients?.filter((item: any) => item && item.ingredient && item.ingredient.name).map((item: any) => {
+                  const ingredient = item.ingredient;
+                  const typeColors: Record<string, string> = {
+                    fruit: 'from-accent-primary/20 to-accent-primary/10',
+                    root: 'from-accent-yellow/20 to-accent-yellow/10',
+                    green: 'from-accent-green/20 to-accent-green/10',
+                    herb: 'from-accent-green/20 to-accent-yellow/10',
+                  };
+                  const bgColor = ingredient.type ? typeColors[ingredient.type] || 'from-gray-100 to-gray-50' : 'from-gray-100 to-gray-50';
 
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <svg className="w-4 h-4 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                        </svg>
-                        <span className="font-medium">{ingredient.type}</span>
+                  return (
+                    <div
+                      key={item.id}
+                      className="group relative bg-gradient-to-br p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 hover:border-accent-green/30"
+                      style={{ background: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }}
+                    >
+                      <div className={`bg-gradient-to-br ${bgColor} rounded-xl p-4`}>
+                        {/* Icon */}
+                        <div className="w-12 h-12 bg-white rounded-full mb-3 flex items-center justify-center shadow-sm">
+                          <span className="text-xl font-heading font-bold text-accent-primary">
+                            {ingredient.name?.charAt(0) || '?'}
+                          </span>
+                        </div>
+
+                        {/* Name */}
+                        <h3 className="font-heading text-base font-bold mb-1 text-gray-900">
+                          {ingredient.name}
+                        </h3>
+
+                        {/* Type */}
+                        {ingredient.type && (
+                          <p className="text-xs font-medium text-gray-600 capitalize mb-2">
+                            {ingredient.type}
+                          </p>
+                        )}
+
+                        {/* Seasonality */}
+                        {ingredient.seasonality && (
+                          <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>{ingredient.seasonality}</span>
+                          </div>
+                        )}
                       </div>
-                      {ingredient.seasonality && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <svg className="w-4 h-4 text-accent-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                          </svg>
-                          <span>{ingredient.seasonality}</span>
+
+                      {/* Farm info on hover - tooltip style */}
+                      {ingredient.farms && ingredient.farms.length > 0 && (
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
+                          <div className="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-xl max-w-xs whitespace-nowrap">
+                            <p className="font-semibold mb-1">Farm: {ingredient.farms[0].name}</p>
+                            {ingredient.farms[0].location && (
+                              <p className="text-gray-300">{ingredient.farms[0].location}</p>
+                            )}
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                          </div>
                         </div>
                       )}
                     </div>
-
-                    {ingredient.farms && ingredient.farms.length > 0 && (
-                      <div className="border-t border-gray-100 pt-4">
-                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                          Farm Partners
-                        </p>
-                        <ul className="space-y-1">
-                          {ingredient.farms.map((farm: any) => (
-                            <li key={farm.id} className="text-sm text-gray-700 flex items-start gap-2">
-                              <svg className="w-4 h-4 text-accent-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                              </svg>
-                              <span>
-                                <strong>{farm.name}</strong>
-                                {farm.location && <span className="text-gray-500"> • {farm.location}</span>}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </StaggerContainer>
+                  );
+                })}
+              </StaggerContainer>
+            </div>
           </div>
         </Section>
       )}
 
       {/* Pricing */}
       {blend.variants && blend.variants.length > 0 && (
-        <Section id="pricing" className="bg-white relative overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-accent-yellow/10 to-accent-green/10 rounded-full blur-3xl" />
-
+        <Section id="pricing" className="bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
           <div className="relative z-10">
-            <FadeIn direction="up" className="text-center mb-12">
-              <h2 className="font-heading text-4xl sm:text-5xl font-bold mb-4 leading-tight-90">
+            <FadeIn direction="up" className="text-center mb-8">
+              <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2 leading-tight">
                 Choose your size
               </h2>
-              <p className="text-xl text-gray-600">Fresh-pressed and ready for pickup or delivery</p>
+              <p className="text-lg text-gray-600">Fresh-pressed and ready for pickup or delivery</p>
             </FadeIn>
             <VariantSelector
               variants={blend.variants}
@@ -269,20 +288,37 @@ export default async function BlendPage({ params }: BlendPageProps) {
         </Section>
       )}
 
-      {/* Back Link */}
-      <Section className="bg-gray-50">
-        <div className="text-center">
-          <Link
-            href="/blends"
-            className="inline-flex items-center gap-2 text-accent-primary hover:gap-3 transition-all duration-300 font-semibold text-lg group"
-          >
-            <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            <span>Explore All Blends</span>
-          </Link>
-        </div>
-      </Section>
+      {/* Related Blends - Other Products */}
+      {otherBlends && otherBlends.length > 0 && (
+        <Section className="bg-white py-12 sm:py-16 border-t border-gray-100">
+          <FadeIn direction="up">
+            <div className="text-center mb-8">
+              <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2 leading-tight">
+                Explore Other Blends
+              </h2>
+              <p className="text-lg text-gray-600">Discover more cold-pressed wellness</p>
+            </div>
+          </FadeIn>
+          <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+            {otherBlends.map((otherBlend: any) => (
+              <BlendCard key={otherBlend.id} blend={otherBlend} />
+            ))}
+          </StaggerContainer>
+          <FadeIn direction="up" delay={0.3}>
+            <div className="text-center mt-8">
+              <Link
+                href="/blends"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+              >
+                <span>View All Blends</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+          </FadeIn>
+        </Section>
+      )}
     </>
   );
 }

@@ -7,17 +7,20 @@ interface UserAdminActionsProps {
   userId: string;
   currentTier: string;
   stripeCustomerId: string | null;
+  isAdmin: boolean;
 }
 
 export function UserAdminActions({
   userId,
   currentTier,
   stripeCustomerId,
+  isAdmin,
 }: UserAdminActionsProps) {
   const router = useRouter();
   const [selectedTier, setSelectedTier] = useState(currentTier);
   const [updating, setUpdating] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [togglingAdmin, setTogglingAdmin] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleUpdateTier = async () => {
@@ -88,6 +91,41 @@ export function UserAdminActions({
     }
   };
 
+  const handleToggleAdmin = async () => {
+    const action = isAdmin ? 'remove admin access from' : 'grant admin access to';
+    if (!confirm(`Are you sure you want to ${action} this user?`)) {
+      return;
+    }
+
+    setTogglingAdmin(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch(`/api/admin/users/${userId}/toggle-admin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isAdmin: !isAdmin }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update admin status');
+      }
+
+      setMessage({ type: 'success', text: `Successfully ${isAdmin ? 'removed' : 'granted'} admin access!` });
+      router.refresh();
+    } catch (error) {
+      console.error('Toggle admin error:', error);
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'Failed to update admin status',
+      });
+    } finally {
+      setTogglingAdmin(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow p-6 space-y-6">
       <h2 className="font-semibold text-lg">Admin Actions</h2>
@@ -133,6 +171,40 @@ export function UserAdminActions({
         <p className="mt-2 text-sm text-gray-500">
           Current: <span className="font-semibold capitalize">{currentTier === 'none' ? 'Standard' : currentTier}</span>
         </p>
+      </div>
+
+      {/* Admin Access */}
+      <div className="pt-6 border-t border-gray-200">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-medium text-gray-900 mb-1">
+              Admin Access
+            </h3>
+            <p className="text-sm text-gray-600 max-w-md">
+              {isAdmin
+                ? 'This user currently has admin access and can manage the admin console.'
+                : 'Grant admin access to allow this user to manage the admin console.'}
+            </p>
+            <div className="mt-2">
+              <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${
+                isAdmin ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
+              }`}>
+                {isAdmin ? '✓ Admin' : 'Standard User'}
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={handleToggleAdmin}
+            disabled={togglingAdmin}
+            className={`px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+              isAdmin
+                ? 'bg-red-600 text-white hover:bg-red-700'
+                : 'bg-purple-600 text-white hover:bg-purple-700'
+            }`}
+          >
+            {togglingAdmin ? 'Updating...' : isAdmin ? 'Remove Admin' : 'Make Admin'}
+          </button>
+        </div>
       </div>
 
       {/* Sync from Stripe */}

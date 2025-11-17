@@ -184,7 +184,7 @@ test.describe('Homepage Content Visibility and Aesthetics', () => {
     await embed.scrollIntoViewIfNeeded();
     await expect(embed).toBeVisible();
 
-    const isKlaviyoDefined = await page.evaluate(() => typeof window.klaviyo !== 'undefined');
+    const isKlaviyoDefined = await page.evaluate(() => typeof (window as any).klaviyo !== 'undefined');
     expect(isKlaviyoDefined).toBeTruthy();
   });
 });

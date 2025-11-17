@@ -12,6 +12,10 @@ interface Ingredient {
   image_url?: string | null;
   created_at: string;
   updated_at: string;
+  product_ingredients?: Array<{
+    count: number;
+    product?: { id: string; name: string } | null;
+  }>;
 }
 
 interface IngredientsTableProps {
@@ -74,6 +78,9 @@ export function IngredientsTable({ ingredients, onDelete }: IngredientsTableProp
               Type
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Used In Products
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Seasonality
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -114,6 +121,17 @@ export function IngredientsTable({ ingredients, onDelete }: IngredientsTableProp
                 >
                   {ingredient.type}
                 </span>
+              </td>
+              <td className="px-6 py-4">
+                {ingredient.product_ingredients && ingredient.product_ingredients.length > 0 ? (
+                  <div className="text-sm">
+                    <span className="font-medium text-accent-primary">
+                      {ingredient.product_ingredients[0]?.count || 0} products
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-sm text-gray-400">Not used</span>
+                )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-500">

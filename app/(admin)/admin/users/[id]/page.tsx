@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { createServerClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 import { getUserSubscriptions, getUserPurchases } from '@/lib/subscription';
 import { formatPrice } from '@/lib/stripe';
 import { UserAdminActions } from './UserAdminActions';
+import { requireAdmin } from '@/lib/admin';
 
 export const metadata: Metadata = {
   title: 'User Details | Admin',
@@ -16,7 +17,9 @@ export default async function UserDetailPage({
 }: {
   params: { id: string };
 }) {
-  const supabase = createServerClient();
+  await requireAdmin();
+
+  const supabase = createServiceRoleClient();
 
   // Get user profile
   const { data: profile, error } = await supabase
@@ -139,6 +142,7 @@ export default async function UserDetailPage({
         userId={params.id}
         currentTier={profile.partnership_tier || 'none'}
         stripeCustomerId={profile.stripe_customer_id}
+        isAdmin={profile.is_admin || false}
       />
 
       {/* Active Discounts */}

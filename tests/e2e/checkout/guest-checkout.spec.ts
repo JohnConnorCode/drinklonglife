@@ -1,13 +1,9 @@
 import { test, expect } from '@playwright/test';
 import {
-  goToBlends,
-  selectBlend,
-  selectSize,
   completeCheckoutWithTestCard,
   isCheckoutSuccessful,
   getCheckoutSessionId,
 } from '../../helpers/checkout';
-import { waitForOrder } from '../../helpers/database';
 
 test.describe('Guest Checkout Flow', () => {
   test('should complete guest checkout with valid card', async ({ page }) => {
@@ -142,7 +138,7 @@ test.describe('Guest Checkout Flow', () => {
 
     // Select a size and note the price
     const priceElements = page.locator('text=$');
-    const pricesBeforeCheckout = await priceElements.allTextContents();
+    await priceElements.allTextContents();
 
     // Click Add to Cart
     const sizeButtons = page.locator('button:has-text("Add to Cart")');

@@ -103,15 +103,6 @@ export const homePageQuery = groq`*[_type == "homePage"][0]{
   },
   featuredBlendsHeading,
   featuredBlendsSubheading,
-  "featuredBlends": featuredBlends[]->{
-    _id,
-    name,
-    slug { current },
-    tagline,
-    image ${imageFragment},
-    labelColor,
-    functionList
-  },
   featuredBlendsCtaText,
   featuredBlendsSizingText,
   featuredBlendsDeliveryText,

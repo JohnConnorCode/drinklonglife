@@ -6,6 +6,7 @@ import { CartItem } from '@/components/cart/CartItem';
 import { CouponInput } from '@/components/cart/CouponInput';
 import Link from 'next/link';
 import { ShoppingBag, ArrowLeft, AlertCircle } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 export default function CartPage() {
   const { items, getSubtotal, getDiscount, getTotal, clearCart } = useCartStore();
@@ -17,7 +18,7 @@ export default function CartPage() {
   const total = getTotal();
 
   const handleCheckout = async () => {
-    console.log('🛒 handleCheckout called');
+    logger.debug('handleCheckout called');
     setCheckoutError(null);
     setIsProcessing(true);
 
@@ -28,7 +29,7 @@ export default function CartPage() {
       );
 
       if (invalidItems.length > 0) {
-        console.error('Invalid items in cart:', invalidItems);
+        logger.error('Invalid items in cart:', invalidItems);
         clearCart();
         throw new Error('Your cart contains invalid items. Cart has been cleared. Please add items again.');
       }
@@ -38,15 +39,15 @@ export default function CartPage() {
         priceId: item.priceId,
         quantity: item.quantity,
       }));
-      console.log('📦 Checkout items:', checkoutItems);
+      logger.debug('Checkout items:', checkoutItems);
 
       // Get coupon code if applied
       const { coupon } = useCartStore.getState();
       const couponCode = coupon?.valid ? coupon.code : undefined;
-      console.log('🎫 Coupon code:', couponCode);
+      logger.debug('Coupon code:', couponCode);
 
       // Call checkout API
-      console.log('📡 Calling /api/checkout...');
+      logger.debug('Calling /api/checkout...');
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -56,27 +57,27 @@ export default function CartPage() {
         }),
       });
 
-      console.log('📬 Response status:', response.status, response.ok);
+      logger.debug('Response status:', response.status, response.ok);
 
       if (!response.ok) {
         const errorData = await response.json();
         const errorMessage = errorData.details || errorData.error || 'Failed to create checkout session';
-        console.error('❌ Checkout error response:', errorData);
+        logger.error('Checkout error response:', errorData);
         throw new Error(errorMessage);
       }
 
       const { url } = await response.json();
-      console.log('🔗 Received checkout URL:', url);
+      logger.debug('Received checkout URL:', url);
 
       // Redirect to Stripe Checkout
       if (url) {
-        console.log('🚀 Redirecting to:', url);
+        logger.debug('Redirecting to:', url);
         window.location.href = url;
       } else {
         throw new Error('No checkout URL received from server');
       }
     } catch (error) {
-      console.error('❌ Checkout error:', error);
+      logger.error('Checkout error:', error);
       setCheckoutError(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
       setIsProcessing(false);
     }
