@@ -29,7 +29,6 @@ export default async function WebsiteLayout({
       <Header
         siteSettings={siteSettings}
         navigation={navigation}
-        ctaLabel="Reserve This Week"
       />
       <main className="min-h-screen">{children}</main>
       <Footer siteSettings={siteSettings} navigation={navigation} />
