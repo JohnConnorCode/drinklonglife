@@ -17,10 +17,9 @@ import { SignOutButton } from './auth/SignOutButton';
 interface HeaderProps {
   siteSettings?: any;
   navigation?: any;
-  ctaLabel?: string;
 }
 
-export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
+export function Header({ siteSettings, navigation }: HeaderProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
