@@ -95,7 +95,10 @@ export function VariantSelector({
 
               <div className="mb-4">
                 <h3 className="font-heading text-2xl font-bold mb-1 text-gray-900">
-                  {variant.label.replace(' (Monthly)', '')}
+                  {variant.label
+                    .replace(' (Monthly)', '')
+                    .replace('-Gallon Jug', ' Gallon')
+                    .replace('2oz', '2 oz')}
                 </h3>
                 {isSubscription && (
                   <p className="text-sm text-gray-500 font-medium">Delivered Monthly</p>

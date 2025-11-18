@@ -26,9 +26,16 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [blendsMenuOpen, setBlendsMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const headerLinks = navigation?.primaryLinks || [];
   const cartItemCount = useCartStore((state) => state.getItemCount());
+
+  const blends = [
+    { name: 'Green Bomb', slug: 'green-bomb' },
+    { name: 'Red Bomb', slug: 'red-bomb' },
+    { name: 'Yellow Bomb', slug: 'yellow-bomb' },
+  ];
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -159,13 +166,68 @@ export function Header({ siteSettings, navigation, ctaLabel }: HeaderProps) {
               );
             })}
 
-            {/* Ambassadors Link (hardcoded) */}
+            {/* Blends Dropdown */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: 0.4,
                 delay: 1.0 + headerLinks.length * 0.1,
+                ease: 'easeOut',
+              }}
+              className="relative"
+              onMouseEnter={() => setBlendsMenuOpen(true)}
+              onMouseLeave={() => setBlendsMenuOpen(false)}
+            >
+              <Link
+                href="/blends"
+                className={clsx(
+                  'group text-sm font-heading font-medium transition-colors relative flex items-center gap-1',
+                  pathname.startsWith('/blends') ? 'text-accent-primary' : 'text-gray-700 hover:text-black'
+                )}
+              >
+                Blends
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+                <span
+                  className={clsx(
+                    'absolute -bottom-1 left-0 h-0.5 bg-accent-primary transition-all duration-300',
+                    pathname.startsWith('/blends') ? 'w-full' : 'w-0 group-hover:w-full'
+                  )}
+                />
+              </Link>
+
+              {/* Dropdown Menu */}
+              {blendsMenuOpen && (
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  <Link
+                    href="/blends"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-accent-primary transition-colors font-medium"
+                  >
+                    All Blends
+                  </Link>
+                  <div className="border-t border-gray-100 my-1"></div>
+                  {blends.map((blend) => (
+                    <Link
+                      key={blend.slug}
+                      href={`/blends/${blend.slug}`}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-accent-primary transition-colors"
+                    >
+                      {blend.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+
+            {/* Ambassadors Link (hardcoded) */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.4,
+                delay: 1.0 + (headerLinks.length + 1) * 0.1,
                 ease: 'easeOut',
               }}
             >
