@@ -228,69 +228,69 @@ export default async function AdminDashboard() {
         </h2>
       </FadeIn>
       <StaggerContainer staggerDelay={0.05} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Link
-            href="/admin/products/new"
-            className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-accent-primary transition-colors group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-accent-primary/10 group-hover:bg-accent-primary/20 rounded-lg flex items-center justify-center transition-colors">
-                <Package className="w-6 h-6 text-accent-primary" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Add Product</h3>
-                <p className="text-sm text-gray-600">Create new product</p>
-              </div>
+        <Link
+          href="/admin/products/new"
+          className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-accent-primary transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-accent-primary/10 group-hover:bg-accent-primary/20 rounded-lg flex items-center justify-center transition-colors">
+              <Package className="w-6 h-6 text-accent-primary" />
             </div>
-          </Link>
+            <div>
+              <h3 className="font-semibold text-gray-900">Add Product</h3>
+              <p className="text-sm text-gray-600">Create new product</p>
+            </div>
+          </div>
+        </Link>
 
-          <Link
-            href="/admin/ingredients/new"
-            className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-orange-500 transition-colors group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-orange-100 group-hover:bg-orange-200 rounded-lg flex items-center justify-center transition-colors">
-                <Activity className="w-6 h-6 text-orange-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Add Ingredient</h3>
-                <p className="text-sm text-gray-600">Create ingredient</p>
-              </div>
+        <Link
+          href="/admin/ingredients/new"
+          className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-orange-500 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-orange-100 group-hover:bg-orange-200 rounded-lg flex items-center justify-center transition-colors">
+              <Activity className="w-6 h-6 text-orange-600" />
             </div>
-          </Link>
+            <div>
+              <h3 className="font-semibold text-gray-900">Add Ingredient</h3>
+              <p className="text-sm text-gray-600">Create ingredient</p>
+            </div>
+          </div>
+        </Link>
 
-          <Link
-            href="/admin/users"
-            className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-blue-500 transition-colors group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-100 group-hover:bg-blue-200 rounded-lg flex items-center justify-center transition-colors">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Manage Users</h3>
-                <p className="text-sm text-gray-600">View user accounts</p>
-              </div>
+        <Link
+          href="/admin/users"
+          className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-blue-500 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-blue-100 group-hover:bg-blue-200 rounded-lg flex items-center justify-center transition-colors">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
             </div>
-          </Link>
+            <div>
+              <h3 className="font-semibold text-gray-900">Manage Users</h3>
+              <p className="text-sm text-gray-600">View user accounts</p>
+            </div>
+          </div>
+        </Link>
 
-          <Link
-            href="/admin/discounts"
-            className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-green-500 transition-colors group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-green-100 group-hover:bg-green-200 rounded-lg flex items-center justify-center transition-colors">
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">View Discounts</h3>
-                <p className="text-sm text-gray-600">Discount codes</p>
-              </div>
+        <Link
+          href="/admin/discounts"
+          className="bg-white rounded-lg shadow p-6 border-2 border-gray-200 hover:border-green-500 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-green-100 group-hover:bg-green-200 rounded-lg flex items-center justify-center transition-colors">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </div>
-          </Link>
+            <div>
+              <h3 className="font-semibold text-gray-900">View Discounts</h3>
+              <p className="text-sm text-gray-600">Discount codes</p>
+            </div>
+          </div>
+        </Link>
       </StaggerContainer>
 
       {/* System Info */}

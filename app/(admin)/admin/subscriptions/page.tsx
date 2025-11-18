@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { SubscriptionsTable } from './SubscriptionsTable';
+import { FadeIn } from '@/components/animations';
 
 export const metadata = {
   title: 'Subscriptions | Admin',
@@ -54,37 +55,43 @@ export default async function SubscriptionsPage() {
   return (
     <div className="p-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Subscriptions</h1>
-        <p className="text-gray-600 mt-1">
-          {subscriptions.length} total subscriptions
-        </p>
-      </div>
+      <FadeIn direction="up" delay={0.05}>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Subscriptions</h1>
+          <p className="text-gray-600 mt-1">
+            {subscriptions.length} total subscriptions
+          </p>
+        </div>
+      </FadeIn>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-green-200">
-          <div className="text-sm text-gray-600">Active</div>
-          <div className="text-3xl font-bold text-green-600 mt-1">{activeCount}</div>
+      <FadeIn direction="up" delay={0.1}>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-green-200">
+            <div className="text-sm text-gray-600">Active</div>
+            <div className="text-3xl font-bold text-green-600 mt-1">{activeCount}</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-blue-200">
+            <div className="text-sm text-gray-600">Trialing</div>
+            <div className="text-3xl font-bold text-blue-600 mt-1">{trialingCount}</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-yellow-200">
+            <div className="text-sm text-gray-600">Past Due</div>
+            <div className="text-3xl font-bold text-yellow-600 mt-1">{pastDueCount}</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-gray-200">
+            <div className="text-sm text-gray-600">Canceled</div>
+            <div className="text-3xl font-bold text-gray-600 mt-1">{canceledCount}</div>
+          </div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-blue-200">
-          <div className="text-sm text-gray-600">Trialing</div>
-          <div className="text-3xl font-bold text-blue-600 mt-1">{trialingCount}</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-yellow-200">
-          <div className="text-sm text-gray-600">Past Due</div>
-          <div className="text-3xl font-bold text-yellow-600 mt-1">{pastDueCount}</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-gray-200">
-          <div className="text-sm text-gray-600">Canceled</div>
-          <div className="text-3xl font-bold text-gray-600 mt-1">{canceledCount}</div>
-        </div>
-      </div>
+      </FadeIn>
 
       {/* Table */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <SubscriptionsTable subscriptions={subscriptions} />
-      </div>
+      <FadeIn direction="up" delay={0.15}>
+        <div className="bg-white shadow rounded-lg overflow-hidden">
+          <SubscriptionsTable subscriptions={subscriptions} />
+        </div>
+      </FadeIn>
     </div>
   );
 }

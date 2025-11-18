@@ -7,6 +7,7 @@ import { formatCurrency } from '@/lib/utils/formatCurrency';
 import { formatDateTime } from '@/lib/utils/formatDate';
 import { OrderStatusBadge, PaymentStatusBadge } from '@/components/admin/OrderStatusBadge';
 import { OrderFilters } from '@/components/admin/OrderFilters';
+import { FadeIn } from '@/components/animations';
 
 export const metadata: Metadata = {
   title: 'Orders | Admin',
@@ -196,49 +197,57 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-3xl font-bold text-gray-900">
-            Orders
-          </h1>
-          <p className="text-gray-600 mt-2">
-            View and manage customer orders, process refunds, and export data
-          </p>
-        </div>
+      <FadeIn direction="up" delay={0.05}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              Orders
+            </h1>
+            <p className="text-gray-600 mt-2">
+              View and manage customer orders, process refunds, and export data
+            </p>
+          </div>
 
-        <Link
-          href="/admin/orders/export"
-          className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 transition-colors inline-flex items-center gap-2"
-        >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+          <Link
+            href="/admin/orders/export"
+            className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 transition-colors inline-flex items-center gap-2"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
-          Export CSV
-        </Link>
-      </div>
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            Export CSV
+          </Link>
+        </div>
+      </FadeIn>
 
       {/* Stats */}
-      <Suspense fallback={<div className="h-24 bg-gray-100 animate-pulse rounded-lg" />}>
-        <OrdersStats />
-      </Suspense>
+      <FadeIn direction="up" delay={0.1}>
+        <Suspense fallback={<div className="h-24 bg-gray-100 animate-pulse rounded-lg" />}>
+          <OrdersStats />
+        </Suspense>
+      </FadeIn>
 
       {/* Filters */}
-      <OrderFilters />
+      <FadeIn direction="up" delay={0.15}>
+        <OrderFilters />
+      </FadeIn>
 
       {/* Orders Table */}
-      <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse rounded-lg" />}>
-        <OrdersTable searchParams={searchParams} />
-      </Suspense>
+      <FadeIn direction="up" delay={0.2}>
+        <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse rounded-lg" />}>
+          <OrdersTable searchParams={searchParams} />
+        </Suspense>
+      </FadeIn>
     </div>
   );
 }

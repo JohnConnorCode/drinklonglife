@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { ReferralsTable } from './ReferralsTable';
 import { getReferralLeaderboardWithUsers } from '@/lib/referral-utils';
+import { FadeIn } from '@/components/animations';
 
 export const metadata = {
   title: 'Referrals | Admin',
@@ -58,72 +59,80 @@ export default async function ReferralsPage() {
   return (
     <div className="p-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Referral Program</h1>
-        <p className="text-gray-600 mt-1">Track referrals and rewards</p>
-      </div>
+      <FadeIn direction="up" delay={0.05}>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Referral Program</h1>
+          <p className="text-gray-600 mt-1">Track referrals and rewards</p>
+        </div>
+      </FadeIn>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-600">Total Referrals</div>
-          <div className="text-3xl font-bold text-gray-900 mt-1">{totalReferrals}</div>
+      <FadeIn direction="up" delay={0.1}>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="text-sm text-gray-600">Total Referrals</div>
+            <div className="text-3xl font-bold text-gray-900 mt-1">{totalReferrals}</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-green-200">
+            <div className="text-sm text-gray-600">Completed</div>
+            <div className="text-3xl font-bold text-green-600 mt-1">{completedPurchases}</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-yellow-200">
+            <div className="text-sm text-gray-600">Pending Rewards</div>
+            <div className="text-3xl font-bold text-yellow-600 mt-1">{pendingRewards}</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6 border-2 border-blue-200">
+            <div className="text-sm text-gray-600">Rewards Issued</div>
+            <div className="text-3xl font-bold text-blue-600 mt-1">{issuedRewards}</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="text-sm text-gray-600">Conversion Rate</div>
+            <div className="text-3xl font-bold text-gray-900 mt-1">{conversionRate}%</div>
+          </div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-green-200">
-          <div className="text-sm text-gray-600">Completed</div>
-          <div className="text-3xl font-bold text-green-600 mt-1">{completedPurchases}</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-yellow-200">
-          <div className="text-sm text-gray-600">Pending Rewards</div>
-          <div className="text-3xl font-bold text-yellow-600 mt-1">{pendingRewards}</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-blue-200">
-          <div className="text-sm text-gray-600">Rewards Issued</div>
-          <div className="text-3xl font-bold text-blue-600 mt-1">{issuedRewards}</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-600">Conversion Rate</div>
-          <div className="text-3xl font-bold text-gray-900 mt-1">{conversionRate}%</div>
-        </div>
-      </div>
+      </FadeIn>
 
       {/* Leaderboard */}
       {leaderboard.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-lg font-bold mb-4">Top Referrers</h2>
-          <div className="grid grid-cols-1 gap-4">
-            {leaderboard.map((entry, index) => (
-              <div key={entry.userId} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-4">
-                  <div className="text-2xl font-bold text-gray-400">#{index + 1}</div>
-                  <div>
-                    <div className="font-medium text-gray-900">{entry.userName}</div>
-                    <div className="text-sm text-gray-500">{entry.email}</div>
+        <FadeIn direction="up" delay={0.15}>
+          <div className="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 className="text-lg font-bold mb-4">Top Referrers</h2>
+            <div className="grid grid-cols-1 gap-4">
+              {leaderboard.map((entry, index) => (
+                <div key={entry.userId} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-4">
+                    <div className="text-2xl font-bold text-gray-400">#{index + 1}</div>
+                    <div>
+                      <div className="font-medium text-gray-900">{entry.userName}</div>
+                      <div className="text-sm text-gray-500">{entry.email}</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-6 text-sm">
+                    <div className="text-center">
+                      <div className="font-bold text-gray-900">{entry.count}</div>
+                      <div className="text-gray-500">Referred</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="font-bold text-green-600">{entry.completedCount}</div>
+                      <div className="text-gray-500">Converted</div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex gap-6 text-sm">
-                  <div className="text-center">
-                    <div className="font-bold text-gray-900">{entry.count}</div>
-                    <div className="text-gray-500">Referred</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-bold text-green-600">{entry.completedCount}</div>
-                    <div className="text-gray-500">Converted</div>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        </FadeIn>
       )}
 
       {/* All Referrals Table */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-bold">All Referrals</h2>
+      <FadeIn direction="up" delay={0.2}>
+        <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-bold">All Referrals</h2>
+          </div>
+          <ReferralsTable referrals={referrals} />
         </div>
-        <ReferralsTable referrals={referrals} />
-      </div>
+      </FadeIn>
     </div>
   );
 }

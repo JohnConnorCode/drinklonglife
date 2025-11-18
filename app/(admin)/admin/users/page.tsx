@@ -5,6 +5,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Suspense } from 'react';
 import { requireAdmin } from '@/lib/admin';
+import { FadeIn } from '@/components/animations';
 
 export const metadata: Metadata = {
   title: 'User Management | Admin',
@@ -139,20 +140,23 @@ export default async function UsersPage({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">
-            User Management
-          </h1>
-          <p className="text-gray-600">
-            Search, view, and manage user accounts
-          </p>
+      <FadeIn direction="up" delay={0.05}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">
+              User Management
+            </h1>
+            <p className="text-gray-600">
+              Search, view, and manage user accounts
+            </p>
+          </div>
         </div>
-      </div>
+      </FadeIn>
 
       {/* Search */}
-      <div className="bg-white rounded-lg shadow p-4">
-        <form action="/admin/users" method="get" className="flex gap-4">
+      <FadeIn direction="up" delay={0.1}>
+        <div className="bg-white rounded-lg shadow p-4">
+          <form action="/admin/users" method="get" className="flex gap-4">
           <input
             type="text"
             name="search"
@@ -174,13 +178,16 @@ export default async function UsersPage({
               Clear
             </Link>
           )}
-        </form>
-      </div>
+          </form>
+        </div>
+      </FadeIn>
 
       {/* User List */}
-      <Suspense fallback={<LoadingSkeleton variant="table" lines={10} />}>
-        <UserList searchQuery={searchParams.search} />
-      </Suspense>
+      <FadeIn direction="up" delay={0.15}>
+        <Suspense fallback={<LoadingSkeleton variant="table" lines={10} />}>
+          <UserList searchQuery={searchParams.search} />
+        </Suspense>
+      </FadeIn>
     </div>
   );
 }

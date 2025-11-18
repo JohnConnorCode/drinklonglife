@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { ProductsTable } from './ProductsTable';
 import { ProductsToolbar } from './ProductsToolbar';
 import Link from 'next/link';
+import { FadeIn } from '@/components/animations';
 
 export const metadata = {
   title: 'Products | Admin',
@@ -41,25 +42,31 @@ export default async function ProductsAdminPage() {
 
   return (
     <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Products</h1>
-          <p className="text-gray-600 mt-1">
-            {products?.length || 0} total ({publishedCount} published, {draftCount} drafts)
-          </p>
+      <FadeIn direction="up" delay={0.05}>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Products</h1>
+            <p className="text-gray-600 mt-1">
+              {products?.length || 0} total ({publishedCount} published, {draftCount} drafts)
+            </p>
+          </div>
+          <Link
+            href="/admin/products/new"
+            className="px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-primary/90 transition-colors font-medium"
+          >
+            + Add Product
+          </Link>
         </div>
-        <Link
-          href="/admin/products/new"
-          className="px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-primary/90 transition-colors font-medium"
-        >
-          + Add Product
-        </Link>
-      </div>
+      </FadeIn>
 
       {/* Toolbar with search, filter, export */}
-      <ProductsToolbar totalCount={products?.length || 0} />
+      <FadeIn direction="up" delay={0.1}>
+        <ProductsToolbar totalCount={products?.length || 0} />
+      </FadeIn>
 
-      <ProductsTable products={products || []} />
+      <FadeIn direction="up" delay={0.15}>
+        <ProductsTable products={products || []} />
+      </FadeIn>
     </div>
   );
 }

@@ -25,7 +25,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-accent-cream">
+    <div className="min-h-screen bg-accent-cream flex flex-col">
       {/* Admin Header */}
       <div className="bg-accent-primary text-white shadow-lg border-b-4 border-accent-yellow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -112,7 +112,7 @@ export default async function AdminLayout({
       </div>
 
       {/* Admin Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full" style={{ minHeight: '90vh' }}>
         {children}
       </main>
 
