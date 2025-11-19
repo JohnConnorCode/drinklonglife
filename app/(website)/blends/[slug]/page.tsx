@@ -164,14 +164,17 @@ export default async function BlendPage({ params }: BlendPageProps) {
                 <div className="bg-white rounded-xl p-6 shadow-md border-2 border-accent-green/20">
                   <h3 className="font-heading text-lg font-bold mb-3 text-gray-900">Available Sizes</h3>
                   <div className="space-y-2 mb-4">
-                    {blend.variants.slice(0, 3).map((variant: any) => (
-                      <div key={variant.id} className="flex justify-between items-center text-sm">
-                        <span className="font-medium text-gray-700">{variant.label}</span>
-                        {variant.price_usd && (
-                          <span className="font-bold text-accent-primary">${variant.price_usd}</span>
-                        )}
-                      </div>
-                    ))}
+                    {blend.variants
+                      .filter((v: any) => v.is_active && (!v.billing_type || v.billing_type === 'one_time'))
+                      .slice(0, 3)
+                      .map((variant: any) => (
+                        <div key={variant.id} className="flex justify-between items-center text-sm">
+                          <span className="font-medium text-gray-700">{variant.label}</span>
+                          {variant.price_usd && (
+                            <span className="font-bold text-accent-primary">${variant.price_usd}</span>
+                          )}
+                        </div>
+                      ))}
                   </div>
                   <Link
                     href="#pricing"
