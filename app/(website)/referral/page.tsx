@@ -90,7 +90,7 @@ export default function ReferralProgramPage() {
             {/* Step 2 */}
             <div className="text-center group">
               <div className="relative inline-block mb-6">
-                <div className="w-24 h-24 bg-gradient-to-br from-accent-secondary to-accent-green rounded-full flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <div className="w-24 h-24 bg-gradient-to-br from-accent-green to-accent-yellow rounded-full flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <span className="text-4xl font-bold text-white">2</span>
                 </div>
                 <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent-yellow rounded-full flex items-center justify-center shadow-md">
@@ -108,7 +108,7 @@ export default function ReferralProgramPage() {
             {/* Step 3 */}
             <div className="text-center group">
               <div className="relative inline-block mb-6">
-                <div className="w-24 h-24 bg-gradient-to-br from-accent-green to-accent-yellow rounded-full flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <div className="w-24 h-24 bg-gradient-to-br from-accent-yellow to-accent-primary rounded-full flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <span className="text-4xl font-bold text-white">3</span>
                 </div>
                 <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent-yellow rounded-full flex items-center justify-center shadow-md">
