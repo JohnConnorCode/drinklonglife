@@ -93,6 +93,18 @@ export default async function AdminLayout({
                 >
                   Users
                 </Link>
+                <Link
+                  href="/admin/newsletter"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
+                >
+                  Newsletter
+                </Link>
+                <Link
+                  href="/admin/wholesale"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
+                >
+                  Wholesale
+                </Link>
               </nav>
             </div>
             <div className="flex items-center gap-4">
