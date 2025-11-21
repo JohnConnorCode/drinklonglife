@@ -27,7 +27,7 @@ export const productSchema = z.object({
 export const variantSchema = z.object({
   size_key: z.string().min(1, 'Size key required'),
   label: z.string().min(1, 'Label required'),
-  stripe_price_id: z.string().regex(/^price_[a-zA-Z0-9]+$/, 'Invalid Stripe Price ID'),
+  stripe_price_id: z.string().regex(/^price_[a-zA-Z0-9]+$/, 'Invalid Stripe Price ID').optional().nullable(),
   is_default: z.boolean(),
   display_order: z.number().min(1),
   is_active: z.boolean(),
