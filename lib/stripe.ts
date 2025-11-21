@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import { getStripeKeys } from './stripe/config';
+import { logger } from './logger';
 
 // Legacy singleton stripe instance - DO NOT USE for checkout operations
 // Use getStripeClient() from lib/stripe/config.ts instead for dynamic key support
@@ -50,7 +51,7 @@ export async function getStripePrice(priceId: string): Promise<Stripe.Price | nu
     });
     return price;
   } catch (error) {
-    console.error(`Error fetching Stripe price ${priceId}:`, error);
+    logger.error(`Error fetching Stripe price ${priceId}:`, error);
     return null;
   }
 }
@@ -159,6 +160,16 @@ export async function createCheckoutSession(
     };
   }
 
+  // Enable shipping address collection for ALL orders
+  sessionParams.shipping_address_collection = {
+    allowed_countries: ['US', 'CA'],
+  };
+
+  // Enable automatic tax calculation (Stripe Tax)
+  sessionParams.automatic_tax = {
+    enabled: true,
+  };
+
   return await client.checkout.sessions.create(sessionParams);
 }
 
@@ -224,12 +235,15 @@ export async function createCartCheckoutSession(
     };
   }
 
-  // Enable shipping address collection for one-time payments
-  if (mode === 'payment') {
-    sessionParams.shipping_address_collection = {
-      allowed_countries: ['US', 'CA'],
-    };
-  }
+  // Enable shipping address collection for ALL orders (one-time AND subscriptions)
+  sessionParams.shipping_address_collection = {
+    allowed_countries: ['US', 'CA'],
+  };
+
+  // Enable automatic tax calculation (Stripe Tax)
+  sessionParams.automatic_tax = {
+    enabled: true,
+  };
 
   return await client.checkout.sessions.create(sessionParams);
 }
@@ -351,7 +365,7 @@ export async function getPriceMetadata(priceId: string): Promise<{
       sizeLabel: price.metadata?.size_label,
     };
   } catch (error) {
-    console.error(`Error fetching price metadata for ${priceId}:`, error);
+    logger.error(`Error fetching price metadata for ${priceId}:`, error);
     return null;
   }
 }
@@ -369,7 +383,7 @@ export async function getStripeCustomer(
     }
     return customer as Stripe.Customer;
   } catch (error) {
-    console.error(`Error fetching Stripe customer ${customerId}:`, error);
+    logger.error(`Error fetching Stripe customer ${customerId}:`, error);
     return null;
   }
 }
@@ -392,7 +406,7 @@ export async function getCustomerInvoices(
     });
     return invoices.data;
   } catch (error) {
-    console.error(`Error fetching invoices for customer ${customerId}:`, error);
+    logger.error(`Error fetching invoices for customer ${customerId}:`, error);
     return [];
   }
 }
@@ -420,7 +434,7 @@ export async function getUpcomingInvoice(
     if ((error as any)?.statusCode === 404) {
       return null;
     }
-    console.error(`Error fetching upcoming invoice for customer ${customerId}:`, error);
+    logger.error(`Error fetching upcoming invoice for customer ${customerId}:`, error);
     return null;
   }
 }
@@ -438,7 +452,7 @@ export async function applyCustomerCoupon(
     } as any);
     return customer;
   } catch (error) {
-    console.error(`Error applying coupon to customer ${customerId}:`, error);
+    logger.error(`Error applying coupon to customer ${customerId}:`, error);
     return null;
   }
 }
@@ -455,7 +469,7 @@ export async function removeCustomerCoupon(
     } as any);
     return customer;
   } catch (error) {
-    console.error(`Error removing coupon from customer ${customerId}:`, error);
+    logger.error(`Error removing coupon from customer ${customerId}:`, error);
     return null;
   }
 }

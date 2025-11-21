@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStripeClient } from '@/lib/stripe/config';
 import { createServerClient } from '@/lib/supabase/server';
 import { rateLimit } from '@/lib/rate-limit';
+import { logger } from '@/lib/logger';
 
 interface ValidateCouponRequest {
   code: string;
@@ -9,20 +10,23 @@ interface ValidateCouponRequest {
 
 export async function POST(req: NextRequest) {
   try {
-    // CRITICAL SECURITY: Require authentication to prevent coupon enumeration attacks
+    // Support both authenticated and guest users
     const supabase = createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Authentication required', valid: false },
-        { status: 401 }
-      );
-    }
-
     // CRITICAL SECURITY: Rate limiting to prevent brute force attacks
-    const rateLimitKey = `coupon-validate:${user.id}`;
-    const { success, remaining, reset } = rateLimit(rateLimitKey, 10, '1m');
+    // For authenticated users: rate limit by user ID
+    // For guests: rate limit by IP address
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] ||
+                     req.headers.get('x-real-ip') ||
+                     'unknown';
+    const rateLimitKey = user
+      ? `coupon-validate:user:${user.id}`
+      : `coupon-validate:ip:${clientIp}`;
+
+    // Stricter rate limit for guests (5 attempts vs 10 for auth users)
+    const maxAttempts = user ? 10 : 5;
+    const { success, remaining, reset } = rateLimit(rateLimitKey, maxAttempts, '1m');
 
     if (!success) {
       return NextResponse.json(
@@ -82,7 +86,7 @@ export async function POST(req: NextRequest) {
       throw error;
     }
   } catch (error) {
-    console.error('Coupon validation error:', error);
+    logger.error('Coupon validation error:', error);
     return NextResponse.json(
       {
         error: 'Failed to validate coupon',
