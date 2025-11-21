@@ -17,15 +17,11 @@ const productSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100),
   slug: z.string().optional(),
   tagline: z.string().max(200).optional().nullable(),
-  label_color: z.enum(['yellow', 'red', 'green']),
+  label_color: z.string().min(1, 'Color is required'),
   function_list: z.string().optional(), // Comma-separated string
-  best_for: z.string().optional(), // Comma-separated string
-  is_featured: z.boolean(),
   is_active: z.boolean(),
   display_order: z.coerce.number().min(1),
   stripe_product_id: z.string().optional().nullable(),
-  meta_title: z.string().optional().nullable(),
-  meta_description: z.string().optional().nullable(),
   publish: z.boolean(),
   auto_sync: z.boolean().optional(),
 });
@@ -52,25 +48,10 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
   );
   const [productVariants, setProductVariants] = useState<any[]>(variants || []);
 
-  // Rich text editors
+  // Rich text editor
   const descriptionEditor = useEditor({
     extensions: [StarterKit],
     content: product?.description || { type: 'doc', content: [] },
-  });
-
-  const storyEditor = useEditor({
-    extensions: [StarterKit],
-    content: product?.story || { type: 'doc', content: [] },
-  });
-
-  const detailedFunctionEditor = useEditor({
-    extensions: [StarterKit],
-    content: product?.detailed_function || { type: 'doc', content: [] },
-  });
-
-  const howToUseEditor = useEditor({
-    extensions: [StarterKit],
-    content: product?.how_to_use || { type: 'doc', content: [] },
   });
 
   // Form setup
@@ -84,10 +65,8 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
       name: product?.name || '',
       slug: product?.slug || '',
       tagline: product?.tagline || '',
-      label_color: product?.label_color || 'yellow',
+      label_color: product?.label_color || '',
       function_list: product?.function_list?.join(', ') || '',
-      best_for: product?.best_for?.join(', ') || '',
-      is_featured: product?.is_featured || false,
       is_active: product?.is_active ?? true,
       display_order: product?.display_order || 1,
       stripe_product_id: product?.stripe_product_id || '',
@@ -154,20 +133,13 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
         slug: data.slug || undefined,
         tagline: data.tagline || null,
         description: descriptionEditor?.getJSON() || null,
-        story: storyEditor?.getJSON() || null,
-        detailed_function: detailedFunctionEditor?.getJSON() || null,
-        how_to_use: howToUseEditor?.getJSON() || null,
         function_list: data.function_list
           ? data.function_list.split(',').map((s) => s.trim()).filter(Boolean)
           : null,
-        best_for: data.best_for
-          ? data.best_for.split(',').map((s) => s.trim()).filter(Boolean)
-          : null,
-        label_color: data.label_color,
+        label_color: data.label_color || null,
         image_url: imageUrl,
         image_alt: data.name,
         stripe_product_id: data.stripe_product_id || null,
-        is_featured: data.is_featured,
         is_active: data.is_active,
         display_order: data.display_order,
         meta_title: data.meta_title || null,
@@ -315,28 +287,17 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
             <label className="block font-medium mb-1">
               Label Color <span className="text-red-500">*</span>
             </label>
-            <div className="flex gap-4">
-              {['yellow', 'red', 'green'].map((color) => (
-                <label key={color} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    {...register('label_color')}
-                    value={color}
-                    className="w-4 h-4"
-                  />
-                  <span
-                    className={`w-8 h-8 rounded-full border-2 ${
-                      color === 'yellow'
-                        ? 'bg-yellow-400'
-                        : color === 'red'
-                        ? 'bg-red-500'
-                        : 'bg-green-500'
-                    }`}
-                  />
-                  <span className="capitalize">{color}</span>
-                </label>
-              ))}
-            </div>
+            <input
+              type="color"
+              {...register('label_color')}
+              className="w-32 h-12 border border-gray-300 rounded-lg cursor-pointer"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Pick any color for the product label gradient
+            </p>
+            {errors.label_color && (
+              <p className="text-red-600 text-sm mt-1">{errors.label_color.message}</p>
+            )}
           </div>
 
           <div>
@@ -347,17 +308,8 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
               placeholder="Energy, Focus, Detox (comma-separated)"
             />
             <p className="text-sm text-gray-500 mt-1">
-              Enter keywords separated by commas
+              Enter keywords separated by commas - shown as badges on product page
             </p>
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1">Best For</label>
-            <input
-              {...register('best_for')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              placeholder="Morning boost, Post-workout (comma-separated)"
-            />
           </div>
         </div>
       </section>
@@ -402,32 +354,12 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
         </div>
       </section>
 
-      {/* Rich Text Editors */}
+      {/* Description */}
       <section className="bg-white p-6 rounded-lg shadow">
         <h2 className="text-xl font-bold mb-4">Description</h2>
+        <p className="text-sm text-gray-600 mb-3">Main product description shown on the product page</p>
         <div className="border border-gray-300 rounded-lg p-4 min-h-[200px] prose max-w-none">
           <EditorContent editor={descriptionEditor} />
-        </div>
-      </section>
-
-      <section className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-bold mb-4">Blend Story</h2>
-        <div className="border border-gray-300 rounded-lg p-4 min-h-[200px] prose max-w-none">
-          <EditorContent editor={storyEditor} />
-        </div>
-      </section>
-
-      <section className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-bold mb-4">Detailed Function</h2>
-        <div className="border border-gray-300 rounded-lg p-4 min-h-[150px] prose max-w-none">
-          <EditorContent editor={detailedFunctionEditor} />
-        </div>
-      </section>
-
-      <section className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-bold mb-4">How to Use</h2>
-        <div className="border border-gray-300 rounded-lg p-4 min-h-[150px] prose max-w-none">
-          <EditorContent editor={howToUseEditor} />
         </div>
       </section>
 
@@ -567,64 +499,30 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
               className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
             <p className="text-sm text-gray-500 mt-1">
-              Lower numbers appear first (1, 2, 3...)
+              Lower numbers appear first on the blends page (1 = Green Bomb, 2 = Red Bomb, 3 = Yellow Bomb)
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <input type="checkbox" {...register('is_featured')} className="w-4 h-4" />
-            <label className="font-medium">Featured Product</label>
-          </div>
-
-          <div className="flex items-center gap-2">
             <input type="checkbox" {...register('is_active')} className="w-4 h-4" />
-            <label className="font-medium">Active (visible on site)</label>
+            <label className="font-medium">Active (visible on website)</label>
           </div>
 
           <div className="flex items-center gap-2">
             <input type="checkbox" {...register('publish')} className="w-4 h-4" />
             <label className="font-medium">Published</label>
-            <p className="text-sm text-gray-500">
-              (Unpublished products are drafts)
-            </p>
           </div>
 
           <div className="border-t pt-4 mt-4">
             <div className="flex items-start gap-2">
               <input type="checkbox" {...register('auto_sync')} className="w-4 h-4 mt-1" />
               <div>
-                <label className="font-medium">Auto-sync to Stripe</label>
+                <label className="font-medium">Auto-sync to Stripe after saving</label>
                 <p className="text-sm text-gray-500 mt-1">
-                  Automatically create/update Stripe product and prices after saving. Requires variants to have price_usd set.
+                  Automatically creates/updates Stripe product and prices when you save
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SEO */}
-      <section className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-bold mb-4">SEO</h2>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block font-medium mb-1">Meta Title</label>
-            <input
-              {...register('meta_title')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              placeholder="Defaults to product name if empty"
-            />
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1">Meta Description</label>
-            <textarea
-              {...register('meta_description')}
-              rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              placeholder="Brief description for search engines"
-            />
           </div>
         </div>
       </section>
