@@ -117,3 +117,30 @@ The `LoadingSkeleton` component uses these props:
 // ✅ CORRECT
 <LoadingSkeleton variant="table" lines={5} />
 ```
+
+## Security
+
+### Sanity Studio Access Control
+
+**Rule**: Sanity Studio MUST be inside the `(admin)` route group to be protected by authentication.
+
+**Location**: `app/(admin)/studio/[[...tool]]/page.tsx` (NOT `app/studio/[[...tool]]/page.tsx`)
+
+**Why**: The `(admin)` route group is protected by middleware that checks:
+1. User is authenticated (logged in)
+2. User has `is_admin = true` in their profile
+
+**Sanity Config**: Must use `/admin/studio` as basePath:
+
+```typescript
+// sanity.config.ts
+const config: Config = defineConfig({
+  basePath: '/admin/studio', // IMPORTANT: Must match protected route
+  // ... rest of config
+});
+```
+
+**Verification**:
+- `/studio` → Shows homepage (catch-all route) or 404
+- `/admin/studio` → Redirects to login if not authenticated
+- After login with admin account → Shows Sanity Studio
