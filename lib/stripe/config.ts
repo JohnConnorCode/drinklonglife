@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import { logger } from '@/lib/logger';
 
 /**
  * Fetch the current Stripe mode from Supabase
@@ -10,7 +11,7 @@ async function getStripeModeFromDatabase(): Promise<'test' | 'production'> {
     const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!SUPABASE_URL || !SUPABASE_KEY) {
-      console.warn('Supabase not configured, falling back to test mode');
+      logger.warn('Supabase not configured, falling back to test mode');
       return 'test';
     }
 
@@ -24,7 +25,7 @@ async function getStripeModeFromDatabase(): Promise<'test' | 'production'> {
     });
 
     if (!response.ok) {
-      console.warn('Failed to fetch Stripe mode from database, falling back to test mode');
+      logger.warn('Failed to fetch Stripe mode from database, falling back to test mode');
       return 'test';
     }
 
@@ -37,7 +38,7 @@ async function getStripeModeFromDatabase(): Promise<'test' | 'production'> {
     // Default to test mode for safety
     return 'test';
   } catch (error) {
-    console.error('Error fetching Stripe mode:', error);
+    logger.error('Error fetching Stripe mode:', error);
     return 'test'; // Fail-safe to test mode
   }
 }

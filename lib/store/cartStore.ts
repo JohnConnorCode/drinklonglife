@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { logger } from '@/lib/logger';
 
 /**
  * Cart item interface
@@ -49,6 +50,7 @@ interface CartActions {
   applyCoupon: (code: string) => Promise<void>;
   removeCoupon: () => void;
   clearCart: () => void;
+  clearError: () => void;
   getSubtotal: () => number;
   getDiscount: () => number;
   getTotal: () => number;
@@ -84,7 +86,7 @@ export const useCartStore = create<CartStore>()(
       addItem: (item) => {
         // Validate price ID before adding
         if (!item.priceId || !item.priceId.startsWith('price_') || item.priceId.length < 20) {
-          console.error('Invalid priceId:', item.priceId);
+          logger.error('Invalid priceId:', item.priceId);
           set({ error: 'Invalid product data. Please refresh the page.' });
           return;
         }
@@ -97,7 +99,7 @@ export const useCartStore = create<CartStore>()(
             const errorMsg = item.productType === 'subscription'
               ? 'Cannot add subscription to cart with one-time purchases. Please checkout separately or clear your cart first.'
               : 'Cannot add one-time purchase to cart with subscriptions. Please checkout separately or clear your cart first.';
-            console.warn('Mixed billing types in cart:', { existingType, newType: item.productType });
+            logger.warn('Mixed billing types in cart:', { existingType, newType: item.productType });
             set({ error: errorMsg });
             return;
           }
@@ -105,7 +107,7 @@ export const useCartStore = create<CartStore>()(
 
         // Enforce quantity=1 for subscription items
         if (item.productType === 'subscription' && item.quantity > 1) {
-          console.warn('Subscription items must have quantity of 1');
+          logger.warn('Subscription items must have quantity of 1');
           set({ error: 'Subscription items can only have a quantity of 1.' });
           return;
         }
@@ -139,8 +141,11 @@ export const useCartStore = create<CartStore>()(
 
       // Remove item from cart
       removeItem: (id) => {
+        const newItems = get().items.filter((item) => item.id !== id);
         set({
-          items: get().items.filter((item) => item.id !== id),
+          items: newItems,
+          // Clear error when cart becomes empty (user fixed the problem by removing items)
+          error: newItems.length === 0 ? undefined : get().error,
         });
       },
 
@@ -198,6 +203,11 @@ export const useCartStore = create<CartStore>()(
           coupon: undefined,
           error: undefined,
         });
+      },
+
+      // Clear error manually
+      clearError: () => {
+        set({ error: undefined });
       },
 
       // Get subtotal (before discount)

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth/admin';
+import { logger } from '@/lib/logger';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -23,7 +24,7 @@ export async function GET() {
     );
 
     if (!response.ok) {
-      console.error('Failed to fetch from Supabase:', await response.text());
+      logger.error('Failed to fetch from Supabase:', await response.text());
       return NextResponse.json({
         mode: 'test',
         message: 'No Stripe settings configured, defaulting to test mode',
@@ -47,7 +48,7 @@ export async function GET() {
       modifiedBy: settings.modified_by,
     });
   } catch (error) {
-    console.error('Error fetching Stripe settings:', error);
+    logger.error('Error fetching Stripe settings:', error);
     return NextResponse.json(
       { error: 'Failed to fetch Stripe settings' },
       { status: 500 }
@@ -77,11 +78,11 @@ export async function PUT(req: NextRequest) {
 
     // Warn if switching to production
     if (mode === 'production') {
-      console.warn(
+      logger.warn(
         `⚠️ PRODUCTION MODE ENABLED by ${admin.email} at ${new Date().toISOString()}`
       );
     } else {
-      console.log(
+      logger.info(
         `✅ TEST MODE ENABLED by ${admin.email} at ${new Date().toISOString()}`
       );
     }
@@ -152,7 +153,7 @@ export async function PUT(req: NextRequest) {
 
     if (!updateResponse.ok) {
       const error = await updateResponse.text();
-      console.error('Failed to update Supabase:', error);
+      logger.error('Failed to update Supabase:', error);
       return NextResponse.json(
         { error: 'Failed to update Stripe settings' },
         { status: 500 }
@@ -177,7 +178,7 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    console.error('Error updating Stripe settings:', error);
+    logger.error('Error updating Stripe settings:', error);
     return NextResponse.json(
       { error: 'Failed to update Stripe settings' },
       { status: 500 }

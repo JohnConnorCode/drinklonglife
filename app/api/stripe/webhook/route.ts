@@ -6,6 +6,7 @@ import { upsertSubscription, createPurchase, updatePurchaseStatus } from '@/lib/
 import { completeReferral } from '@/lib/referral-utils';
 import { trackServerEvent } from '@/lib/analytics';
 import { sendOrderConfirmationEmail, sendSubscriptionConfirmationEmail } from '@/lib/email/send';
+import { logger } from '@/lib/logger';
 
 /**
  * Verify webhook signature against both test and production secrets.
@@ -51,11 +52,11 @@ export async function POST(req: NextRequest) {
     try {
       event = verifyWebhookSignature(body, signature, stripe);
     } catch (err) {
-      console.error('Webhook signature verification error:', err);
+      logger.error('Webhook signature verification error:', err);
     }
 
     if (!event) {
-      console.error('Webhook signature verification failed for all configured secrets');
+      logger.error('Webhook signature verification failed for all configured secrets');
       return NextResponse.json(
         { error: 'Invalid signature' },
         { status: 400 }
@@ -129,7 +130,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Webhook error:', error);
+    logger.error('Webhook error:', error);
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 500 }
@@ -144,7 +145,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   const { customer, subscription, payment_intent, metadata, mode } = session;
 
   if (!customer || typeof customer !== 'string') {
-    console.error('No customer in checkout session');
+    logger.error('No customer in checkout session');
     return;
   }
 
@@ -221,7 +222,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       });
 
     if (orderError) {
-      console.error('Error creating order record:', orderError);
+      logger.error('Error creating order record:', orderError);
     } else {
       // Send order confirmation email
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
@@ -263,20 +264,20 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
   const canceled_at = (subscription as any).canceled_at;
 
   if (typeof customer !== 'string') {
-    console.error('Invalid customer in subscription');
+    logger.error('Invalid customer in subscription');
     return;
   }
 
   // Get the price and product from the subscription
   const price = items.data[0]?.price;
   if (!price) {
-    console.error('No price in subscription');
+    logger.error('No price in subscription');
     return;
   }
 
   const productId = typeof price.product === 'string' ? price.product : price.product?.id;
   if (!productId) {
-    console.error('No product in subscription');
+    logger.error('No product in subscription');
     return;
   }
 
@@ -290,7 +291,7 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
     .single();
 
   if (!profile) {
-    console.error(`No user found for customer ${customer}`);
+    logger.error(`No user found for customer ${customer}`);
     return;
   }
 
@@ -413,7 +414,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
   const { id, amount, currency, customer, metadata } = paymentIntent;
 
   if (!customer || typeof customer !== 'string') {
-    console.error('No customer in payment intent');
+    logger.error('No customer in payment intent');
     return;
   }
 
@@ -427,7 +428,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
     .single();
 
   if (!profile) {
-    console.error(`No user found for customer ${customer}`);
+    logger.error(`No user found for customer ${customer}`);
     return;
   }
 

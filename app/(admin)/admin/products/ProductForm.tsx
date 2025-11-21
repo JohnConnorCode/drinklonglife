@@ -11,6 +11,7 @@ import { useDropzone } from 'react-dropzone';
 import { createClient } from '@/lib/supabase/browser';
 import Image from 'next/image';
 import { VariantsManager } from './VariantsManager';
+import { logger } from '@/lib/logger';
 
 // Form validation schema
 const productSchema = z.object({
@@ -194,7 +195,7 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
           // Keep sync message visible for 2 seconds before redirecting
           await new Promise(resolve => setTimeout(resolve, 2000));
         } catch (syncErr: any) {
-          console.error('Sync error:', syncErr);
+          logger.error('Sync error:', syncErr);
           setSyncMessage(`⚠️ Sync error: ${syncErr.message}`);
           await new Promise(resolve => setTimeout(resolve, 2000));
         } finally {
@@ -206,7 +207,7 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
       router.push('/admin/products');
       router.refresh();
     } catch (err: any) {
-      console.error('Save error:', err);
+      logger.error('Save error:', err);
       setError(err.message || 'Failed to save product');
     } finally {
       setSaving(false);

@@ -3,6 +3,7 @@ import { createServerClient } from '@/lib/supabase/server';
 import { createCheckoutSession, createCartCheckoutSession, getOrCreateCustomer } from '@/lib/stripe';
 import { getStripeClient } from '@/lib/stripe/config';
 import { rateLimit } from '@/lib/rate-limit';
+import { logger } from '@/lib/logger';
 
 interface CartItemRequest {
   priceId: string;
@@ -189,7 +190,7 @@ export async function POST(req: NextRequest) {
             quantity: item.quantity,
           });
         } catch (error) {
-          console.error(`❌ Invalid price ID: ${item.priceId}`, error);
+          logger.error(`❌ Invalid price ID: ${item.priceId}`, error);
           return NextResponse.json(
             { error: `Invalid price ID: ${item.priceId}` },
             { status: 400 }
@@ -237,7 +238,7 @@ export async function POST(req: NextRequest) {
           );
         }
       } catch (error) {
-        console.error(`❌ Invalid price ID: ${priceId}`, error);
+        logger.error(`❌ Invalid price ID: ${priceId}`, error);
         return NextResponse.json(
           { error: 'Invalid price selected' },
           { status: 400 }
@@ -266,7 +267,7 @@ export async function POST(req: NextRequest) {
     );
 
   } catch (error) {
-    console.error('Checkout error:', error);
+    logger.error('Checkout error:', error);
     return NextResponse.json(
       {
         error: 'Failed to create checkout session',
