@@ -157,6 +157,25 @@ export async function POST(req: NextRequest) {
             );
           }
 
+          // INVENTORY CHECK: Verify sufficient stock available
+          const { data: variant } = await supabase
+            .from('product_variants')
+            .select('id, track_inventory, stock_quantity')
+            .eq('stripe_price_id', item.priceId)
+            .single();
+
+          if (variant?.track_inventory && variant.stock_quantity !== null) {
+            if (variant.stock_quantity < item.quantity) {
+              return NextResponse.json(
+                {
+                  error: `Insufficient stock for this item. Available: ${variant.stock_quantity}, Requested: ${item.quantity}`,
+                  availableStock: variant.stock_quantity,
+                },
+                { status: 400 }
+              );
+            }
+          }
+
           // Detect billing type and check for mixed cart
           const billingType = price.type === 'recurring' ? 'subscription' : 'one-time';
           billingTypes.add(billingType);
@@ -236,6 +255,25 @@ export async function POST(req: NextRequest) {
             { error: 'Price type does not match checkout mode' },
             { status: 400 }
           );
+        }
+
+        // INVENTORY CHECK: Verify sufficient stock available
+        const { data: variant } = await supabase
+          .from('product_variants')
+          .select('id, track_inventory, stock_quantity')
+          .eq('stripe_price_id', priceId)
+          .single();
+
+        if (variant?.track_inventory && variant.stock_quantity !== null) {
+          if (variant.stock_quantity < 1) {
+            return NextResponse.json(
+              {
+                error: 'This item is currently out of stock',
+                availableStock: 0,
+              },
+              { status: 400 }
+            );
+          }
         }
       } catch (error) {
         logger.error(`❌ Invalid price ID: ${priceId}`, error);

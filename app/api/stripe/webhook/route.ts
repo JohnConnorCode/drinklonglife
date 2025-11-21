@@ -201,7 +201,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     const paymentIntentId = typeof payment_intent === 'string' ? payment_intent : payment_intent.id;
 
     // Create order record for E2E test verification (upsert to prevent duplicates)
-    const { error: orderError } = await supabase
+    const { data: orderData, error: orderError } = await supabase
       .from('orders')
       .upsert({
         stripe_session_id: session.id,
@@ -219,27 +219,62 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       }, {
         onConflict: 'stripe_session_id',
         ignoreDuplicates: false, // Update if already exists
-      });
+      })
+      .select()
+      .single();
 
     if (orderError) {
       logger.error('Error creating order record:', orderError);
     } else {
-      // Send order confirmation email
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
-      if (lineItems && lineItems.data.length > 0 && (session.customer_email || session.customer_details?.email)) {
-        await sendOrderConfirmationEmail({
-          to: (session.customer_email || session.customer_details?.email)!,
-          orderNumber: session.id.replace('cs_', ''),
-          customerName: session.customer_details?.name || undefined,
-          items: lineItems.data.map(item => ({
-            name: item.description || 'Product',
-            quantity: item.quantity || 1,
-            price: item.amount_total || 0,
-          })),
-          subtotal: session.amount_subtotal || 0,
-          total: session.amount_total || 0,
-          currency: session.currency || 'usd',
-        });
+      // Decrease inventory for all line items
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+        expand: ['data.price'],
+      });
+
+      if (lineItems && lineItems.data.length > 0) {
+        // Process inventory decreases for each line item
+        for (const item of lineItems.data) {
+          const price = item.price;
+          if (price && price.id) {
+            // Find variant by stripe_price_id
+            const { data: variant } = await supabase
+              .from('product_variants')
+              .select('id')
+              .eq('stripe_price_id', price.id)
+              .single();
+
+            if (variant) {
+              // Call decrease_inventory function
+              const { error: inventoryError } = await supabase.rpc('decrease_inventory', {
+                p_variant_id: variant.id,
+                p_quantity: item.quantity || 1,
+                p_order_id: orderData?.id || null,
+                p_stripe_session_id: session.id,
+              });
+
+              if (inventoryError) {
+                logger.error(`Error decreasing inventory for variant ${variant.id}:`, inventoryError);
+              }
+            }
+          }
+        }
+
+        // Send order confirmation email
+        if (session.customer_email || session.customer_details?.email) {
+          await sendOrderConfirmationEmail({
+            to: (session.customer_email || session.customer_details?.email)!,
+            orderNumber: session.id.replace('cs_', ''),
+            customerName: session.customer_details?.name || undefined,
+            items: lineItems.data.map(item => ({
+              name: item.description || 'Product',
+              quantity: item.quantity || 1,
+              price: item.amount_total || 0,
+            })),
+            subtotal: session.amount_subtotal || 0,
+            total: session.amount_total || 0,
+            currency: session.currency || 'usd',
+          });
+        }
       }
     }
 
