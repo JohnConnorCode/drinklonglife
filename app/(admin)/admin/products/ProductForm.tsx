@@ -70,8 +70,6 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
       is_active: product?.is_active ?? true,
       display_order: product?.display_order || 1,
       stripe_product_id: product?.stripe_product_id || '',
-      meta_title: product?.meta_title || '',
-      meta_description: product?.meta_description || '',
       publish: !!product?.published_at,
       auto_sync: true, // Default to auto-sync enabled
     },
@@ -142,8 +140,6 @@ export function ProductForm({ product, ingredients, variants, allIngredients }: 
         stripe_product_id: data.stripe_product_id || null,
         is_active: data.is_active,
         display_order: data.display_order,
-        meta_title: data.meta_title || null,
-        meta_description: data.meta_description || null,
         published_at: data.publish ? new Date().toISOString() : null,
       };
 
