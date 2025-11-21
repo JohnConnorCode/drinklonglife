@@ -9,6 +9,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatCurrency } from '@/lib/utils/formatCurrency';
+import { logger } from '@/lib/logger';
 
 interface RefundButtonProps {
   orderId: string;
@@ -56,7 +57,7 @@ export function RefundButton({ orderId, orderAmount }: RefundButtonProps) {
       // Refresh the page to show updated data
       router.refresh();
     } catch (err: any) {
-      console.error('Refund error:', err);
+      logger.error('Refund error:', err);
       setError(err.message || 'Failed to process refund');
     } finally {
       setRefunding(false);
@@ -113,7 +114,7 @@ export function RefundButton({ orderId, orderAmount }: RefundButtonProps) {
       setShowPartialInput(false);
       setPartialAmount('');
     } catch (err: any) {
-      console.error('Refund error:', err);
+      logger.error('Refund error:', err);
       setError(err.message || 'Failed to process refund');
     } finally {
       setRefunding(false);
