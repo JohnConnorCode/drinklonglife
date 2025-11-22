@@ -158,23 +158,18 @@ export async function POST(req: NextRequest) {
             );
           }
 
-          // INVENTORY CHECK: Verify sufficient stock available
+          // INVENTORY CHECK: Get variant ID for reservation
           const { data: variant } = await supabase
             .from('product_variants')
             .select('id, track_inventory, stock_quantity')
             .eq('stripe_price_id', item.priceId)
             .single();
 
-          if (variant?.track_inventory && variant.stock_quantity !== null) {
-            if (variant.stock_quantity < item.quantity) {
-              return NextResponse.json(
-                {
-                  error: `Insufficient stock for this item. Available: ${variant.stock_quantity}, Requested: ${item.quantity}`,
-                  availableStock: variant.stock_quantity,
-                },
-                { status: 400 }
-              );
-            }
+          if (!variant) {
+            return NextResponse.json(
+              { error: `Variant not found for price ${item.priceId}` },
+              { status: 400 }
+            );
           }
 
           // Detect billing type and check for mixed cart
@@ -208,6 +203,7 @@ export async function POST(req: NextRequest) {
           validatedLineItems.push({
             price: item.priceId,
             quantity: item.quantity,
+            variantId: variant.id, // Store for reservation
           });
         } catch (error) {
           logger.error(`❌ Invalid price ID: ${item.priceId}`, error);
@@ -249,7 +245,35 @@ export async function POST(req: NextRequest) {
         stripeClient
       );
 
-      return NextResponse.json({ url: checkoutSession.url });
+      // CRITICAL: Atomically reserve inventory to prevent race conditions
+      // This must happen AFTER session creation to have a session ID
+      for (const item of validatedLineItems) {
+        if (item.variantId) {
+          const { data: reservationResult, error: reservationError } = await supabase
+            .rpc('reserve_inventory', {
+              p_variant_id: item.variantId,
+              p_quantity: item.quantity,
+              p_session_id: checkoutSession.id,
+            });
+
+          if (reservationError || !reservationResult?.success) {
+            // Reservation failed - release any reservations and return error
+            await supabase.rpc('release_reservation', {
+              p_session_id: checkoutSession.id,
+            });
+
+            return NextResponse.json(
+              {
+                error: reservationResult?.error || 'Insufficient stock',
+                availableStock: reservationResult?.available_stock || 0,
+              },
+              { status: 400 }
+            );
+          }
+        }
+      }
+
+      return NextResponse.json({ url: checkoutSession.url, sessionId: checkoutSession.id });
     }
 
     // LEGACY SINGLE-ITEM CHECKOUT
@@ -274,24 +298,12 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // INVENTORY CHECK: Verify sufficient stock available
+        // Get variant ID for reservation (we'll reserve after session creation)
         const { data: variant } = await supabase
           .from('product_variants')
-          .select('id, track_inventory, stock_quantity')
+          .select('id')
           .eq('stripe_price_id', priceId)
           .single();
-
-        if (variant?.track_inventory && variant.stock_quantity !== null) {
-          if (variant.stock_quantity < 1) {
-            return NextResponse.json(
-              {
-                error: 'This item is currently out of stock',
-                availableStock: 0,
-              },
-              { status: 400 }
-            );
-          }
-        }
       } catch (error) {
         logger.error(`❌ Invalid price ID: ${priceId}`, error);
         return NextResponse.json(
@@ -326,7 +338,27 @@ export async function POST(req: NextRequest) {
         stripeClient
       );
 
-      return NextResponse.json({ url: checkoutSession.url });
+      // CRITICAL: Atomically reserve inventory for single-item checkout
+      if (variant?.id) {
+        const { data: reservationResult, error: reservationError } = await supabase
+          .rpc('reserve_inventory', {
+            p_variant_id: variant.id,
+            p_quantity: 1,
+            p_session_id: checkoutSession.id,
+          });
+
+        if (reservationError || !reservationResult?.success) {
+          return NextResponse.json(
+            {
+              error: reservationResult?.error || 'Insufficient stock',
+              availableStock: reservationResult?.available_stock || 0,
+            },
+            { status: 400 }
+          );
+        }
+      }
+
+      return NextResponse.json({ url: checkoutSession.url, sessionId: checkoutSession.id });
     }
 
     // Invalid request
