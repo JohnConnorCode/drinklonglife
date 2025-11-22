@@ -188,3 +188,27 @@ const config: Config = defineConfig({
 5. System shows: "✅ Synced to Stripe! Product: prod_xxx, Prices: 1"
 6. Product ready for checkout immediately
 ```
+
+## Environment Variables
+
+### Transactional Email (Resend)
+
+**Where configured**: Vercel Project Settings → Environment Variables
+
+**Required variables**:
+```bash
+RESEND_API_KEY=re_8UeJfPqu_PRRGUb3rCYCJBEZytgTgjkJk
+EMAIL_FROM="Long Life <hello@drinklonglife.com>"
+```
+
+**Usage**:
+- Order confirmations sent via Stripe webhook
+- Subscription confirmations
+- Shipping notifications
+- Email queue processor (`/api/cron/process-email-queue`)
+
+**How emails work**:
+1. Stripe webhook queues email to `email_queue` table
+2. Vercel Cron runs processor every 5 minutes
+3. Processor sends emails via Resend API
+4. Failed emails retry up to 3 times
