@@ -131,6 +131,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (error) {
     logger.error('Webhook error:', error);
+
+    // CRITICAL: Log webhook failure for manual retry/investigation
+    const supabase = createServiceRoleClient();
+    await supabase.from('webhook_failures').insert({
+      event_id: event.id,
+      event_type: event.type,
+      event_data: event,
+      error_message: error instanceof Error ? error.message : 'Unknown error',
+    });
+
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 500 }
@@ -172,21 +182,24 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     );
     await handleSubscriptionChange(stripeSubscription);
 
-    // Send subscription confirmation email
+    // CRITICAL: Queue subscription confirmation email (prevents webhook failures from email issues)
     if (session.customer_email || session.customer_details?.email) {
       const price = stripeSubscription.items.data[0]?.price;
       const product = typeof price?.product === 'string'
         ? await stripe.products.retrieve(price.product)
         : price?.product;
 
-      await sendSubscriptionConfirmationEmail({
-        to: (session.customer_email || session.customer_details?.email)!,
-        customerName: session.customer_details?.name || undefined,
-        planName: (product && 'name' in product) ? product.name : 'Subscription',
-        planPrice: price?.unit_amount || 0,
-        billingInterval: price?.recurring?.interval || 'month',
-        nextBillingDate: new Date((stripeSubscription as any).current_period_end * 1000).toLocaleDateString(),
-        currency: session.currency || 'usd',
+      await supabase.from('email_queue').insert({
+        email_type: 'subscription_confirmation',
+        to_email: (session.customer_email || session.customer_details?.email)!,
+        template_data: {
+          customerName: session.customer_details?.name || undefined,
+          planName: (product && 'name' in product) ? product.name : 'Subscription',
+          planPrice: price?.unit_amount || 0,
+          billingInterval: price?.recurring?.interval || 'month',
+          nextBillingDate: new Date((stripeSubscription as any).current_period_end * 1000).toLocaleDateString(),
+          currency: session.currency || 'usd',
+        }
       });
     }
 
@@ -268,22 +281,30 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
           }
         }
 
-        // Send order confirmation email
+        // CRITICAL: Queue order confirmation email (prevents webhook failures from email issues)
         if (session.customer_email || session.customer_details?.email) {
-          await sendOrderConfirmationEmail({
-            to: (session.customer_email || session.customer_details?.email)!,
-            orderNumber: session.id.replace('cs_', ''),
-            customerName: session.customer_details?.name || undefined,
-            items: lineItems.data.map(item => ({
-              name: item.description || 'Product',
-              quantity: item.quantity || 1,
-              price: item.amount_total || 0,
-            })),
-            subtotal: session.amount_subtotal || 0,
-            total: session.amount_total || 0,
-            currency: session.currency || 'usd',
+          await supabase.from('email_queue').insert({
+            email_type: 'order_confirmation',
+            to_email: (session.customer_email || session.customer_details?.email)!,
+            template_data: {
+              orderNumber: session.id.replace('cs_', ''),
+              customerName: session.customer_details?.name || undefined,
+              items: lineItems.data.map(item => ({
+                name: item.description || 'Product',
+                quantity: item.quantity || 1,
+                price: item.amount_total || 0,
+              })),
+              subtotal: session.amount_subtotal || 0,
+              total: session.amount_total || 0,
+              currency: session.currency || 'usd',
+            }
           });
         }
+
+        // CRITICAL: Release inventory reservation now that payment succeeded
+        await supabase.rpc('release_reservation', {
+          p_session_id: session.id
+        });
       }
     }
 
