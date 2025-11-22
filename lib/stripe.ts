@@ -221,8 +221,9 @@ export async function createCartCheckoutSession(
     sessionParams.customer = customerId;
   } else if (customerEmail) {
     sessionParams.customer_email = customerEmail;
-  } else {
-    // For guest checkout, allow Stripe to collect email
+  } else if (mode === 'payment') {
+    // For guest checkout in payment mode, allow Stripe to collect email
+    // NOTE: customer_creation is only allowed in payment mode, not subscription mode
     sessionParams.customer_creation = 'always';
   }
 

@@ -214,14 +214,12 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      const lineItems = validatedLineItems;
-
       // CRITICAL: Generate idempotency key to prevent double charges
       // Key is based on: user/IP + cart contents + 1-minute time window
       // This prevents duplicate checkout sessions if user clicks button twice
       const timeWindow = Math.floor(Date.now() / 60000); // 1-minute windows
       const cartFingerprint = JSON.stringify({
-        items: lineItems.map(item => ({ price: item.price, qty: item.quantity })).sort(),
+        items: validatedLineItems.map(item => ({ price: item.price, qty: item.quantity })).sort(),
         coupon: couponCode || null,
         time: timeWindow,
       });
@@ -231,9 +229,15 @@ export async function POST(req: NextRequest) {
         .digest('hex')
         .substring(0, 40); // Stripe max length is 40 chars
 
+      // Strip variantId before passing to Stripe (it's only for our internal use)
+      const stripeLineItems = validatedLineItems.map(({ price, quantity }) => ({
+        price,
+        quantity,
+      }));
+
       const checkoutSession = await createCartCheckoutSession(
         {
-          lineItems,
+          lineItems: stripeLineItems,
           mode: checkoutMode,
           successUrl: finalSuccessUrl,
           cancelUrl: finalCancelUrl,
