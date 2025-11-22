@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/browser';
 import { logger } from '@/lib/logger';
 
 interface ProductVariant {

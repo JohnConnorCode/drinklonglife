@@ -278,6 +278,13 @@ export async function POST(req: NextRequest) {
 
     // LEGACY SINGLE-ITEM CHECKOUT
     if (priceId && mode) {
+      // Get variant ID for reservation (we'll reserve after session creation)
+      const { data: variant } = await supabase
+        .from('product_variants')
+        .select('id')
+        .eq('stripe_price_id', priceId)
+        .single();
+
       // CRITICAL SECURITY: Validate price server-side
       try {
         const price = await stripeClient.prices.retrieve(priceId);
@@ -297,13 +304,6 @@ export async function POST(req: NextRequest) {
             { status: 400 }
           );
         }
-
-        // Get variant ID for reservation (we'll reserve after session creation)
-        const { data: variant } = await supabase
-          .from('product_variants')
-          .select('id')
-          .eq('stripe_price_id', priceId)
-          .single();
       } catch (error) {
         logger.error(`❌ Invalid price ID: ${priceId}`, error);
         return NextResponse.json(

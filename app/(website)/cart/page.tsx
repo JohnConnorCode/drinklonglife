@@ -32,6 +32,7 @@ export default function CartPage() {
       }, 10000);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [checkoutError]);
 
   const handleCheckout = async () => {

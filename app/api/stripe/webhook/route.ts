@@ -5,7 +5,6 @@ import { createServiceRoleClient } from '@/lib/supabase/server';
 import { upsertSubscription, createPurchase, updatePurchaseStatus } from '@/lib/subscription';
 import { completeReferral } from '@/lib/referral-utils';
 import { trackServerEvent } from '@/lib/analytics';
-import { sendOrderConfirmationEmail, sendSubscriptionConfirmationEmail } from '@/lib/email/send';
 import { logger } from '@/lib/logger';
 
 /**
@@ -133,13 +132,15 @@ export async function POST(req: NextRequest) {
     logger.error('Webhook error:', error);
 
     // CRITICAL: Log webhook failure for manual retry/investigation
-    const supabase = createServiceRoleClient();
-    await supabase.from('webhook_failures').insert({
-      event_id: event.id,
-      event_type: event.type,
-      event_data: event,
-      error_message: error instanceof Error ? error.message : 'Unknown error',
-    });
+    if (event) {
+      const supabase = createServiceRoleClient();
+      await supabase.from('webhook_failures').insert({
+        event_id: event.id,
+        event_type: event.type,
+        event_data: event,
+        error_message: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
 
     return NextResponse.json(
       { error: 'Webhook handler failed' },
