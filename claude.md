@@ -189,33 +189,124 @@ const config: Config = defineConfig({
 6. Product ready for checkout immediately
 ```
 
-## Environment Variables
+## Email System (Database-Driven Templates)
 
-### Transactional Email (Resend)
+**Status**: ✅ Production-ready enterprise email system
 
-**Where configured**: Vercel Project Settings → Environment Variables
+### Architecture Overview
 
-**Required variables**:
+The email system uses **database-driven templates** with a Supabase Edge Function for sending. This allows admins to edit email templates through a web UI without code changes.
+
+**Key Components**:
+1. **Database Tables** - Templates, notifications (audit trail), user preferences
+2. **Supabase Edge Function** - Variable substitution, user preferences, Resend API integration
+3. **Admin UI** - `/admin/email-templates` for template management
+4. **Simple API** - `sendEmail()` function for application code
+
+### Environment Variables
+
+**Vercel (Next.js)**:
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+RESEND_API_KEY=re_8UeJfPqu_PRRGUb3rCYCJBEZytgTgjkJk
+```
+
+**Supabase Edge Function** (Project Settings → Edge Functions):
 ```bash
 RESEND_API_KEY=re_8UeJfPqu_PRRGUb3rCYCJBEZytgTgjkJk
 EMAIL_FROM="Long Life <hello@drinklonglife.com>"
 ```
 
-**Usage**:
-- Order confirmations sent via Stripe webhook
-- Subscription confirmations
-- Shipping notifications
-- Email queue processor (`/api/cron/process-email-queue`)
+### Database Tables
 
-**How emails work**:
-1. Stripe webhook queues email to `email_queue` table
-2. Vercel Cron runs processor daily at midnight UTC (Hobby plan limit)
-3. Processor sends up to 50 emails per run via Resend API
-4. Failed emails retry up to 3 times
+**`email_template_versions`** - Database-driven email templates
+- Fields: `template_name`, `version_type` (draft/published), `subject_template`, `html_template`, `data_schema`
+- Draft/publish workflow: Edit drafts safely, publish to production
+- Variable substitution: `{{variableName}}` syntax
 
-**Manual trigger** (instant email delivery):
-```bash
-curl -H "Authorization: Bearer $CRON_SECRET" https://drinklonglife.com/api/cron/process-email-queue
+**`email_notifications`** - Complete audit trail for all sent emails
+- Fields: `user_id`, `email`, `template_name`, `status` (pending/sent/failed), `sent_at`, `error_message`
+- Tracks every email sent through the system
+- Replaces old `email_queue` table
+
+**`email_preferences`** - Granular user email preferences
+- Fields: `user_id`, `all_emails_enabled`, `marketing_emails`, `order_confirmations`, `subscription_notifications`, etc.
+- Unsubscribe tokens for one-click unsubscribe
+- Automatically created for new users
+
+### How to Send Emails
+
+**From application code**:
+```typescript
+import { sendEmail } from '@/lib/email/send-template';
+
+await sendEmail({
+  to: 'customer@example.com',
+  template: 'order_confirmation', // Template name from database
+  data: {
+    orderNumber: '12345',
+    customerName: 'John Doe',
+    items: [...],
+    subtotal: 5000, // Amount in cents
+    total: 5500,
+    currency: 'usd',
+  },
+  userId: 'user-uuid', // Optional, for tracking and preferences
+});
 ```
 
-**Note**: Hobby plan limits cron to daily. For hourly email delivery, upgrade to Vercel Pro.
+### Email Flow
+
+1. **Application** calls `sendEmail()` with template name and data
+2. **Edge Function** loads published template from database
+3. **Variable Substitution** replaces `{{variableName}}` with actual data
+4. **User Preferences** checked (skip if user disabled this email type)
+5. **Audit Record** created in `email_notifications` table
+6. **Resend API** sends the email
+7. **Audit Updated** with sent status or error message
+
+### Current Templates
+
+- `order_confirmation` - Order confirmation with items, totals
+- `subscription_confirmation` - Subscription welcome email
+- `newsletter_welcome` - Newsletter signup confirmation
+- `contact_form_notification` - Contact form submission (internal)
+
+### Admin UI
+
+**Location**: `/admin/email-templates`
+
+**Features** (currently implemented):
+- ✅ View all templates by category
+- ✅ See draft vs published status
+- ⚠️  Edit/Preview/Test functionality (coming soon)
+
+**How to add templates**:
+1. Use the seed script: `node scripts/seed-email-templates.mjs`
+2. Or insert directly into `email_template_versions` table
+3. Templates must be published to be used in production
+
+### Deployment Checklist
+
+- [x] Database migration applied (`021_email_system_complete.sql`)
+- [ ] Templates seeded (`node scripts/seed-email-templates.mjs`)
+- [ ] Edge function deployed (`supabase functions deploy send-email`)
+- [ ] Environment variables configured in Supabase
+- [x] Stripe webhook updated to use `sendEmail()`
+- [x] Admin UI accessible at `/admin/email-templates`
+
+### Migration from Old System
+
+**Old system** (deprecated):
+- `email_queue` table
+- `/api/cron/process-email-queue` cron job
+- React Email templates (`lib/email/templates.tsx`)
+
+**New system**:
+- `email_notifications` table (audit trail + queue)
+- Supabase Edge Function (`supabase/functions/send-email`)
+- Database-driven templates (editable via admin UI)
+
+**Note**: Old React Email templates kept temporarily for reference in `lib/email/templates.tsx`.

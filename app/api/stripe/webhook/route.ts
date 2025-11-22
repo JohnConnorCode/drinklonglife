@@ -6,6 +6,7 @@ import { upsertSubscription, createPurchase, updatePurchaseStatus } from '@/lib/
 import { completeReferral } from '@/lib/referral-utils';
 import { trackServerEvent } from '@/lib/analytics';
 import { logger } from '@/lib/logger';
+import { sendEmail } from '@/lib/email/send-template';
 
 /**
  * Verify webhook signature against both test and production secrets.
@@ -187,24 +188,26 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     );
     await handleSubscriptionChange(stripeSubscription);
 
-    // CRITICAL: Queue subscription confirmation email (prevents webhook failures from email issues)
+    // Send subscription confirmation email via new email system
     if (session.customer_email || session.customer_details?.email) {
       const price = stripeSubscription.items.data[0]?.price;
       const product = typeof price?.product === 'string'
         ? await stripe.products.retrieve(price.product)
         : price?.product;
 
-      await supabase.from('email_queue').insert({
-        email_type: 'subscription_confirmation',
-        to_email: (session.customer_email || session.customer_details?.email)!,
-        template_data: {
-          customerName: session.customer_details?.name || undefined,
+      await sendEmail({
+        to: (session.customer_email || session.customer_details?.email)!,
+        template: 'subscription_confirmation',
+        data: {
+          customerName: session.customer_details?.name || 'there',
+          customerEmail: session.customer_email || session.customer_details?.email,
           planName: (product && 'name' in product) ? product.name : 'Subscription',
           planPrice: price?.unit_amount || 0,
           billingInterval: price?.recurring?.interval || 'month',
           nextBillingDate: new Date((stripeSubscription as any).current_period_end * 1000).toLocaleDateString(),
           currency: session.currency || 'usd',
-        }
+        },
+        userId,
       });
     }
 
@@ -286,14 +289,15 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
           }
         }
 
-        // CRITICAL: Queue order confirmation email (prevents webhook failures from email issues)
+        // Send order confirmation email via new email system
         if (session.customer_email || session.customer_details?.email) {
-          await supabase.from('email_queue').insert({
-            email_type: 'order_confirmation',
-            to_email: (session.customer_email || session.customer_details?.email)!,
-            template_data: {
+          await sendEmail({
+            to: (session.customer_email || session.customer_details?.email)!,
+            template: 'order_confirmation',
+            data: {
               orderNumber: session.id.replace('cs_', ''),
-              customerName: session.customer_details?.name || undefined,
+              customerName: session.customer_details?.name || 'there',
+              customerEmail: session.customer_email || session.customer_details?.email,
               items: lineItems.data.map(item => ({
                 name: item.description || 'Product',
                 quantity: item.quantity || 1,
@@ -302,7 +306,8 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
               subtotal: session.amount_subtotal || 0,
               total: session.amount_total || 0,
               currency: session.currency || 'usd',
-            }
+            },
+            userId,
           });
         }
 
