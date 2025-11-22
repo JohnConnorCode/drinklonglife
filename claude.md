@@ -209,6 +209,8 @@ EMAIL_FROM="Long Life <hello@drinklonglife.com>"
 
 **How emails work**:
 1. Stripe webhook queues email to `email_queue` table
-2. Vercel Cron runs processor every 5 minutes
-3. Processor sends emails via Resend API
+2. Vercel Cron runs processor every hour (Hobby plan limit)
+3. Processor sends up to 50 emails per run via Resend API
 4. Failed emails retry up to 3 times
+
+**Note**: Hobby plan limits cron to hourly. For faster email delivery (every 5 min), upgrade to Vercel Pro or manually trigger: `curl https://drinklonglife.com/api/cron/process-email-queue`

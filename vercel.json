@@ -4,6 +4,6 @@
   "installCommand": "npm install",
   "crons": [{
     "path": "/api/cron/process-email-queue",
-    "schedule": "*/5 * * * *"
+    "schedule": "0 * * * *"
   }]
 }
