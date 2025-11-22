@@ -133,12 +133,12 @@ export async function POST(req: NextRequest) {
 
     // CRITICAL: Log webhook failure for manual retry/investigation
     try {
-      if (event) {
+      if (event && 'id' in event && 'type' in event) {
         const supabase = createServiceRoleClient();
         await supabase.from('webhook_failures').insert({
           event_id: event.id,
           event_type: event.type,
-          event_data: event,
+          event_data: event as Record<string, unknown>,
           error_message: error instanceof Error ? error.message : 'Unknown error',
         });
       }
