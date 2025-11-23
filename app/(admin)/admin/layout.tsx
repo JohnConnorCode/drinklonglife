@@ -4,6 +4,7 @@ import { createServerClient } from '@/lib/supabase/server';
 import { isCurrentUserAdmin } from '@/lib/admin';
 import { SignOutButton } from '@/components/auth/SignOutButton';
 import { AnimatedLogo } from '@/components/AnimatedLogo';
+import { AdminNavigation } from '@/components/admin/AdminNavigation';
 
 export default async function AdminLayout({
   children,
@@ -30,7 +31,7 @@ export default async function AdminLayout({
       <div className="bg-accent-primary text-white shadow-lg border-b-4 border-accent-yellow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4 md:gap-8">
               <Link href="/admin" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <div className="bg-white/10 rounded-lg p-1.5">
                   <AnimatedLogo
@@ -44,85 +45,9 @@ export default async function AdminLayout({
                   <div className="text-xs text-accent-yellow">Admin Console</div>
                 </div>
               </Link>
-              <nav className="hidden md:flex items-center gap-1">
-                <Link
-                  href="/admin"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/admin/orders"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Orders
-                </Link>
-                <Link
-                  href="/admin/subscriptions"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Subscriptions
-                </Link>
-                <Link
-                  href="/admin/products"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Products
-                </Link>
-                <Link
-                  href="/admin/ingredients"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Ingredients
-                </Link>
-                <Link
-                  href="/admin/referrals"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Referrals
-                </Link>
-                <Link
-                  href="/admin/discounts"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Discounts
-                </Link>
-                <Link
-                  href="/admin/users"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Users
-                </Link>
-                <Link
-                  href="/admin/newsletter"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Newsletter
-                </Link>
-                <Link
-                  href="/admin/wholesale"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Wholesale
-                </Link>
-                <Link
-                  href="/admin/email-templates"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors"
-                >
-                  Email Templates
-                </Link>
-                <Link
-                  href="/admin/stripe-mode"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors border-l border-white/20 ml-1 pl-3"
-                >
-                  <span className="flex items-center gap-1">
-                    <span>⚙️</span>
-                    <span>Stripe Mode</span>
-                  </span>
-                </Link>
-              </nav>
+              <AdminNavigation />
             </div>
-            <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-4">
               <Link
                 href="/"
                 className="text-sm text-white/70 hover:text-white transition-colors flex items-center gap-1"

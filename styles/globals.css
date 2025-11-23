@@ -80,7 +80,7 @@ img[data-nimg] {
 /* Faster fade for priority images (above the fold) */
 img[data-nimg][fetchpriority="high"],
 img[data-nimg].priority {
-  animation: image-fade-in 0.3s ease-in-out;
+  animation: image-fade-in 0.1s ease-in-out;
 }
 
 /* For images that are already loaded (cached), use instant display */

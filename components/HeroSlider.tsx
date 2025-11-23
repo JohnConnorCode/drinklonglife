@@ -141,7 +141,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                         alt={slide.heading}
                         fill
                         className={`object-cover hidden md:block transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`}
-                        priority={index === 0}
+                        priority={true}
                         quality={90}
                         sizes="100vw"
                       />
@@ -153,7 +153,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                         alt={slide.heading}
                         fill
                         className={`object-cover md:hidden transition-transform duration-[20000ms] ease-out ${kenBurnsScale}`}
-                        priority={index === 0}
+                        priority={true}
                         quality={90}
                         sizes="100vw"
                       />

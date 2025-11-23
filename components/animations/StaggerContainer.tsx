@@ -44,6 +44,10 @@ export function StaggerContainer({
     },
   };
 
+  // Check if className contains grid classes
+  const isGrid = className?.includes('grid');
+  const childClassName = isGrid ? 'contents' : '';
+
   return (
     <motion.div
       ref={ref}
@@ -53,7 +57,7 @@ export function StaggerContainer({
       className={className}
     >
       {Children.map(children, (child) => (
-        <motion.div variants={item}>{child}</motion.div>
+        <motion.div variants={item} className={childClassName}>{child}</motion.div>
       ))}
     </motion.div>
   );
