@@ -120,6 +120,19 @@ function renderTiptapNode(node: any, key: number = 0): React.ReactNode {
   }
 }
 
+// Helper to extract video ID from URL
+function getVideoId(url: string): { platform: 'youtube' | 'vimeo' | null; id: string | null } {
+  // YouTube
+  const youtubeMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+  if (youtubeMatch) return { platform: 'youtube', id: youtubeMatch[1] };
+
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vimeoMatch) return { platform: 'vimeo', id: vimeoMatch[1] };
+
+  return { platform: null, id: null };
+}
+
 // Portable Text components (for Sanity content)
 const PortableTextComponents = {
   types: {
@@ -140,6 +153,92 @@ const PortableTextComponents = {
             </figcaption>
           )}
         </figure>
+      );
+    },
+    videoEmbed: ({ value }: any) => {
+      const { platform, id } = getVideoId(value.url);
+      if (!platform || !id) return null;
+
+      const embedUrl = platform === 'youtube'
+        ? `https://www.youtube.com/embed/${id}`
+        : `https://player.vimeo.com/video/${id}`;
+
+      return (
+        <figure className="my-6">
+          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+            <iframe
+              src={embedUrl}
+              className="absolute top-0 left-0 w-full h-full rounded-lg"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          {value.caption && (
+            <figcaption className="text-sm text-gray-600 mt-2 text-center">
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+    },
+    codeBlock: ({ value }: any) => {
+      return (
+        <div className="my-6">
+          {value.filename && (
+            <div className="bg-gray-200 text-gray-700 px-4 py-2 text-sm font-mono rounded-t-lg border-b border-gray-300">
+              {value.filename}
+            </div>
+          )}
+          <pre className={`bg-gray-900 text-gray-100 p-4 overflow-x-auto ${!value.filename ? 'rounded-lg' : 'rounded-b-lg'}`}>
+            <code className={`language-${value.language || 'text'}`}>
+              {value.code}
+            </code>
+          </pre>
+        </div>
+      );
+    },
+    callout: ({ value }: any) => {
+      const typeStyles = {
+        tip: 'bg-blue-50 border-blue-200 text-blue-900',
+        info: 'bg-gray-50 border-gray-200 text-gray-900',
+        warning: 'bg-yellow-50 border-yellow-200 text-yellow-900',
+        success: 'bg-green-50 border-green-200 text-green-900',
+      };
+      const emojis = { tip: '💡', info: 'ℹ️', warning: '⚠️', success: '✅' };
+      const style = typeStyles[value.type as keyof typeof typeStyles] || typeStyles.info;
+      const emoji = emojis[value.type as keyof typeof emojis] || emojis.info;
+
+      return (
+        <div className={`my-6 p-4 border-l-4 rounded-r-lg ${style}`}>
+          {value.title && (
+            <div className="font-semibold mb-2 flex items-center gap-2">
+              <span>{emoji}</span>
+              {value.title}
+            </div>
+          )}
+          <div className="text-sm leading-relaxed whitespace-pre-wrap">
+            {value.content}
+          </div>
+        </div>
+      );
+    },
+    button: ({ value }: any) => {
+      const isPrimary = value.style === 'primary';
+      return (
+        <div className="my-6">
+          <a
+            href={value.url}
+            className={`inline-block px-8 py-4 rounded-full font-semibold transition-all ${
+              isPrimary
+                ? 'bg-accent-primary text-white hover:opacity-90'
+                : 'border-2 border-black text-black hover:bg-black hover:text-white'
+            }`}
+            target={value.url?.startsWith('http') ? '_blank' : undefined}
+            rel={value.url?.startsWith('http') ? 'noreferrer' : undefined}
+          >
+            {value.text}
+          </a>
+        </div>
       );
     },
   },

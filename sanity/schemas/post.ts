@@ -41,6 +41,13 @@ export default defineType({
       type: 'blockContent',
     }),
     defineField({
+      name: 'isPublished',
+      title: 'Published',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Toggle to publish/unpublish this post',
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Published Date',
       type: 'datetime',
@@ -49,6 +56,20 @@ export default defineType({
       name: 'author',
       title: 'Author',
       type: 'string',
+    }),
+    defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Nutrition', value: 'nutrition' },
+          { title: 'Recipes', value: 'recipes' },
+          { title: 'Wellness', value: 'wellness' },
+          { title: 'Sustainability', value: 'sustainability' },
+          { title: 'Behind the Scenes', value: 'behind-the-scenes' },
+        ],
+      },
     }),
     defineField({
       name: 'seo',

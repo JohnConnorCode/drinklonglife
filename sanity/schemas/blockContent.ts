@@ -59,5 +59,144 @@ export default defineType({
         },
       ],
     }),
+    // Video Embed
+    defineArrayMember({
+      type: 'object',
+      name: 'videoEmbed',
+      title: 'Video Embed',
+      fields: [
+        {
+          name: 'url',
+          type: 'url',
+          title: 'Video URL',
+          description: 'YouTube or Vimeo URL',
+        },
+        {
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+        },
+      ],
+      preview: {
+        select: {
+          url: 'url',
+        },
+        prepare({ url }) {
+          return {
+            title: 'Video Embed',
+            subtitle: url,
+          };
+        },
+      },
+    }),
+    // Code Block
+    defineArrayMember({
+      type: 'code',
+      name: 'codeBlock',
+      title: 'Code Block',
+      options: {
+        language: 'javascript',
+        languageAlternatives: [
+          { title: 'JavaScript', value: 'javascript' },
+          { title: 'TypeScript', value: 'typescript' },
+          { title: 'HTML', value: 'html' },
+          { title: 'CSS', value: 'css' },
+          { title: 'Python', value: 'python' },
+          { title: 'Bash', value: 'bash' },
+          { title: 'JSON', value: 'json' },
+        ],
+        withFilename: true,
+      },
+    }),
+    // Callout Box
+    defineArrayMember({
+      type: 'object',
+      name: 'callout',
+      title: 'Callout Box',
+      fields: [
+        {
+          name: 'type',
+          type: 'string',
+          title: 'Type',
+          options: {
+            list: [
+              { title: '💡 Tip', value: 'tip' },
+              { title: 'ℹ️ Info', value: 'info' },
+              { title: '⚠️ Warning', value: 'warning' },
+              { title: '✅ Success', value: 'success' },
+            ],
+          },
+          initialValue: 'info',
+        },
+        {
+          name: 'title',
+          type: 'string',
+          title: 'Title',
+        },
+        {
+          name: 'content',
+          type: 'text',
+          title: 'Content',
+          rows: 4,
+        },
+      ],
+      preview: {
+        select: {
+          type: 'type',
+          title: 'title',
+        },
+        prepare({ type, title }) {
+          const emojis = { tip: '💡', info: 'ℹ️', warning: '⚠️', success: '✅' };
+          return {
+            title: `${emojis[type as keyof typeof emojis] || ''} ${title || 'Callout'}`,
+            subtitle: type,
+          };
+        },
+      },
+    }),
+    // Button/CTA
+    defineArrayMember({
+      type: 'object',
+      name: 'button',
+      title: 'Button',
+      fields: [
+        {
+          name: 'text',
+          type: 'string',
+          title: 'Button Text',
+          validation: (Rule) => Rule.required(),
+        },
+        {
+          name: 'url',
+          type: 'url',
+          title: 'URL',
+          validation: (Rule) => Rule.required(),
+        },
+        {
+          name: 'style',
+          type: 'string',
+          title: 'Style',
+          options: {
+            list: [
+              { title: 'Primary', value: 'primary' },
+              { title: 'Secondary', value: 'secondary' },
+            ],
+          },
+          initialValue: 'primary',
+        },
+      ],
+      preview: {
+        select: {
+          text: 'text',
+          style: 'style',
+        },
+        prepare({ text, style }) {
+          return {
+            title: `Button: ${text}`,
+            subtitle: style,
+          };
+        },
+      },
+    }),
   ],
 });
