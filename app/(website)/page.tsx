@@ -2,11 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { client } from '@/lib/sanity.client';
 import { homePageQuery } from '@/lib/sanity.queries';
+import { logger } from '@/lib/logger';
 import { Section } from '@/components/Section';
 import { RichText } from '@/components/RichText';
 import { BlendsGrid } from '@/components/BlendsGrid';
 import { urlFor } from '@/lib/image';
-import { FadeIn, StaggerContainer, FloatingElement, ParallaxElement } from '@/components/animations';
+import { FadeIn, StaggerContainer, ParallaxElement } from '@/components/animations';
 import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 import { StatsSection } from '@/components/StatsSection';
 import { HeroSlider } from '@/components/HeroSlider';
@@ -19,7 +20,7 @@ async function getHomePage() {
   try {
     return await client.fetch(homePageQuery);
   } catch (error) {
-    console.error('Error fetching home page:', error);
+    logger.error('Error fetching home page:', error);
     return null;
   }
 }
@@ -28,7 +29,7 @@ async function getFeaturedBlends() {
   try {
     return await getFeaturedProducts();
   } catch (error) {
-    console.error('Error fetching featured blends:', error);
+    logger.error('Error fetching featured blends:', error);
     return [];
   }
 }
@@ -46,7 +47,7 @@ export default async function Home() {
   }
 
   const {
-    hero,
+    heroSlides,
     valueProps,
     featuredBlendsHeading,
     featuredBlendsSubheading,
@@ -95,107 +96,13 @@ export default async function Home() {
     },
   ];
 
-  // Use defaultSlides until images are uploaded to Sanity CMS
-  // Sanity currently has slides with null images, so we use defaults with /public images
-  const slides = defaultSlides;
+  // Use Sanity heroSlides if available, otherwise fall back to defaults
+  const slides = heroSlides && heroSlides.length > 0 ? heroSlides : defaultSlides;
 
   return (
     <>
       {/* Hero Slider */}
       <HeroSlider slides={slides} />
-
-      {/* Legacy Hero Fallback - Hidden */}
-      <div className="hidden">
-        <Section className="bg-gradient-to-br from-gray-50 to-white py-20 sm:py-32">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <FadeIn direction="up" delay={0.2}>
-                <h1 className="font-heading text-5xl sm:text-6xl font-bold mb-4 leading-tight-90">
-                  Long Life
-                </h1>
-              </FadeIn>
-              <FadeIn direction="up" delay={0.4}>
-                {hero?.heading ? (
-                  <p className="text-2xl font-semibold mb-4 leading-tight-95">
-                    {hero.heading}
-                  </p>
-                ) : (
-                  <p className="text-2xl font-semibold mb-4 leading-tight-95">
-                    Small-batch juice for real humans.
-                  </p>
-                )}
-              </FadeIn>
-              <FadeIn direction="up" delay={0.6}>
-                {hero?.subheading ? (
-                  <p className="text-lg text-muted mb-2 leading-relaxed">
-                    {hero.subheading}
-                  </p>
-                ) : (
-                  <p className="text-lg text-muted mb-2 leading-relaxed">
-                    Cold-pressed, ingredient-dense, made weekly in Indiana.
-                  </p>
-                )}
-                <p className="text-lg font-semibold mb-8">
-                  Drink what your body recognizes.
-                </p>
-              </FadeIn>
-              <FadeIn direction="up" delay={0.8}>
-              <div className="flex gap-4">
-              {hero?.ctaPrimary ? (
-                <Link
-                  href={hero.ctaPrimary.target?.pageRef?.slug?.current
-                    ? `/${hero.ctaPrimary.target.pageRef.slug.current}`
-                    : hero.ctaPrimary.target?.externalUrl || '/blends'}
-                  className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  {hero.ctaPrimary.label}
-                </Link>
-              ) : (
-                <Link
-                  href="/blends"
-                  className="px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  Shop Weekly Batches
-                </Link>
-              )}
-              {hero?.ctaSecondary ? (
-                <Link
-                  href={hero.ctaSecondary.target?.pageRef?.slug?.current
-                    ? `/${hero.ctaSecondary.target.pageRef.slug.current}`
-                    : hero.ctaSecondary.target?.externalUrl || '#newsletter'}
-                  className="px-6 py-3 border-2 border-black text-black rounded-full font-semibold hover:bg-black hover:text-white transition-colors"
-                >
-                  {hero.ctaSecondary.label}
-                </Link>
-              ) : (
-                <Link
-                  href="#newsletter"
-                  className="px-6 py-3 border-2 border-black text-black rounded-full font-semibold hover:bg-black hover:text-white transition-colors"
-                >
-                  Join the List
-                </Link>
-              )}
-              </div>
-            </FadeIn>
-          </div>
-          {hero?.image && (
-            <FloatingElement yOffset={15} duration={4}>
-              <FadeIn direction="left" delay={0.4}>
-                <div className="relative h-96 md:h-full">
-                  <Image
-                    src={urlFor(hero.image).url()}
-                    alt="Long Life Juice"
-                    fill
-                    className="object-cover rounded-lg shadow-2xl"
-                    priority
-                  />
-                </div>
-              </FadeIn>
-            </FloatingElement>
-          )}
-        </div>
-      </Section>
-      </div>
 
       {/* Value Props */}
       {valueProps && valueProps.length > 0 && (
