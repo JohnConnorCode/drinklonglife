@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -19,7 +20,7 @@ async function getPosts() {
   try {
     return await client.fetch(postsQuery);
   } catch (error) {
-    console.error('Error fetching posts:', error);
+    logger.error('Error fetching posts:', error);
     return [];
   }
 }

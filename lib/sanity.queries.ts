@@ -440,3 +440,28 @@ export const stripeSettingsQuery = groq`*[_type == "stripeSettings"][0]{
   lastModified,
   modifiedBy
 }`;
+
+/**
+ * Get active upsell offers for a specific page
+ * @param page - The page to show offers on (e.g., 'thank_you', 'account', 'billing')
+ */
+export const upsellOffersQuery = groq`*[_type == "upsellOffer" && isActive == true && $page in showOnPages] | order(priority asc) {
+  _id,
+  title,
+  shortDescription,
+  offerType,
+  stripePriceId,
+  stripeProductId,
+  discountPercentage,
+  originalPrice,
+  salePrice,
+  "image": image {
+    "url": asset->url,
+    "alt": alt
+  },
+  ctaLabel,
+  eligibleTiers,
+  eligiblePlans,
+  limitedTimeOffer,
+  expiresAt
+}`;

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin';
 import { updateOrderStatus, OrderStatus } from '@/lib/admin/orders';
@@ -42,7 +43,7 @@ export async function PATCH(
       status,
     });
   } catch (error: any) {
-    console.error('Status update API error:', error);
+    logger.error('Status update API error:', error);
     return NextResponse.json(
       { success: false, error: error.message || 'Internal server error' },
       { status: 500 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import { client } from '@/lib/sanity.client';
 import { faqQuery, faqPageQuery } from '@/lib/sanity.queries';
@@ -11,7 +12,7 @@ async function getFAQs() {
   try {
     return await client.fetch(faqQuery);
   } catch (error) {
-    console.error('Error fetching FAQs:', error);
+    logger.error('Error fetching FAQs:', error);
     return [];
   }
 }
@@ -20,7 +21,7 @@ async function getFAQPage() {
   try {
     return await client.fetch(faqPageQuery);
   } catch (error) {
-    console.error('Error fetching FAQ page:', error);
+    logger.error('Error fetching FAQ page:', error);
     return null;
   }
 }

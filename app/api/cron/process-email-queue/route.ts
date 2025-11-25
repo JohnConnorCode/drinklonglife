@@ -1,16 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServiceRoleClient } from '@/lib/supabase/server';
-import { sendOrderConfirmationEmail, sendSubscriptionConfirmationEmail } from '@/lib/email/send';
 import { logger } from '@/lib/logger';
 
 /**
- * Email Queue Processor - Runs via Vercel Cron every 5 minutes
- * Processes unsent emails from the email_queue table
+ * @deprecated DEPRECATED - Old Email Queue Processor
  *
- * Security: Vercel Cron automatically adds Authorization header with CRON_SECRET
- * https://vercel.com/docs/cron-jobs/manage-cron-jobs#securing-cron-jobs
+ * This endpoint is DEPRECATED and no longer active.
+ *
+ * The new email system uses:
+ * - Database-driven templates in `email_template_versions` table
+ * - Supabase Edge Function: `supabase/functions/send-email`
+ * - Helper function: `lib/email/send-template.ts`
+ *
+ * See CLAUDE.md "Email System (Database-Driven Templates)" for documentation.
+ *
+ * This file is kept for reference only and will return a deprecation notice.
  */
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
+  logger.warn('Deprecated email queue endpoint called - this system is no longer active');
+
+  return NextResponse.json({
+    deprecated: true,
+    message: 'This endpoint is deprecated. The new email system uses Supabase Edge Functions.',
+    documentation: 'See CLAUDE.md "Email System (Database-Driven Templates)" section.',
+  }, { status: 410 }); // 410 Gone
+
+  // Original implementation preserved below for reference
+  /*
   try {
     // Verify this is called by Vercel Cron (in production)
     if (process.env.NODE_ENV === 'production') {
@@ -143,4 +158,5 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
   }
+  */
 }

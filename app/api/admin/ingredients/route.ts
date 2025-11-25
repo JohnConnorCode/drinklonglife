@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { ingredientSchema } from '@/lib/validations/ingredient';
@@ -51,7 +52,7 @@ export async function GET(_request: NextRequest) {
 
     return NextResponse.json({ ingredients: data });
   } catch (error: any) {
-    console.error('Error fetching ingredients:', error);
+    logger.error('Error fetching ingredients:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to fetch ingredients' },
       { status: 500 }
@@ -115,7 +116,7 @@ export async function POST(_request: NextRequest) {
 
     return NextResponse.json({ ingredient }, { status: 201 });
   } catch (error: any) {
-    console.error('Error creating ingredient:', error);
+    logger.error('Error creating ingredient:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to create ingredient' },
       { status: 500 }

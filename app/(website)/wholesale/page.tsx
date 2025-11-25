@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import { client } from '@/lib/sanity.client';
 import { wholesalePageQuery } from '@/lib/sanity.queries';
@@ -11,7 +12,7 @@ async function getWholesalePage() {
   try {
     return await client.fetch(wholesalePageQuery);
   } catch (error) {
-    console.error('Error fetching wholesale page:', error);
+    logger.error('Error fetching wholesale page:', error);
     return null;
   }
 }

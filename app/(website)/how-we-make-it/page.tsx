@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { client } from '@/lib/sanity.client';
@@ -13,7 +14,7 @@ async function getProcessPage() {
   try {
     return await client.fetch(processPageQuery);
   } catch (error) {
-    console.error('Error fetching process page:', error);
+    logger.error('Error fetching process page:', error);
     return null;
   }
 }

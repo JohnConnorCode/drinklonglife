@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,7 +15,7 @@ async function getAboutPage() {
   try {
     return await client.fetch(aboutPageQuery);
   } catch (error) {
-    console.error('Error fetching about page:', error);
+    logger.error('Error fetching about page:', error);
     return null;
   }
 }

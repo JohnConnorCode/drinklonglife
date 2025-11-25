@@ -114,6 +114,64 @@ export async function getAllProducts(): Promise<Product[]> {
 }
 
 /**
+ * Product with minimum price calculated from variants
+ */
+export interface ProductWithMinPrice extends Product {
+  min_price: number | null;
+}
+
+/**
+ * Get all products with their minimum variant price
+ * Used for pricing pages where we need to show "From $X"
+ */
+export async function getAllProductsWithMinPrice(): Promise<ProductWithMinPrice[]> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('products')
+    .select(
+      `
+      id,
+      name,
+      slug,
+      tagline,
+      image_url,
+      image_alt,
+      label_color,
+      function_list,
+      is_featured,
+      display_order,
+      product_variants(price_usd)
+    `
+    )
+    .eq('is_active', true)
+    .not('published_at', 'is', null)
+    .order('display_order', { ascending: true });
+
+  if (error) {
+    logger.error('Error fetching products with prices:', error);
+    return [];
+  }
+
+  // Calculate minimum price for each product
+  return (data || []).map((product: any) => {
+    const variants = product.product_variants || [];
+    const prices = variants
+      .map((v: { price_usd: number | null }) => v.price_usd)
+      .filter((p: number | null): p is number => p !== null && p > 0);
+
+    const minPrice = prices.length > 0 ? Math.min(...prices) : null;
+
+    // Remove variants from the returned object, just keep min_price
+    const { product_variants, ...productData } = product;
+    return {
+      ...productData,
+      min_price: minPrice,
+    } as ProductWithMinPrice;
+  });
+}
+
+/**
  * Get all products for static generation (no cookies, uses anon key)
  * Used in generateStaticParams where cookies() is not available
  */

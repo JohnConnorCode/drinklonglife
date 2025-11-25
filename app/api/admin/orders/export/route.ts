@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin';
 import { getOrders, OrderStatus, PaymentStatus } from '@/lib/admin/orders';
@@ -81,7 +82,7 @@ export async function GET(_request: NextRequest) {
       },
     });
   } catch (error: any) {
-    console.error('CSV export error:', error);
+    logger.error('CSV export error:', error);
     return NextResponse.json(
       { success: false, error: error.message || 'Export failed' },
       { status: 500 }

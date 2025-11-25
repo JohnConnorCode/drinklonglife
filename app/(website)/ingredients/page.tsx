@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,7 +16,7 @@ async function getIngredientsSourcingPage() {
   try {
     return await client.fetch(ingredientsSourcingPageQuery);
   } catch (error) {
-    console.error('Error fetching ingredients & sourcing page:', error);
+    logger.error('Error fetching ingredients & sourcing page:', error);
     return null;
   }
 }

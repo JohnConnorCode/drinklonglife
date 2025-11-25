@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { productsToCSV } from '@/lib/admin/csv-export';
@@ -51,7 +52,7 @@ export async function GET(_request: NextRequest) {
       },
     });
   } catch (error: any) {
-    console.error('Error exporting products:', error);
+    logger.error('Error exporting products:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to export products' },
       { status: 500 }

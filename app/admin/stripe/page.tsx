@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { requireAdminUser } from '@/lib/auth/admin';
@@ -24,7 +25,7 @@ export default async function AdminStripePage() {
   try {
     settings = await client.fetch(stripeSettingsQuery);
   } catch (error) {
-    console.error('Failed to fetch Stripe settings:', error);
+    logger.error('Failed to fetch Stripe settings:', error);
   }
 
   const lastModifiedDate = settings?.lastModified

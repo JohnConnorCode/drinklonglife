@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,7 +20,7 @@ async function getPage(slug: string) {
   try {
     return await client.fetch(pageQuery, { slug });
   } catch (error) {
-    console.error('Error fetching page:', error);
+    logger.error('Error fetching page:', error);
     return null;
   }
 }
@@ -28,7 +29,7 @@ async function getAllPagesForStaticGen() {
   try {
     return await client.fetch(pagesQuery);
   } catch (error) {
-    console.error('Error fetching pages:', error);
+    logger.error('Error fetching pages:', error);
     return [];
   }
 }

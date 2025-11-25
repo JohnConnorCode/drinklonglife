@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 /**
  * Send Email via Database-Driven Templates
  *
@@ -79,7 +80,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<SendEmailRes
     const result = await response.json();
 
     if (!response.ok) {
-      console.error('Email sending failed:', result);
+      logger.error('Email sending failed:', result);
       return {
         success: false,
         error: result.error || 'Unknown error',
@@ -93,7 +94,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<SendEmailRes
     };
 
   } catch (error) {
-    console.error('Email sending error:', error);
+    logger.error('Email sending error:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',

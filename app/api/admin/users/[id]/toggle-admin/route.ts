@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { isCurrentUserAdmin } from '@/lib/admin';
@@ -34,7 +35,7 @@ export async function POST(
       .single();
 
     if (error) {
-      console.error('Error updating admin status:', error);
+      logger.error('Error updating admin status:', error);
       return NextResponse.json(
         { error: 'Failed to update admin status: ' + error.message },
         { status: 500 }
@@ -43,7 +44,7 @@ export async function POST(
 
     return NextResponse.json({ success: true, profile });
   } catch (error: any) {
-    console.error('Error in POST /api/admin/users/[id]/toggle-admin:', error);
+    logger.error('Error in POST /api/admin/users/[id]/toggle-admin:', error);
     return NextResponse.json(
       { error: error.message || 'Internal server error' },
       { status: 500 }

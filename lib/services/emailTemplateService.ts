@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 /**
  * Email Template Service
  *
@@ -48,7 +49,7 @@ export async function getAllTemplates(): Promise<EmailTemplate[]> {
     .order('version_type', { ascending: true }); // draft before published
 
   if (error) {
-    console.error('Error fetching templates:', error);
+    logger.error('Error fetching templates:', error);
     throw new Error('Failed to fetch email templates');
   }
 
@@ -76,7 +77,7 @@ export async function getTemplate(
       // Not found
       return null;
     }
-    console.error('Error fetching template:', error);
+    logger.error('Error fetching template:', error);
     throw new Error('Failed to fetch email template');
   }
 
@@ -116,7 +117,7 @@ export async function saveTemplateDraft(
     .single();
 
   if (error) {
-    console.error('Error saving draft:', error);
+    logger.error('Error saving draft:', error);
     throw new Error('Failed to save draft');
   }
 
@@ -166,7 +167,7 @@ export async function publishTemplate(
     .single();
 
   if (error) {
-    console.error('Error publishing template:', error);
+    logger.error('Error publishing template:', error);
     throw new Error('Failed to publish template');
   }
 
@@ -196,7 +197,7 @@ export async function deleteTemplate(
     .eq('version_type', versionType);
 
   if (error) {
-    console.error('Error deleting template:', error);
+    logger.error('Error deleting template:', error);
     throw new Error('Failed to delete template');
   }
 }
@@ -215,7 +216,7 @@ export async function getTemplatesByCategory(category: string): Promise<EmailTem
     .order('template_name', { ascending: true });
 
   if (error) {
-    console.error('Error fetching templates by category:', error);
+    logger.error('Error fetching templates by category:', error);
     throw new Error('Failed to fetch templates by category');
   }
 
@@ -234,7 +235,7 @@ export async function getCategories(): Promise<string[]> {
     .not('category', 'is', null);
 
   if (error) {
-    console.error('Error fetching categories:', error);
+    logger.error('Error fetching categories:', error);
     throw new Error('Failed to fetch categories');
   }
 

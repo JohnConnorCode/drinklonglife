@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { client } from '@/lib/sanity.client';
@@ -11,7 +12,7 @@ async function getSubscriptionsPage() {
   try {
     return await client.fetch(subscriptionsPageQuery);
   } catch (error) {
-    console.error('Error fetching subscriptions page:', error);
+    logger.error('Error fetching subscriptions page:', error);
     return null;
   }
 }

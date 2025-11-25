@@ -6,6 +6,11 @@ import { completeReferral } from '@/lib/referral-utils';
 import { trackServerEvent } from '@/lib/analytics';
 import { logger } from '@/lib/logger';
 import { sendEmail } from '@/lib/email/send-template';
+import {
+  InvoiceWithSubscription,
+  getShippingDetails,
+  getSubscriptionPeriods,
+} from '@/lib/stripe/types';
 
 /**
  * Webhook Event Handlers
@@ -67,7 +72,7 @@ export async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Se
           planName: (product && 'name' in product) ? product.name : 'Subscription',
           planPrice: price?.unit_amount || 0,
           billingInterval: price?.recurring?.interval || 'month',
-          nextBillingDate: new Date((stripeSubscription as any).current_period_end * 1000).toLocaleDateString(),
+          nextBillingDate: new Date(getSubscriptionPeriods(stripeSubscription).currentPeriodEnd * 1000).toLocaleDateString(),
           currency: session.currency || 'usd',
         },
         userId,
@@ -124,13 +129,13 @@ export async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Se
         user_id: userId || null,
         metadata: session.metadata || {},
         fulfillment_status: 'pending',
-        shipping_name: (session as any).shipping_details?.name || session.customer_details?.name,
-        shipping_address_line1: (session as any).shipping_details?.address?.line1,
-        shipping_address_line2: (session as any).shipping_details?.address?.line2,
-        shipping_city: (session as any).shipping_details?.address?.city,
-        shipping_state: (session as any).shipping_details?.address?.state,
-        shipping_postal_code: (session as any).shipping_details?.address?.postal_code,
-        shipping_country: (session as any).shipping_details?.address?.country,
+        shipping_name: getShippingDetails(session)?.name || session.customer_details?.name,
+        shipping_address_line1: getShippingDetails(session)?.address?.line1,
+        shipping_address_line2: getShippingDetails(session)?.address?.line2,
+        shipping_city: getShippingDetails(session)?.address?.city,
+        shipping_state: getShippingDetails(session)?.address?.state,
+        shipping_postal_code: getShippingDetails(session)?.address?.postal_code,
+        shipping_country: getShippingDetails(session)?.address?.country,
       }, {
         onConflict: 'stripe_session_id',
       })
@@ -154,10 +159,12 @@ export async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Se
  */
 export async function handleSubscriptionChange(subscription: Stripe.Subscription) {
   const { id, customer, items, status, metadata } = subscription;
-  const current_period_start = (subscription as any).current_period_start;
-  const current_period_end = (subscription as any).current_period_end;
-  const cancel_at_period_end = (subscription as any).cancel_at_period_end;
-  const canceled_at = (subscription as any).canceled_at;
+  // Get subscription period properties using type-safe helper
+  const periods = getSubscriptionPeriods(subscription);
+  const current_period_start = periods.currentPeriodStart;
+  const current_period_end = periods.currentPeriodEnd;
+  const cancel_at_period_end = periods.cancelAtPeriodEnd;
+  const canceled_at = periods.canceledAt;
 
   if (typeof customer !== 'string') {
     logger.error('Invalid customer in subscription');
@@ -241,7 +248,8 @@ export async function handleSubscriptionDeleted(subscription: Stripe.Subscriptio
  * Handle successful invoice payment
  */
 export async function handleInvoicePaid(invoice: Stripe.Invoice) {
-  const subscription = (invoice as any).subscription;
+  const invoiceWithSub = invoice as InvoiceWithSubscription;
+  const subscription = invoiceWithSub.subscription;
 
   if (!subscription) {
     return; // Not a subscription invoice
@@ -256,7 +264,8 @@ export async function handleInvoicePaid(invoice: Stripe.Invoice) {
  * Handle failed invoice payment
  */
 export async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
-  const subscription = (invoice as any).subscription;
+  const invoiceWithSub = invoice as InvoiceWithSubscription;
+  const subscription = invoiceWithSub.subscription;
 
   if (!subscription) {
     return; // Not a subscription invoice

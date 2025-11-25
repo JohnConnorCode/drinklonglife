@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { ingredientsToCSV } from '@/lib/admin/csv-export';
@@ -51,7 +52,7 @@ export async function GET(_request: NextRequest) {
       },
     });
   } catch (error: any) {
-    console.error('Error exporting ingredients:', error);
+    logger.error('Error exporting ingredients:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to export ingredients' },
       { status: 500 }

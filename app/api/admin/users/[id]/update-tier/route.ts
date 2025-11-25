@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
 import { isCurrentUserAdmin } from '@/lib/admin';
@@ -40,7 +41,7 @@ export async function POST(
       .eq('id', params.id);
 
     if (error) {
-      console.error('Error updating tier:', error);
+      logger.error('Error updating tier:', error);
       return NextResponse.json(
         { error: 'Failed to update tier' },
         { status: 500 }
@@ -52,7 +53,7 @@ export async function POST(
       message: `Tier updated to ${tier}`,
     });
   } catch (error) {
-    console.error('Update tier error:', error);
+    logger.error('Update tier error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

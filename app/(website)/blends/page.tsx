@@ -4,21 +4,15 @@ import { getAllProducts } from '@/lib/supabase/queries/products';
 import { Section } from '@/components/Section';
 import { BlendsGrid } from '@/components/BlendsGrid';
 import { FadeIn } from '@/components/animations';
+import { client } from '@/lib/sanity.client';
+import { blendsPageQuery } from '@/lib/sanity.queries';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
-async function getBlends() {
-  try {
-    return await getAllProducts();
-  } catch (error) {
-    console.error('Error fetching blends:', error);
-    return [];
-  }
-}
-
-// Blends page settings - can be moved to database later
-const blendsPageSettings = {
+// Default settings as fallback
+const defaultBlendsPageSettings = {
   heading: 'Our Blends',
   subheading: 'Each blend is carefully crafted with cold-pressed organic ingredients to support your wellness journey.',
   seo: {
@@ -27,15 +21,38 @@ const blendsPageSettings = {
   },
 };
 
+async function getBlends() {
+  try {
+    return await getAllProducts();
+  } catch (error) {
+    logger.error('Error fetching blends:', error);
+    return [];
+  }
+}
+
+async function getBlendsPageSettings() {
+  try {
+    const settings = await client.fetch(blendsPageQuery);
+    return settings || defaultBlendsPageSettings;
+  } catch (error) {
+    logger.error('Error fetching blends page settings:', error);
+    return defaultBlendsPageSettings;
+  }
+}
+
 export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getBlendsPageSettings();
   return {
-    title: blendsPageSettings.seo.metaTitle,
-    description: blendsPageSettings.seo.metaDescription,
+    title: settings.seo?.metaTitle || defaultBlendsPageSettings.seo.metaTitle,
+    description: settings.seo?.metaDescription || defaultBlendsPageSettings.seo.metaDescription,
   };
 }
 
 export default async function BlendsPage() {
-  const blends = await getBlends();
+  const [blends, blendsPageSettings] = await Promise.all([
+    getBlends(),
+    getBlendsPageSettings(),
+  ]);
 
   return (
     <>
@@ -73,12 +90,12 @@ export default async function BlendsPage() {
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <FadeIn direction="up" delay={0.1}>
             <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight text-white">
-              {blendsPageSettings.heading}
+              {blendsPageSettings.heading || defaultBlendsPageSettings.heading}
             </h1>
           </FadeIn>
           <FadeIn direction="up" delay={0.2}>
             <p className="text-xl sm:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto">
-              {blendsPageSettings.subheading}
+              {blendsPageSettings.subheading || defaultBlendsPageSettings.subheading}
             </p>
           </FadeIn>
 

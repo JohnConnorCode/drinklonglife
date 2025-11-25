@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { ingredientSchema } from '@/lib/validations/ingredient';
@@ -45,7 +46,7 @@ export async function GET(
 
     return NextResponse.json({ ingredient: data });
   } catch (error: any) {
-    console.error('Error fetching ingredient:', error);
+    logger.error('Error fetching ingredient:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to fetch ingredient' },
       { status: 500 }
@@ -115,7 +116,7 @@ export async function PATCH(
 
     return NextResponse.json({ ingredient: updatedIngredient });
   } catch (error: any) {
-    console.error('Error updating ingredient:', error);
+    logger.error('Error updating ingredient:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to update ingredient' },
       { status: 500 }
@@ -181,7 +182,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error('Error deleting ingredient:', error);
+    logger.error('Error deleting ingredient:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to delete ingredient' },
       { status: 500 }

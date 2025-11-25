@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -72,7 +73,7 @@ async function getAvailablePerks(partnershipTier: string): Promise<PartnershipPe
 
     return perks || [];
   } catch (error) {
-    console.error('Error fetching partnership perks:', error);
+    logger.error('Error fetching partnership perks:', error);
     return [];
   }
 }
@@ -100,7 +101,7 @@ async function getActiveDiscounts(): Promise<UserDiscount[]> {
 
     return discounts || [];
   } catch (error) {
-    console.error('Error fetching user discounts:', error);
+    logger.error('Error fetching user discounts:', error);
     return [];
   }
 }

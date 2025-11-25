@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getAllProducts } from '@/lib/supabase/queries/products';
+import { getAllProductsWithMinPrice } from '@/lib/supabase/queries/products';
 import { Section } from '@/components/Section';
 import { FadeIn, StaggerContainer } from '@/components/animations';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PricingPage() {
-  const products = await getAllProducts();
+  const products = await getAllProductsWithMinPrice();
 
   return (
     <>
@@ -112,7 +112,9 @@ export default async function PricingPage() {
                         </div>
                       )}
                       <div className="flex items-center justify-between mt-6">
-                        <span className="text-sm text-gray-500">From $12.99</span>
+                        <span className="text-sm text-gray-500">
+                          {product.min_price ? `From $${product.min_price.toFixed(2)}` : 'View pricing'}
+                        </span>
                         <span className="inline-flex items-center gap-2 text-accent-primary font-semibold group-hover:gap-3 transition-all">
                           View Options
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

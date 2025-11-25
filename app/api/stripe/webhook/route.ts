@@ -7,6 +7,11 @@ import { completeReferral } from '@/lib/referral-utils';
 import { trackServerEvent } from '@/lib/analytics';
 import { logger } from '@/lib/logger';
 import { sendEmail } from '@/lib/email/send-template';
+import {
+  InvoiceWithSubscription,
+  getShippingDetails,
+  getSubscriptionPeriods,
+} from '@/lib/stripe/types';
 
 /**
  * Verify webhook signature against both test and production secrets.
@@ -204,7 +209,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
           planName: (product && 'name' in product) ? product.name : 'Subscription',
           planPrice: price?.unit_amount || 0,
           billingInterval: price?.recurring?.interval || 'month',
-          nextBillingDate: new Date((stripeSubscription as any).current_period_end * 1000).toLocaleDateString(),
+          nextBillingDate: new Date(getSubscriptionPeriods(stripeSubscription).currentPeriodEnd * 1000).toLocaleDateString(),
           currency: session.currency || 'usd',
         },
         userId,
@@ -239,13 +244,13 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
         metadata: session.metadata || {},
         fulfillment_status: 'pending', // Default fulfillment status
         // Capture shipping information from Stripe
-        shipping_name: (session as any).shipping_details?.name || session.customer_details?.name,
-        shipping_address_line1: (session as any).shipping_details?.address?.line1,
-        shipping_address_line2: (session as any).shipping_details?.address?.line2,
-        shipping_city: (session as any).shipping_details?.address?.city,
-        shipping_state: (session as any).shipping_details?.address?.state,
-        shipping_postal_code: (session as any).shipping_details?.address?.postal_code,
-        shipping_country: (session as any).shipping_details?.address?.country,
+        shipping_name: getShippingDetails(session)?.name || session.customer_details?.name,
+        shipping_address_line1: getShippingDetails(session)?.address?.line1,
+        shipping_address_line2: getShippingDetails(session)?.address?.line2,
+        shipping_city: getShippingDetails(session)?.address?.city,
+        shipping_state: getShippingDetails(session)?.address?.state,
+        shipping_postal_code: getShippingDetails(session)?.address?.postal_code,
+        shipping_country: getShippingDetails(session)?.address?.country,
       }, {
         onConflict: 'stripe_session_id',
         ignoreDuplicates: false, // Update if already exists
@@ -333,17 +338,12 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
  */
 async function handleSubscriptionChange(subscription: Stripe.Subscription) {
   const { id, customer, items, status, metadata } = subscription;
-  // Type assertion for subscription period properties (exist but may not be in TS types)
-  const sub = subscription as Stripe.Subscription & {
-    current_period_start: number;
-    current_period_end: number;
-    cancel_at_period_end: boolean;
-    canceled_at: number | null;
-  };
-  const current_period_start = sub.current_period_start;
-  const current_period_end = sub.current_period_end;
-  const cancel_at_period_end = sub.cancel_at_period_end;
-  const canceled_at = sub.canceled_at;
+  // Get subscription period properties using type-safe helper
+  const periods = getSubscriptionPeriods(subscription);
+  const current_period_start = periods.currentPeriodStart;
+  const current_period_end = periods.currentPeriodEnd;
+  const cancel_at_period_end = periods.cancelAtPeriodEnd;
+  const canceled_at = periods.canceledAt;
 
   if (typeof customer !== 'string') {
     logger.error('Invalid customer in subscription');
@@ -459,10 +459,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
  * Handle successful invoice payment
  */
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
-  // Type assertion for subscription property on invoice
-  const invoiceWithSub = invoice as Stripe.Invoice & {
-    subscription?: string | Stripe.Subscription | null;
-  };
+  // Use type-safe invoice with subscription
+  const invoiceWithSub = invoice as InvoiceWithSubscription;
   const subscription = invoiceWithSub.subscription;
 
   if (!subscription) {
@@ -478,10 +476,8 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
  * Handle failed invoice payment
  */
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
-  // Type assertion for subscription property on invoice
-  const invoiceWithSub = invoice as Stripe.Invoice & {
-    subscription?: string | Stripe.Subscription | null;
-  };
+  // Use type-safe invoice with subscription
+  const invoiceWithSub = invoice as InvoiceWithSubscription;
   const subscription = invoiceWithSub.subscription;
 
   if (!subscription) {

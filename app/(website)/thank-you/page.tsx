@@ -5,6 +5,9 @@ import { getActiveUser } from '@/lib/user-utils';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { UpsellGrid } from '@/components/upsells/UpsellCard';
 import { trackServerEvent } from '@/lib/analytics';
+import { client } from '@/lib/sanity.client';
+import { upsellOffersQuery } from '@/lib/sanity.queries';
+import { logger } from '@/lib/logger';
 
 export const metadata: Metadata = {
   title: 'Thank You! | Long Life',
@@ -214,6 +217,27 @@ export default async function ThankYouPage({ searchParams }: ThankYouPageProps) 
   );
 }
 
+// Default upsell offers as fallback when Sanity has no content
+const defaultUpsellOffers = [
+  {
+    _id: 'tier-upgrade-partner',
+    title: 'Upgrade to Partner Tier - Save 20%',
+    shortDescription:
+      'Get exclusive partner perks, priority support, and 20% off all future orders.',
+    offerType: 'tier_upgrade',
+    stripePriceId: 'price_partner_tier_upgrade',
+    originalPrice: 99,
+    salePrice: 79,
+    ctaLabel: 'Upgrade Now',
+    limitedTimeOffer: true,
+    eligibleTiers: ['none', 'affiliate'],
+    image: {
+      url: '/images/partner-tier.jpg',
+      alt: 'Partner Tier Benefits',
+    },
+  },
+];
+
 /**
  * Get relevant upsell offers based on user's tier and purchase
  *
@@ -221,36 +245,45 @@ export default async function ThankYouPage({ searchParams }: ThankYouPageProps) 
  * @param purchasedPlan - Plan they just purchased
  * @returns Array of upsell offers
  */
-async function getUpsellOffers(tier: string, _purchasedPlan?: string): Promise<any[]> {
-  // TODO: Fetch from Sanity
-  // For now, return mock data
+async function getUpsellOffers(tier: string, purchasedPlan?: string): Promise<any[]> {
+  try {
+    // Fetch upsell offers from Sanity for the thank you page
+    const sanityOffers = await client.fetch(upsellOffersQuery, { page: 'thank_you' });
 
-  const mockOffers = [
-    {
-      id: 'tier-upgrade-partner',
-      title: 'Upgrade to Partner Tier - Save 20%',
-      shortDescription:
-        'Get exclusive partner perks, priority support, and 20% off all future orders.',
-      offerType: 'tier_upgrade',
-      stripePriceId: 'price_partner_tier_upgrade',
-      originalPrice: 9900, // $99
-      salePrice: 7900, // $79
-      ctaLabel: 'Upgrade Now',
-      limitedTimeOffer: true,
-      image: {
-        url: '/images/partner-tier.jpg',
-        alt: 'Partner Tier Benefits',
-      },
-    },
-  ];
+    // Use Sanity offers if available, otherwise fall back to defaults
+    const offers = sanityOffers && sanityOffers.length > 0 ? sanityOffers : defaultUpsellOffers;
 
-  // Filter based on tier and plan
-  return mockOffers.filter((offer) => {
-    // Don't show tier upgrades to VIP users
-    if (tier === 'vip' && offer.offerType === 'tier_upgrade') {
-      return false;
-    }
+    // Filter based on tier and plan eligibility
+    return offers.filter((offer: any) => {
+      // Check tier eligibility (if specified)
+      if (offer.eligibleTiers && offer.eligibleTiers.length > 0) {
+        if (!offer.eligibleTiers.includes(tier)) {
+          return false;
+        }
+      }
 
-    return true;
-  });
+      // Check plan eligibility (if specified)
+      if (offer.eligiblePlans && offer.eligiblePlans.length > 0 && purchasedPlan) {
+        if (!offer.eligiblePlans.includes(purchasedPlan)) {
+          return false;
+        }
+      }
+
+      // Check expiration
+      if (offer.expiresAt && new Date(offer.expiresAt) < new Date()) {
+        return false;
+      }
+
+      return true;
+    });
+  } catch (error) {
+    logger.error('Error fetching upsell offers:', error);
+    // Return filtered defaults on error
+    return defaultUpsellOffers.filter((offer) => {
+      if (offer.eligibleTiers && !offer.eligibleTiers.includes(tier)) {
+        return false;
+      }
+      return true;
+    });
+  }
 }

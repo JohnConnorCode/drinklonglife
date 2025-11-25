@@ -8,6 +8,7 @@
  */
 
 import { revalidatePath } from 'next/cache';
+import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/server';
 import {
   getAllTemplates,
@@ -57,7 +58,7 @@ export async function getEmailTemplates() {
     const templates = await getAllTemplates();
     return { success: true, data: templates };
   } catch (error) {
-    console.error('Error fetching templates:', error);
+    logger.error('Error fetching templates:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to fetch templates',
@@ -75,7 +76,7 @@ export async function getEmailTemplate(templateName: string, versionType: 'draft
     const template = await getTemplate(templateName, versionType);
     return { success: true, data: template };
   } catch (error) {
-    console.error('Error fetching template:', error);
+    logger.error('Error fetching template:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to fetch template',
@@ -94,7 +95,7 @@ export async function saveEmailTemplateDraft(input: CreateTemplateInput) {
     revalidatePath('/admin/email-templates');
     return { success: true, data: template };
   } catch (error) {
-    console.error('Error saving draft:', error);
+    logger.error('Error saving draft:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to save draft',
@@ -113,7 +114,7 @@ export async function publishEmailTemplate(templateName: string) {
     revalidatePath('/admin/email-templates');
     return { success: true, data: template };
   } catch (error) {
-    console.error('Error publishing template:', error);
+    logger.error('Error publishing template:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to publish template',
@@ -132,7 +133,7 @@ export async function deleteEmailTemplate(templateName: string, versionType: 'dr
     revalidatePath('/admin/email-templates');
     return { success: true };
   } catch (error) {
-    console.error('Error deleting template:', error);
+    logger.error('Error deleting template:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to delete template',
@@ -150,7 +151,7 @@ export async function getEmailTemplateCategories() {
     const categories = await getCategories();
     return { success: true, data: categories };
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    logger.error('Error fetching categories:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to fetch categories',
@@ -183,7 +184,7 @@ export async function sendTestEmail(
       data: { id: result.id, notificationId: result.notificationId },
     };
   } catch (error) {
-    console.error('Error sending test email:', error);
+    logger.error('Error sending test email:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to send test email',

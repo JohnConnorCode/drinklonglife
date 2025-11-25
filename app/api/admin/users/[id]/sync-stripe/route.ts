@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
 import { isCurrentUserAdmin } from '@/lib/admin';
@@ -83,7 +84,7 @@ export async function POST(
       .eq('id', params.id);
 
     if (updateError) {
-      console.error('Error updating profile:', updateError);
+      logger.error('Error updating profile:', updateError);
       return NextResponse.json(
         { error: 'Failed to update profile' },
         { status: 500 }
@@ -100,7 +101,7 @@ export async function POST(
       },
     });
   } catch (error) {
-    console.error('Sync Stripe error:', error);
+    logger.error('Sync Stripe error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
