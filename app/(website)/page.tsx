@@ -96,8 +96,10 @@ export default async function Home() {
     },
   ];
 
-  // Use Sanity heroSlides if available, otherwise fall back to defaults
-  const slides = heroSlides && heroSlides.length > 0 ? heroSlides : defaultSlides;
+  // Use Sanity heroSlides if available AND they have valid images, otherwise fall back to defaults
+  const hasValidSanitySlides = heroSlides && heroSlides.length > 0 &&
+    heroSlides.some((slide: any) => slide.desktopImage || slide.mobileImage || slide.image);
+  const slides = hasValidSanitySlides ? heroSlides : defaultSlides;
 
   return (
     <>
