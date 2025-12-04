@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FadeIn } from '@/components/animations';
 
 interface MoodCard {
   mood: string;
@@ -54,12 +55,12 @@ export function MoodGrid() {
     <section className="bg-black pb-20 md:pb-28">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-          {moods.map((mood) => (
-            <Link
-              key={mood.mood}
-              href={`/blends/${mood.slug}`}
-              className={`group relative block rounded-xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm ${mood.borderColor} transition-all duration-500 hover:bg-white/[0.04]`}
-            >
+          {moods.map((mood, idx) => (
+            <FadeIn key={mood.mood} direction="up" delay={0.5 + idx * 0.1} duration={0.7}>
+              <Link
+                href={`/blends/${mood.slug}`}
+                className={`group relative block rounded-xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm ${mood.borderColor} transition-all duration-500 hover:bg-white/[0.04]`}
+              >
               {/* Accent line at top */}
               <div
                 className="absolute top-0 left-6 right-6 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -130,6 +131,7 @@ export function MoodGrid() {
                 </div>
               </div>
             </Link>
+            </FadeIn>
           ))}
         </div>
       </div>
