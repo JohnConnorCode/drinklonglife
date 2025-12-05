@@ -1,12 +1,10 @@
 import { Metadata } from 'next';
-import { logger } from '@/lib/logger';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { EmptyState } from '@/components/ui/EmptyState';
 import { Suspense } from 'react';
 import { requireAdmin } from '@/lib/admin';
 import { FadeIn } from '@/components/animations';
-import { Mail } from 'lucide-react';
+import { NewsletterManager } from './NewsletterManager';
 
 export const metadata: Metadata = {
   title: 'Newsletter Subscribers | Admin',
@@ -44,17 +42,16 @@ async function NewsletterStats() {
   );
 }
 
-async function SubscriberList() {
+async function SubscriberContent() {
   const supabase = createServiceRoleClient();
 
   const { data: subscribers, error } = await supabase
     .from('newsletter_subscribers')
     .select('*')
     .order('created_at', { ascending: false })
-    .limit(100);
+    .limit(500);
 
   if (error) {
-    logger.error('Error loading subscribers:', error);
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <p className="text-red-600 font-semibold mb-2">Failed to load subscribers</p>
@@ -63,109 +60,58 @@ async function SubscriberList() {
     );
   }
 
-  if (!subscribers || subscribers.length === 0) {
-    return (
-      <EmptyState
-        icon={Mail}
-        title="No subscribers yet"
-        description="Newsletter subscribers will appear here"
-      />
-    );
-  }
-
-  return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">All Subscribers ({subscribers.length})</h3>
-        <a
-          href="/api/admin/newsletter/export"
-          className="px-4 py-2 bg-accent-primary text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
-        >
-          Export CSV
-        </a>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Source
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Subscribed
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Unsubscribed
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {subscribers.map((subscriber) => (
-              <tr key={subscriber.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    {subscriber.email}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`
-                    px-2 py-1 text-xs font-semibold rounded-full
-                    ${subscriber.subscribed ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}
-                  `}>
-                    {subscriber.subscribed ? 'Active' : 'Unsubscribed'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-600 capitalize">
-                    {subscriber.source || 'Unknown'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-500">
-                    {subscriber.subscribed_at ? new Date(subscriber.subscribed_at).toLocaleDateString() : '-'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-500">
-                    {subscriber.unsubscribed_at ? new Date(subscriber.unsubscribed_at).toLocaleDateString() : '-'}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+  return <NewsletterManager initialSubscribers={subscribers || []} />;
 }
+
+export const dynamic = 'force-dynamic';
 
 export default async function NewsletterPage() {
   await requireAdmin();
 
   return (
-    <FadeIn>
-      <div className="mb-8">
-        <h1 className="text-3xl font-heading font-bold text-gray-900 mb-2">
-          Newsletter Subscribers
-        </h1>
-        <p className="text-gray-600">
-          Manage your email newsletter subscriber list
-        </p>
-      </div>
+    <div className="space-y-6">
+      <FadeIn direction="up" delay={0.05}>
+        <div>
+          <h1 className="text-3xl font-heading font-bold text-gray-900 mb-2">
+            Newsletter Subscribers
+          </h1>
+          <p className="text-gray-600">
+            Manage your email newsletter subscriber list
+          </p>
+        </div>
+      </FadeIn>
 
-      <Suspense fallback={<LoadingSkeleton variant="stat" lines={3} />}>
-        <NewsletterStats />
-      </Suspense>
+      <FadeIn direction="up" delay={0.1}>
+        <Suspense fallback={<LoadingSkeleton variant="stat" lines={3} />}>
+          <NewsletterStats />
+        </Suspense>
+      </FadeIn>
 
-      <Suspense fallback={<LoadingSkeleton variant="table" lines={5} />}>
-        <SubscriberList />
-      </Suspense>
-    </FadeIn>
+      {/* Bulk Actions Guide */}
+      <FadeIn direction="up" delay={0.15}>
+        <details className="bg-blue-50 rounded-xl border border-blue-200">
+          <summary className="px-4 py-3 cursor-pointer text-sm font-medium text-blue-700 hover:bg-blue-100 rounded-xl transition-colors">
+            Bulk Actions Guide
+          </summary>
+          <div className="px-4 pb-4 pt-2 border-t border-blue-200">
+            <div className="space-y-2 text-sm text-blue-800">
+              <p><strong>Available Actions:</strong></p>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li><strong>Export CSV</strong> — Download selected subscribers as spreadsheet</li>
+                <li><strong>Resubscribe</strong> — Re-activate unsubscribed emails</li>
+                <li><strong>Unsubscribe</strong> — Mark emails as unsubscribed</li>
+                <li><strong>Delete</strong> — Permanently remove subscribers from database</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+      </FadeIn>
+
+      <FadeIn direction="up" delay={0.2}>
+        <Suspense fallback={<LoadingSkeleton variant="table" lines={5} />}>
+          <SubscriberContent />
+        </Suspense>
+      </FadeIn>
+    </div>
   );
 }

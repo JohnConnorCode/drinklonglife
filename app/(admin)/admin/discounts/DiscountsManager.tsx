@@ -1,16 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import { Download, Power, PowerOff, Trash2 } from 'lucide-react';
+import { BulkActionsBar, SelectCheckbox, SelectAllCheckbox, BulkAction } from '@/components/admin/BulkActionsBar';
 import type { Discount } from './page';
 
 export function DiscountsManager({ initialDiscounts }: { initialDiscounts: Discount[] }) {
   const router = useRouter();
   const [discounts, setDiscounts] = useState(initialDiscounts);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [actionId, setActionId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'expired'>('all');
 
   // Form state
   const [code, setCode] = useState('');
@@ -25,6 +29,136 @@ export function DiscountsManager({ initialDiscounts }: { initialDiscounts: Disco
   const [maxRedemptions, setMaxRedemptions] = useState('');
   const [startsAt, setStartsAt] = useState('');
   const [expiresAt, setExpiresAt] = useState('');
+
+  // Filter discounts based on status
+  const filteredDiscounts = useMemo(() => {
+    return discounts.filter((d) => {
+      if (statusFilter === 'all') return true;
+      const isExpired = d.expires_at && new Date(d.expires_at) < new Date();
+      if (statusFilter === 'active') return d.is_active && !isExpired;
+      if (statusFilter === 'inactive') return !d.is_active;
+      if (statusFilter === 'expired') return isExpired;
+      return true;
+    });
+  }, [discounts, statusFilter]);
+
+  const allSelected = filteredDiscounts.length > 0 && selectedIds.size === filteredDiscounts.length;
+  const someSelected = selectedIds.size > 0 && selectedIds.size < filteredDiscounts.length;
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(new Set(filteredDiscounts.map(d => d.id)));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const handleSelectOne = (id: string, checked: boolean) => {
+    const newSelected = new Set(selectedIds);
+    if (checked) {
+      newSelected.add(id);
+    } else {
+      newSelected.delete(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const bulkActions: BulkAction[] = [
+    {
+      id: 'export',
+      label: 'Export CSV',
+      icon: <Download className="w-4 h-4" />,
+    },
+    {
+      id: 'enable',
+      label: 'Enable',
+      icon: <Power className="w-4 h-4" />,
+      variant: 'success',
+    },
+    {
+      id: 'disable',
+      label: 'Disable',
+      icon: <PowerOff className="w-4 h-4" />,
+      variant: 'warning',
+    },
+    {
+      id: 'delete',
+      label: 'Delete',
+      icon: <Trash2 className="w-4 h-4" />,
+      variant: 'danger',
+      requiresConfirmation: true,
+      confirmationMessage: `This will permanently delete ${selectedIds.size} discount code(s). This cannot be undone.`,
+    },
+  ];
+
+  const handleBulkAction = async (actionId: string) => {
+    const ids = Array.from(selectedIds);
+
+    if (actionId === 'export') {
+      const selectedDiscounts = discounts.filter(d => selectedIds.has(d.id));
+      const csv = [
+        ['Code', 'Name', 'Type', 'Value', 'Min Order', 'Max Uses', 'Used', 'First-Time Only', 'Active', 'Expires'].join(','),
+        ...selectedDiscounts.map(d => [
+          d.code,
+          d.name || '',
+          d.discount_type,
+          d.discount_type === 'percent' ? `${d.discount_percent}%` : `$${(d.discount_amount_cents || 0) / 100}`,
+          d.min_amount_cents ? `$${d.min_amount_cents / 100}` : '',
+          d.max_redemptions || 'Unlimited',
+          d.times_redeemed,
+          d.first_time_only ? 'Yes' : 'No',
+          d.is_active ? 'Yes' : 'No',
+          d.expires_at ? new Date(d.expires_at).toLocaleDateString() : 'Never',
+        ].map(v => `"${v}"`).join(','))
+      ].join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `discounts-export-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      return;
+    }
+
+    if (actionId === 'delete') {
+      const res = await fetch('/api/admin/discounts/bulk', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to delete discounts');
+      }
+
+      setDiscounts(prev => prev.filter(d => !selectedIds.has(d.id)));
+      setSelectedIds(new Set());
+      router.refresh();
+      return;
+    }
+
+    if (actionId === 'enable' || actionId === 'disable') {
+      const res = await fetch('/api/admin/discounts/bulk', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids, updates: { is_active: actionId === 'enable' } }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to update discounts');
+      }
+
+      setDiscounts(prev => prev.map(d =>
+        selectedIds.has(d.id) ? { ...d, is_active: actionId === 'enable' } : d
+      ));
+      setSelectedIds(new Set());
+      router.refresh();
+    }
+  };
 
   const resetForm = () => {
     setCode('');
@@ -351,11 +485,62 @@ export function DiscountsManager({ initialDiscounts }: { initialDiscounts: Disco
         )}
       </div>
 
+      {/* Filter Bar */}
+      <div className="bg-white rounded-lg shadow p-4 flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-gray-700">Status:</span>
+          <select
+            value={statusFilter}
+            onChange={(e) => { setStatusFilter(e.target.value as typeof statusFilter); setSelectedIds(new Set()); }}
+            className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">All ({discounts.length})</option>
+            <option value="active">Active ({discounts.filter(d => d.is_active && (!d.expires_at || new Date(d.expires_at) >= new Date())).length})</option>
+            <option value="inactive">Inactive ({discounts.filter(d => !d.is_active).length})</option>
+            <option value="expired">Expired ({discounts.filter(d => d.expires_at && new Date(d.expires_at) < new Date()).length})</option>
+          </select>
+        </div>
+
+        <div className="h-6 w-px bg-gray-200" />
+
+        {/* Quick Select Buttons */}
+        <button
+          onClick={() => {
+            const inactive = discounts.filter(d => !d.is_active).map(d => d.id);
+            setSelectedIds(new Set(inactive));
+          }}
+          className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          Select Inactive
+        </button>
+
+        <button
+          onClick={() => {
+            const expired = discounts.filter(d => d.expires_at && new Date(d.expires_at) < new Date()).map(d => d.id);
+            setSelectedIds(new Set(expired));
+          }}
+          className="px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+        >
+          Select Expired
+        </button>
+
+        <div className="ml-auto text-sm text-gray-500">
+          {filteredDiscounts.length} codes shown
+        </div>
+      </div>
+
       {/* Codes List */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
+              <th className="px-4 py-3 text-left">
+                <SelectAllCheckbox
+                  checked={allSelected}
+                  indeterminate={someSelected}
+                  onChange={handleSelectAll}
+                />
+              </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Discount</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Restrictions</th>
@@ -365,14 +550,14 @@ export function DiscountsManager({ initialDiscounts }: { initialDiscounts: Disco
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {discounts.length === 0 ? (
+            {filteredDiscounts.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
-                  No discount codes yet. Create one above.
+                <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
+                  {discounts.length === 0 ? 'No discount codes yet. Create one above.' : 'No codes match your filter.'}
                 </td>
               </tr>
             ) : (
-              discounts.map((d) => {
+              filteredDiscounts.map((d) => {
                 const status = getStatus(d);
                 const statusColors: Record<string, string> = {
                   green: 'bg-green-100 text-green-700',
@@ -383,7 +568,13 @@ export function DiscountsManager({ initialDiscounts }: { initialDiscounts: Disco
                 };
 
                 return (
-                  <tr key={d.id} className={`hover:bg-gray-50 ${!d.is_active ? 'opacity-60' : ''}`}>
+                  <tr key={d.id} className={`hover:bg-gray-50 transition-colors ${selectedIds.has(d.id) ? 'bg-blue-50' : ''} ${!d.is_active ? 'opacity-60' : ''}`}>
+                    <td className="px-4 py-3">
+                      <SelectCheckbox
+                        checked={selectedIds.has(d.id)}
+                        onChange={(checked) => handleSelectOne(d.id, checked)}
+                      />
+                    </td>
                     <td className="px-4 py-3">
                       <div>
                         <span className="font-mono font-bold text-gray-900">{d.code}</span>
@@ -445,6 +636,18 @@ export function DiscountsManager({ initialDiscounts }: { initialDiscounts: Disco
           <li>Full control over pricing and discount logic in your application</li>
         </ul>
       </div>
+
+      {/* Bulk Actions Bar */}
+      <BulkActionsBar
+        selectedCount={selectedIds.size}
+        totalCount={filteredDiscounts.length}
+        onSelectAll={() => handleSelectAll(true)}
+        onDeselectAll={() => setSelectedIds(new Set())}
+        allSelected={allSelected}
+        actions={bulkActions}
+        onAction={handleBulkAction}
+        entityName="discount codes"
+      />
     </div>
   );
 }

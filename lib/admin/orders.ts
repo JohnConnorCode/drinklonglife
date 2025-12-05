@@ -9,8 +9,8 @@ import { getStripeClient } from '@/lib/stripe/config';
 import { logger } from '@/lib/logger';
 
 // Order status type based on database schema
-export type OrderStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
-export type PaymentStatus = 'pending' | 'succeeded' | 'failed' | 'refunded';
+export type OrderStatus = 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'completed' | 'failed' | 'refunded';
+export type PaymentStatus = 'unpaid' | 'paid' | 'pending' | 'succeeded' | 'failed' | 'refunded' | 'partial_refund';
 
 export interface Order {
   id: string;

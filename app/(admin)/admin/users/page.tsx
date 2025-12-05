@@ -1,136 +1,14 @@
 import { Metadata } from 'next';
-import { logger } from '@/lib/logger';
 import Link from 'next/link';
 import { createServiceRoleClient } from '@/lib/supabase/server';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { EmptyState } from '@/components/ui/EmptyState';
-import { Suspense } from 'react';
 import { requireAdmin } from '@/lib/admin';
 import { FadeIn } from '@/components/animations';
-import { Users } from 'lucide-react';
+import { UsersManager } from './UsersManager';
 
 export const metadata: Metadata = {
   title: 'User Management | Admin',
   description: 'Manage user accounts and permissions',
 };
-
-async function UserList({ searchQuery }: { searchQuery?: string }) {
-  const supabase = createServiceRoleClient();
-
-  let query = supabase
-    .from('profiles')
-    .select('id, email, full_name, partnership_tier, subscription_status, current_plan, stripe_customer_id, created_at')
-    .order('created_at', { ascending: false })
-    .limit(50);
-
-  if (searchQuery) {
-    query = query.or(`email.ilike.%${searchQuery}%,full_name.ilike.%${searchQuery}%`);
-  }
-
-  const { data: users, error } = await query;
-
-  if (error) {
-    logger.error('Error loading users:', error);
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-600 font-semibold mb-2">Failed to load users</p>
-        <p className="text-sm text-red-500">{error.message}</p>
-        <details className="mt-2">
-          <summary className="text-xs text-red-400 cursor-pointer">Error details</summary>
-          <pre className="text-xs text-red-400 mt-2 overflow-auto">{JSON.stringify(error, null, 2)}</pre>
-        </details>
-      </div>
-    );
-  }
-
-  if (!users || users.length === 0) {
-    return (
-      <EmptyState
-        icon={Users}
-        title="No users found"
-        description={searchQuery ? `No users match "${searchQuery}"` : 'No users in the system yet'}
-      />
-    );
-  }
-
-  return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              User
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Tier
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Status
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Stripe
-            </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {users.map((user) => (
-            <tr key={user.id} className="hover:bg-gray-50">
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {user.full_name || 'No name'}
-                  </p>
-                  <p className="text-sm text-gray-500">{user.email}</p>
-                </div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`
-                  px-2 py-1 text-xs font-semibold rounded-full
-                  ${user.partnership_tier === 'vip' ? 'bg-purple-100 text-purple-800' :
-                    user.partnership_tier === 'partner' ? 'bg-blue-100 text-blue-800' :
-                    user.partnership_tier === 'affiliate' ? 'bg-green-100 text-green-800' :
-                    'bg-gray-100 text-gray-800'}
-                `}>
-                  {user.partnership_tier === 'none' ? 'Standard' : user.partnership_tier || 'None'}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`
-                  px-2 py-1 text-xs font-semibold rounded-full capitalize
-                  ${user.subscription_status === 'active' ? 'bg-green-100 text-green-800' :
-                    user.subscription_status === 'trialing' ? 'bg-blue-100 text-blue-800' :
-                    user.subscription_status === 'past_due' ? 'bg-yellow-100 text-yellow-800' :
-                    user.subscription_status === 'canceled' ? 'bg-red-100 text-red-800' :
-                    'bg-gray-100 text-gray-800'}
-                `}>
-                  {user.subscription_status || 'none'}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {user.stripe_customer_id ? (
-                  <span className="text-green-600">✓ Connected</span>
-                ) : (
-                  <span className="text-gray-400">Not connected</span>
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <Link
-                  href={`/admin/users/${user.id}`}
-                  className="text-blue-600 hover:text-blue-900"
-                >
-                  Manage →
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
 
 export const dynamic = 'force-dynamic';
 
@@ -140,6 +18,38 @@ export default async function UsersPage({
   searchParams: { search?: string };
 }) {
   await requireAdmin();
+
+  const supabase = createServiceRoleClient();
+
+  let query = supabase
+    .from('profiles')
+    .select('id, email, full_name, partnership_tier, subscription_status, current_plan, stripe_customer_id, created_at, is_admin')
+    .order('created_at', { ascending: false })
+    .limit(500); // Increased limit for bulk operations
+
+  if (searchParams.search) {
+    query = query.or(`email.ilike.%${searchParams.search}%,full_name.ilike.%${searchParams.search}%`);
+  }
+
+  const { data: users, error } = await query;
+
+  if (error) {
+    return (
+      <div className="p-8">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-600 font-semibold mb-2">Failed to load users</p>
+          <p className="text-sm text-red-500">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const testUserCount = (users || []).filter(u =>
+    u.email?.includes('test') ||
+    u.email?.includes('example') ||
+    u.email?.includes('+') ||
+    u.full_name?.toLowerCase().includes('test')
+  ).length;
 
   return (
     <div className="space-y-6">
@@ -151,7 +61,7 @@ export default async function UsersPage({
               User Management
             </h1>
             <p className="text-gray-600">
-              Search, view, and manage user accounts
+              Manage {users?.length || 0} users • {testUserCount} test users detected
             </p>
           </div>
         </div>
@@ -161,36 +71,58 @@ export default async function UsersPage({
       <FadeIn direction="up" delay={0.1}>
         <div className="bg-white rounded-lg shadow p-4">
           <form action="/admin/users" method="get" className="flex gap-4">
-          <input
-            type="text"
-            name="search"
-            defaultValue={searchParams.search}
-            placeholder="Search by email or name..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <button
-            type="submit"
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-          >
-            Search
-          </button>
-          {searchParams.search && (
-            <Link
-              href="/admin/users"
-              className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+            <input
+              type="text"
+              name="search"
+              defaultValue={searchParams.search}
+              placeholder="Search by email or name..."
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <button
+              type="submit"
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
-              Clear
-            </Link>
-          )}
+              Search
+            </button>
+            {searchParams.search && (
+              <Link
+                href="/admin/users"
+                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+              >
+                Clear
+              </Link>
+            )}
           </form>
         </div>
       </FadeIn>
 
-      {/* User List */}
+      {/* How Bulk Actions Work */}
+      <FadeIn direction="up" delay={0.12}>
+        <details className="bg-blue-50 rounded-xl border border-blue-200">
+          <summary className="px-4 py-3 cursor-pointer text-sm font-medium text-blue-800 hover:bg-blue-100 rounded-xl transition-colors">
+            How to use Bulk Actions
+          </summary>
+          <div className="px-4 pb-4 pt-2 border-t border-blue-200 text-sm text-blue-700">
+            <ol className="list-decimal list-inside space-y-1">
+              <li>Use <strong>Filter</strong> to show only Test Users or Real Users</li>
+              <li>Click <strong>&quot;Select All Test Users&quot;</strong> to quickly select test accounts</li>
+              <li>Or use checkboxes to manually select users</li>
+              <li>A floating action bar appears at the bottom with bulk actions</li>
+              <li>Actions: <strong>Delete</strong>, <strong>Set Tier</strong>, <strong>Export CSV</strong></li>
+            </ol>
+            <p className="mt-2 text-blue-600">
+              <strong>Safety:</strong> Admin users cannot be deleted. Max 100 users per bulk delete.
+            </p>
+          </div>
+        </details>
+      </FadeIn>
+
+      {/* User Manager */}
       <FadeIn direction="up" delay={0.15}>
-        <Suspense fallback={<LoadingSkeleton variant="table" lines={10} />}>
-          <UserList searchQuery={searchParams.search} />
-        </Suspense>
+        <UsersManager
+          initialUsers={users || []}
+          searchQuery={searchParams.search}
+        />
       </FadeIn>
     </div>
   );

@@ -1,4 +1,5 @@
-import { createServerClient } from '@/lib/supabase/server';
+import { createServerClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { NextRequest } from 'next/server';
 
 /**
  * Check if the current user is an admin
@@ -107,5 +108,29 @@ export async function getAdminStats() {
       activeSubscriptions: 0,
       tierCounts: {},
     };
+  }
+}
+
+/**
+ * Require admin access in API routes
+ * Use this at the start of API route handlers
+ */
+export async function requireAdminApi(_request?: NextRequest): Promise<void> {
+  const supabase = createServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('Authentication required');
+  }
+
+  const serviceClient = createServiceRoleClient();
+  const { data: profile } = await serviceClient
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', user.id)
+    .single();
+
+  if (!profile?.is_admin) {
+    throw new Error('Admin access required');
   }
 }
