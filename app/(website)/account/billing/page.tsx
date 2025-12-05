@@ -100,12 +100,6 @@ export default async function BillingPage() {
             >
               Billing & Invoices
             </Link>
-            <Link
-              href="/account/perks"
-              className="px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 rounded-lg font-semibold whitespace-nowrap transition-colors"
-            >
-              Perks & Rewards
-            </Link>
           </div>
         </FadeIn>
 
@@ -293,7 +287,7 @@ export default async function BillingPage() {
         <FadeIn direction="up" delay={0.5}>
           <AccountUpsellSection
             userId={user.id}
-            userTier={profile.partnership_tier || 'none'}
+            userTier="none"
             page="billing"
             currentPlan={profile.current_plan}
           />

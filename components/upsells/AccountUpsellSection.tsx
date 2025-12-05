@@ -20,20 +20,7 @@ interface AccountUpsellSectionProps {
 }
 
 // Default upsell offers as fallback when Sanity has no content
-const defaultUpsellOffers: UpsellOffer[] = [
-  {
-    id: 'tier-upgrade-partner',
-    title: 'Upgrade to Partner Tier',
-    shortDescription:
-      'Get exclusive partner perks, priority support, and 20% off all future orders.',
-    offerType: 'tier_upgrade',
-    stripePriceId: 'price_partner_tier_upgrade',
-    originalPrice: 9900,
-    salePrice: 7900,
-    ctaLabel: 'Upgrade Now',
-    limitedTimeOffer: true,
-  },
-];
+const defaultUpsellOffers: UpsellOffer[] = [];
 
 async function getUpsellOffers(
   page: string,
