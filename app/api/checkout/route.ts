@@ -91,10 +91,36 @@ export async function POST(req: NextRequest) {
         .eq('id', user.id)
         .single();
 
+      const email = profile?.email || user.email;
+
       if (profile?.stripe_customer_id) {
-        customerId = profile.stripe_customer_id;
-      } else if (profile?.email || user.email) {
-        const email = profile?.email || user.email!;
+        // Verify customer exists in current Stripe mode (test vs live)
+        try {
+          await stripeClient.customers.retrieve(profile.stripe_customer_id);
+          customerId = profile.stripe_customer_id;
+        } catch (err: any) {
+          // Customer doesn't exist in this mode - clear it and create new one
+          logger.warn(`Stripe customer ${profile.stripe_customer_id} not found in current mode, creating new one`);
+          await supabase
+            .from('profiles')
+            .update({ stripe_customer_id: null })
+            .eq('id', user.id);
+
+          if (email) {
+            const customer = await getOrCreateCustomer({
+              email,
+              name: profile?.full_name || user.user_metadata?.name || undefined,
+              metadata: { userId: user.id },
+              stripe: stripeClient,
+            });
+            await supabase
+              .from('profiles')
+              .update({ stripe_customer_id: customer.id })
+              .eq('id', user.id);
+            customerId = customer.id;
+          }
+        }
+      } else if (email) {
         const customer = await getOrCreateCustomer({
           email,
           name: profile?.full_name || user.user_metadata?.name || undefined,
