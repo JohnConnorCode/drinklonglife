@@ -72,7 +72,8 @@ export async function POST(req: NextRequest) {
     } = body;
 
     // CRITICAL SECURITY: Only trust environment variable for origin, not client headers
-    const trustedOrigin = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    // CRITICAL: Trim to remove any accidental newlines/whitespace in env var
+    const trustedOrigin = (process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com').trim();
     const finalSuccessUrl = providedSuccessUrl || `${trustedOrigin}${successPath || '/checkout/success'}?session_id={CHECKOUT_SESSION_ID}`;
     const finalCancelUrl = providedCancelUrl || `${trustedOrigin}${cancelPath || '/cart'}`;
 
