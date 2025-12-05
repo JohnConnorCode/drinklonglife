@@ -340,7 +340,7 @@ await sendEmail({
 ### Deployment Checklist
 
 - [x] Database migration applied (`021_email_system_complete.sql`)
-- [ ] Templates seeded (`node scripts/seed-email-templates.mjs`)
+- [x] Templates seeded (all 12 templates: `seed-email-templates.mjs`, `seed-additional-email-templates.mjs`, `seed-referral-email-templates.mjs`)
 - [ ] Edge function deployed (`supabase functions deploy send-email`)
 - [ ] Environment variables configured in Supabase
 - [x] Stripe webhook updated to use `sendEmail()`

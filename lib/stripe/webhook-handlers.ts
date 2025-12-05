@@ -142,6 +142,23 @@ export async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Se
       .select()
       .single();
 
+    // CRITICAL: Increment discount redemption counter if discount was used
+    // This ensures max_redemptions limits work correctly
+    if (metadata?.discountId) {
+      const { error: redeemError } = await supabase.rpc('redeem_discount', {
+        p_discount_id: metadata.discountId,
+      });
+
+      if (redeemError) {
+        logger.error('Failed to increment discount redemption counter:', {
+          discountId: metadata.discountId,
+          error: redeemError,
+        });
+      } else {
+        logger.info(`Discount redemption recorded for code: ${metadata.discountCode || metadata.discountId}`);
+      }
+    }
+
     // Track purchase event
     if (userId && session.amount_total && orderData?.id) {
       await trackServerEvent('purchase_completed', {

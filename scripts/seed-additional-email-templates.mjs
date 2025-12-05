@@ -451,6 +451,74 @@ const templates = [
 </html>
 `,
   },
+  {
+    template_name: 'payment_failed',
+    category: 'subscriptions',
+    description: 'Payment Failed - Subscription Payment Issue',
+    subject_template: 'Action Required: Payment Failed for Your Subscription',
+    data_schema: {
+      customerName: 'string',
+      planName: 'string',
+      amount: 'number',
+      currency: 'string',
+      retryDate: 'string',
+    },
+    html_template: `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>${standardStyles}
+      .warning-box {
+        background: #fef2f2;
+        border: 2px solid #ef4444;
+        padding: 25px;
+        border-radius: 12px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .amount {
+        font-size: 28px;
+        font-weight: bold;
+        color: #dc2626;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">Long Life</div>
+    </div>
+    <div class="content">
+      <h1>Payment Failed</h1>
+      <p>Hi {{customerName}},</p>
+      <p>We were unable to process your payment for your Long Life subscription.</p>
+
+      <div class="warning-box">
+        <p style="margin: 0; color: #6b7280;">Amount Due</p>
+        <p class="amount">\${{amount}}</p>
+        <p style="margin: 0; color: #6b7280;">For: {{planName}}</p>
+      </div>
+
+      <p><strong>What happens next?</strong></p>
+      <p>We'll automatically retry your payment on <strong>{{retryDate}}</strong>. To avoid any interruption to your subscription, please update your payment method before then.</p>
+
+      <div style="text-align: center;">
+        <a href="https://drinklonglife.com/account/billing" class="button">Update Payment Method</a>
+      </div>
+
+      <p>If you have any questions or need assistance, please don't hesitate to reach out.</p>
+
+      <p>Thank you,<br>The Long Life Team</p>
+    </div>
+    <div class="footer">
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
+    </div>
+  </body>
+</html>
+`,
+  },
 ];
 
 async function seedTemplates() {
