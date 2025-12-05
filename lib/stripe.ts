@@ -172,6 +172,14 @@ export async function createCheckoutSession(
     enabled: true,
   };
 
+  // Required for automatic_tax with shipping - save address back to customer
+  if (customerId) {
+    sessionParams.customer_update = {
+      shipping: 'auto',
+      address: 'auto',
+    };
+  }
+
   // Use idempotency key if provided to prevent duplicate charges
   const requestOptions = idempotencyKey ? { idempotencyKey } : undefined;
 
@@ -252,6 +260,14 @@ export async function createCartCheckoutSession(
   sessionParams.automatic_tax = {
     enabled: true,
   };
+
+  // Required for automatic_tax with shipping - save address back to customer
+  if (customerId) {
+    sessionParams.customer_update = {
+      shipping: 'auto',
+      address: 'auto',
+    };
+  }
 
   // Use idempotency key if provided to prevent duplicate charges
   const requestOptions = idempotencyKey ? { idempotencyKey } : undefined;

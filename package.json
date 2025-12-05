@@ -17,7 +17,7 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
-    "test:checkout": "playwright test tests/e2e/checkout",
+    "test:checkout": "playwright test tests/e2e/checkout --workers=1",
     "test:visual": "playwright test tests/e2e/ui",
     "test:report": "playwright show-report",
     "test:ci": "playwright test --reporter=github",

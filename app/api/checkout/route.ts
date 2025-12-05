@@ -172,7 +172,7 @@ export async function POST(req: NextRequest) {
         // Validate quantity
         if (item.quantity < 1 || item.quantity > 999 || !Number.isInteger(item.quantity)) {
           return NextResponse.json(
-            { error: `Invalid quantity for item: ${item.quantity}. Must be between 1 and 999` },
+            { error: 'Invalid quantity. Please select between 1 and 999 items.' },
             { status: 400 }
           );
         }
@@ -201,7 +201,7 @@ export async function POST(req: NextRequest) {
 
         if (!variant) {
           return NextResponse.json(
-            { error: `Product variant not found for: ${item.priceId}` },
+            { error: 'Product not found. It may have been removed. Please refresh and try again.' },
             { status: 400 }
           );
         }
@@ -237,7 +237,7 @@ export async function POST(req: NextRequest) {
           // Enforce quantity=1 for subscription items
           if (item.quantity > 1) {
             return NextResponse.json(
-              { error: `Subscription items must have quantity of 1. Item ${item.priceId} has quantity ${item.quantity}` },
+              { error: 'Subscriptions can only have a quantity of 1. Please adjust your cart.' },
               { status: 400 }
             );
           }
@@ -272,7 +272,7 @@ export async function POST(req: NextRequest) {
 
           if (unitAmount <= 0) {
             return NextResponse.json(
-              { error: `Invalid price for product: ${product.name}` },
+              { error: 'There was a pricing issue with this item. Please remove it and add it again.' },
               { status: 400 }
             );
           }
@@ -685,10 +685,45 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     logger.error('Checkout error:', error);
+
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+    // Handle specific Stripe errors with user-friendly messages
+    if (errorMessage.includes('idempotent')) {
+      return NextResponse.json(
+        {
+          error: 'Your checkout is already being processed. Please check your email for confirmation or wait a moment and try again.',
+          code: 'DUPLICATE_REQUEST'
+        },
+        { status: 409 }
+      );
+    }
+
+    if (errorMessage.includes('No such customer')) {
+      return NextResponse.json(
+        {
+          error: 'There was a temporary issue with your account. Please try again.',
+          code: 'CUSTOMER_SYNC_ERROR'
+        },
+        { status: 400 }
+      );
+    }
+
+    if (errorMessage.includes('rate') || errorMessage.includes('limit')) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests. Please wait a moment and try again.',
+          code: 'RATE_LIMITED'
+        },
+        { status: 429 }
+      );
+    }
+
+    // Generic error - don't expose internal details
     return NextResponse.json(
       {
-        error: 'Failed to create checkout session',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        error: 'We couldn\'t complete your checkout. Please try again or contact support if the problem persists.',
+        code: 'CHECKOUT_ERROR'
       },
       { status: 500 }
     );

@@ -6,14 +6,16 @@ import { CartItem } from '@/components/cart/CartItem';
 import { CouponInput } from '@/components/cart/CouponInput';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import Link from 'next/link';
-import { ShoppingBag, ArrowLeft, AlertCircle } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, AlertCircle, RefreshCw, Mail } from 'lucide-react';
 import { logger } from '@/lib/logger';
+import { getCheckoutErrorInfo, type CheckoutErrorInfo } from '@/lib/checkout-errors';
 
 export default function CartPage() {
   const { items, getSubtotal, getDiscountAmount, getTotal, clearCart, removeItem } = useCartStore();
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<CheckoutErrorInfo | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   const subtotal = getSubtotal();
   const discountAmount = getDiscountAmount();
@@ -58,10 +60,16 @@ export default function CartPage() {
         }
 
         // Show warning but allow checkout to continue with valid items
-        setCheckoutError(`${invalidItems.length} invalid item(s) were removed from your cart. Proceeding with checkout...`);
+        setCheckoutError({
+          title: 'Items removed',
+          message: `${invalidItems.length} invalid item(s) were removed from your cart.`,
+          suggestion: 'Proceeding with checkout...',
+          canRetry: false,
+        });
 
         // Continue with checkout after short delay to show message
         await new Promise(resolve => setTimeout(resolve, 2000));
+        setCheckoutError(null);
       }
 
       // Prepare checkout items
@@ -121,9 +129,23 @@ export default function CartPage() {
       }
     } catch (error) {
       logger.error('Checkout error:', error);
-      setCheckoutError(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      const errorInfo = getCheckoutErrorInfo(errorMessage);
+
+      // If error suggests clearing cart and it's a product issue, offer to clear
+      if (errorInfo.shouldClearCart) {
+        setShowClearConfirm(true);
+      }
+
+      setCheckoutError(errorInfo);
       setIsProcessing(false);
+      setRetryCount(prev => prev + 1);
     }
+  };
+
+  const handleRetry = () => {
+    setCheckoutError(null);
+    handleCheckout();
   };
 
   if (items.length === 0) {
@@ -218,9 +240,43 @@ export default function CartPage() {
                     <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <h3 className="text-sm font-semibold text-red-900 mb-1">
-                        Checkout Error
+                        {checkoutError.title}
                       </h3>
-                      <p className="text-sm text-red-700">{checkoutError}</p>
+                      <p className="text-sm text-red-700 mb-2">{checkoutError.message}</p>
+                      <p className="text-sm text-red-600 italic">{checkoutError.suggestion}</p>
+
+                      {/* Action buttons */}
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {checkoutError.canRetry && retryCount < 3 && (
+                          <button
+                            onClick={handleRetry}
+                            disabled={isProcessing}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-700 bg-red-100 hover:bg-red-200 rounded-md transition-colors disabled:opacity-50"
+                          >
+                            <RefreshCw className="w-3.5 h-3.5" />
+                            Try Again
+                          </button>
+                        )}
+                        {checkoutError.contactSupport && (
+                          <a
+                            href="mailto:hello@drinklonglife.com?subject=Checkout%20Issue"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                          >
+                            <Mail className="w-3.5 h-3.5" />
+                            Contact Support
+                          </a>
+                        )}
+                      </div>
+
+                      {retryCount >= 3 && (
+                        <p className="mt-3 text-xs text-red-500">
+                          Still having issues? Email us at{' '}
+                          <a href="mailto:hello@drinklonglife.com" className="underline">
+                            hello@drinklonglife.com
+                          </a>{' '}
+                          and we&apos;ll help you complete your order.
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
