@@ -58,8 +58,20 @@ export default function AdminOrdersPage() {
 **Process**:
 1. Make changes
 2. Run `npm run build` locally
-3. Fix any errors
-4. Commit and push only after build succeeds
+3. Run `node scripts/validate-checkout.mjs` to verify Stripe prices
+4. Fix any errors
+5. Commit and push only after build AND checkout validation succeed
+
+### CRITICAL: Validate Checkout Before Deploy
+
+**Rule**: ALWAYS run `node scripts/validate-checkout.mjs` before pushing changes that affect products, prices, or checkout.
+
+**Why**: Checkout was broken in production because product variants had TEST mode Stripe price IDs while the system was in PRODUCTION mode. This validation catches price ID mismatches.
+
+**Scripts available**:
+- `node scripts/validate-checkout.mjs` - Validates all price IDs against Stripe
+- `node scripts/create-all-production-prices.mjs` - Creates production prices for all products
+- `node scripts/sync-stripe-prices.mjs` - Syncs existing Stripe prices to database
 
 **Common build errors to watch for**:
 - TypeScript prop mismatches (e.g., `count` vs `lines`)
