@@ -13,6 +13,7 @@ const labelColorMap = {
   yellow: 'bg-accent-yellow',
   red: 'bg-accent-primary',
   green: 'bg-accent-green',
+  blue: 'bg-blue-500',
 };
 
 export function BlendCard({ blend }: BlendCardProps) {

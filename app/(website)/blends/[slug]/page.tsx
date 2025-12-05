@@ -86,6 +86,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
     yellow: 'from-accent-yellow/80 to-accent-yellow',
     red: 'from-accent-primary/80 to-accent-primary',
     green: 'from-accent-green/80 to-accent-green',
+    blue: 'from-blue-500/80 to-blue-600',
   };
 
   const gradientClass = blend.label_color ? labelColorMap[blend.label_color] || 'from-accent-primary/80 to-accent-primary' : 'from-accent-primary/80 to-accent-primary';

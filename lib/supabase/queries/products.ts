@@ -22,7 +22,7 @@ export interface Product {
   how_to_use: any | null;
   function_list: string[] | null;
   best_for: string[] | null;
-  label_color: 'yellow' | 'red' | 'green' | null;
+  label_color: 'yellow' | 'red' | 'green' | 'blue' | null;
   image_url: string | null;
   image_alt: string | null;
   stripe_product_id: string | null;
