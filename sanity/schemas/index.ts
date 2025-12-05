@@ -22,7 +22,6 @@ import stripeProduct from './stripeProduct';
 import stripeSettings from './stripeSettings';
 import subscriptionPageSettings from './subscriptionPageSettings';
 import partnershipPerk from './partnershipPerk';
-import userDiscount from './userDiscount';
 import upsellOffer from './upsellOffer';
 import referralReward from './referralReward';
 
@@ -68,7 +67,6 @@ export const schemaTypes = [
   stripeSettings,
   subscriptionPageSettings,
   partnershipPerk,
-  userDiscount,
   upsellOffer,
   referralReward,
   // Page Builder

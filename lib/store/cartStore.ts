@@ -25,9 +25,16 @@ export interface CartItem {
  */
 export interface Coupon {
   code: string;
+  promotionCodeId?: string; // Stripe promotion code ID (promo_xxx) - for applying at checkout
+  couponId: string;         // Underlying Stripe coupon ID
+  discountType: 'percent' | 'amount';
   discountPercent?: number;
   discountAmount?: number; // in cents
   valid: boolean;
+  restrictions?: {
+    firstTimeOnly?: boolean;
+    minimumAmount?: number;
+  };
 }
 
 /**
@@ -210,23 +217,37 @@ export const useCartStore = create<CartStore>()(
         set({ isLoading: true, error: undefined });
 
         try {
+          // Get current subtotal for min amount validation
+          const subtotal = get().getSubtotal();
+
           // Call API to validate coupon
           const response = await fetch('/api/coupons/validate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code }),
+            body: JSON.stringify({ code, subtotal }),
           });
 
-          if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Invalid coupon code');
+          const data = await response.json();
+
+          if (!response.ok || !data.valid) {
+            throw new Error(data.error || 'Invalid discount code');
           }
 
-          const coupon: Coupon = await response.json();
+          // Map API response to Coupon interface
+          const coupon: Coupon = {
+            code: data.code,
+            promotionCodeId: data.promotionCodeId,
+            couponId: data.couponId,
+            discountType: data.discountType,
+            discountPercent: data.discountPercent,
+            discountAmount: data.discountAmount,
+            valid: true,
+            restrictions: data.restrictions,
+          };
 
           set({ coupon, isLoading: false });
         } catch (error) {
-          const errorMsg = error instanceof Error ? error.message : 'Failed to apply coupon';
+          const errorMsg = error instanceof Error ? error.message : 'Failed to apply code';
           set({
             error: errorMsg,
             isLoading: false,

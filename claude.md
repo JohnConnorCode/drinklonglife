@@ -58,9 +58,15 @@ export default function AdminOrdersPage() {
 **Process**:
 1. Make changes
 2. Run `npm run build` locally
-3. Run `node scripts/validate-checkout.mjs` to verify Stripe prices
-4. Fix any errors
-5. Commit and push only after build AND checkout validation succeed
+3. Run `npm run test:critical` to verify signup, login, products, and database triggers
+4. Run `node scripts/validate-checkout.mjs` to verify Stripe prices
+5. Fix any errors
+6. Commit and push only after ALL checks pass
+
+**Available test scripts**:
+- `npm run test:critical` - Tests signup, login, products, DB triggers (MUST PASS before deploy)
+- `node scripts/validate-checkout.mjs` - Validates Stripe price IDs
+- `npm run predeploy` - Runs build + critical tests together
 
 ### CRITICAL: Validate Checkout Before Deploy
 
@@ -200,6 +206,37 @@ const config: Config = defineConfig({
 5. System shows: "✅ Synced to Stripe! Product: prod_xxx, Prices: 1"
 6. Product ready for checkout immediately
 ```
+
+## Supabase Database Access
+
+### Credentials Locations
+
+All Supabase credentials are stored in **Vercel Environment Variables** (Production):
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL: `https://qjgenpwbaquqrvyrfsdo.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public anon key for client-side access |
+| `SUPABASE_SERVICE_ROLE_KEY` | Admin service role key (server-side only) |
+| `SUPABASE_DB_PASSWORD` | Direct database password: `DrinkLongLife1!` |
+| `SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key |
+| `SUPABASE_SECRET_KEY` | Supabase secret key |
+
+### Database Connection
+
+**Pooler URL** (for migrations and direct SQL):
+```
+postgresql://postgres.qjgenpwbaquqrvyrfsdo:[PASSWORD]@aws-1-us-east-1.pooler.supabase.com:5432/postgres
+```
+
+**Push Migrations**:
+```bash
+SUPABASE_DB_PASSWORD="DrinkLongLife1!" npx supabase db push --db-url "postgresql://postgres.qjgenpwbaquqrvyrfsdo:DrinkLongLife1!@aws-1-us-east-1.pooler.supabase.com:5432/postgres"
+```
+
+### Project Reference
+- **Project Ref**: `qjgenpwbaquqrvyrfsdo`
+- **Region**: `aws-1-us-east-1`
 
 ## Email System (Database-Driven Templates)
 

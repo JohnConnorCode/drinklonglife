@@ -331,6 +331,69 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       await completeReferral(userId);
     }
   }
+
+  // Track promotion code redemption if a discount was applied
+  await trackPromotionRedemption(session, userId, mode === 'subscription' ? 'subscription' : 'one-time');
+}
+
+/**
+ * Track promotion code usage for analytics
+ */
+async function trackPromotionRedemption(
+  session: Stripe.Checkout.Session,
+  userId: string | undefined,
+  orderType: 'one-time' | 'subscription'
+) {
+  // Check if discount was applied (total_details has discount breakdown)
+  if (!session.total_details?.breakdown?.discounts?.length) {
+    return;
+  }
+
+  const supabase = createServiceRoleClient();
+
+  for (const discountItem of session.total_details.breakdown.discounts) {
+    try {
+      const discount = discountItem.discount as any;
+
+      // Get coupon details
+      const coupon = discount.coupon;
+      if (!coupon) continue;
+
+      // Check if this is the first order for this customer
+      let isFirstOrder = false;
+      if (session.customer) {
+        const { count } = await supabase
+          .from('orders')
+          .select('id', { count: 'exact', head: true })
+          .eq('stripe_customer_id', session.customer);
+        isFirstOrder = (count || 0) <= 1; // This order is the first
+      }
+
+      // Insert redemption record
+      await supabase.from('promotion_redemptions').insert({
+        promotion_code_id: discount.promotion_code || null,
+        promotion_code: coupon.name || coupon.id,
+        coupon_id: coupon.id,
+        customer_id: session.customer || null,
+        customer_email: session.customer_email || session.customer_details?.email,
+        user_id: userId || null,
+        checkout_session_id: session.id,
+        discount_type: coupon.percent_off ? 'percent_off' : 'amount_off',
+        discount_value: coupon.percent_off || coupon.amount_off || 0,
+        discount_amount: discountItem.amount || 0,
+        subtotal: session.amount_subtotal || 0,
+        total: session.amount_total || 0,
+        currency: session.currency || 'usd',
+        is_first_order: isFirstOrder,
+        order_type: orderType,
+      });
+
+      logger.info(`Tracked promotion redemption: ${coupon.name || coupon.id} for session ${session.id}`);
+    } catch (error) {
+      // Don't fail the webhook if tracking fails
+      logger.error('Error tracking promotion redemption:', error);
+    }
+  }
 }
 
 /**

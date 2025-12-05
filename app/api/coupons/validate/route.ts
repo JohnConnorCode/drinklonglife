@@ -1,22 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStripeClient } from '@/lib/stripe/config';
-import { createServerClient } from '@/lib/supabase/server';
+import { createServerClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { rateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
 
 interface ValidateCouponRequest {
   code: string;
+  subtotal?: number; // In cents, to check minimum amount restrictions
 }
 
-export async function POST(req: NextRequest) {
+interface ValidCouponResponse {
+  valid: true;
+  code: string;
+  discountId: string;         // Database discount ID
+  discountType: 'percent' | 'amount';
+  discountPercent?: number;
+  discountAmount?: number;    // In cents
+  name?: string;
+  restrictions?: {
+    minimumAmount?: number;   // In cents
+    expiresAt?: string;
+  };
+}
+
+interface InvalidCouponResponse {
+  valid: false;
+  error: string;
+}
+
+type CouponResponse = ValidCouponResponse | InvalidCouponResponse;
+
+/**
+ * Database-only discount validation
+ * No Stripe dependency - all discounts managed in Supabase
+ */
+export async function POST(req: NextRequest): Promise<NextResponse<CouponResponse>> {
   try {
-    // Support both authenticated and guest users
     const supabase = createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    // CRITICAL SECURITY: Rate limiting to prevent brute force attacks
-    // For authenticated users: rate limit by user ID
-    // For guests: rate limit by IP address
+    // Rate limiting
     const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] ||
                      req.headers.get('x-real-ip') ||
                      'unknown';
@@ -24,7 +46,6 @@ export async function POST(req: NextRequest) {
       ? `coupon-validate:user:${user.id}`
       : `coupon-validate:ip:${clientIp}`;
 
-    // Stricter rate limit for guests (5 attempts vs 10 for auth users)
     const maxAttempts = user ? 10 : 5;
     const { success, remaining, reset } = rateLimit(rateLimitKey, maxAttempts, '1m');
 
@@ -44,70 +65,118 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { code }: ValidateCouponRequest = await req.json();
+    const body = await req.json();
+    const { code, subtotal }: ValidateCouponRequest = body;
 
     if (!code || typeof code !== 'string') {
       return NextResponse.json(
-        { error: 'Coupon code is required', valid: false },
+        { error: 'Discount code is required', valid: false },
         { status: 400 }
       );
     }
 
-    // Get dynamic Stripe client based on current mode (test/production)
-    const stripeClient = await getStripeClient();
+    const cleanCode = code.trim().toUpperCase();
 
-    // Validate coupon code
-    try {
-      const coupon = await stripeClient.coupons.retrieve(code.toUpperCase());
+    // Use service role to bypass RLS for validation
+    const serviceSupabase = createServiceRoleClient();
 
-      if (!coupon.valid) {
-        return NextResponse.json(
-          { error: 'This coupon is no longer valid', valid: false },
-          { status: 400 }
-        );
-      }
+    // Look up discount code in database
+    const { data: discount, error: discountError } = await serviceSupabase
+      .from('discounts')
+      .select('*')
+      .ilike('code', cleanCode)
+      .single();
 
-      // Check if coupon has expired (redeem_by is in Unix timestamp)
-      if (coupon.redeem_by && coupon.redeem_by < Math.floor(Date.now() / 1000)) {
-        return NextResponse.json(
-          { error: 'This coupon has expired', valid: false },
-          { status: 400 }
-        );
-      }
-
-      // Check if max redemptions has been reached
-      if (coupon.max_redemptions && coupon.times_redeemed >= coupon.max_redemptions) {
-        return NextResponse.json(
-          { error: 'This coupon has reached its maximum redemptions', valid: false },
-          { status: 400 }
-        );
-      }
-
-      // Return coupon details
-      return NextResponse.json({
-        code: coupon.id,
-        valid: true,
-        discountPercent: coupon.percent_off ?? undefined,
-        discountAmount: coupon.amount_off ?? undefined,
-      });
-    } catch (error: unknown) {
-      const stripeError = error as { code?: string };
-      // Coupon not found or invalid
-      if (stripeError.code === 'resource_missing') {
-        return NextResponse.json(
-          { error: 'Invalid coupon code', valid: false },
-          { status: 404 }
-        );
-      }
-
-      throw error;
+    if (discountError || !discount) {
+      return NextResponse.json(
+        { error: 'Invalid discount code', valid: false },
+        { status: 404 }
+      );
     }
+
+    // Check if active
+    if (!discount.is_active) {
+      return NextResponse.json(
+        { error: 'This code is no longer active', valid: false },
+        { status: 400 }
+      );
+    }
+
+    // Check start date
+    if (discount.starts_at && new Date(discount.starts_at) > new Date()) {
+      return NextResponse.json(
+        { error: 'This code is not yet active', valid: false },
+        { status: 400 }
+      );
+    }
+
+    // Check expiration
+    if (discount.expires_at && new Date(discount.expires_at) < new Date()) {
+      return NextResponse.json(
+        { error: 'This code has expired', valid: false },
+        { status: 400 }
+      );
+    }
+
+    // Check max redemptions
+    if (discount.max_redemptions !== null && discount.times_redeemed >= discount.max_redemptions) {
+      return NextResponse.json(
+        { error: 'This code has reached its maximum uses', valid: false },
+        { status: 400 }
+      );
+    }
+
+    // Check minimum amount if subtotal provided
+    if (discount.min_amount_cents > 0 && subtotal && subtotal < discount.min_amount_cents) {
+      const minDollars = (discount.min_amount_cents / 100).toFixed(2);
+      return NextResponse.json(
+        { error: `Minimum order of $${minDollars} required for this code`, valid: false },
+        { status: 400 }
+      );
+    }
+
+    // Check first_time_only restriction
+    if (discount.first_time_only && user) {
+      // Check if user has previous orders
+      const { count: orderCount } = await serviceSupabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .eq('status', 'paid');
+
+      if (orderCount && orderCount > 0) {
+        return NextResponse.json(
+          { error: 'This code is only valid for first-time customers', valid: false },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Build response
+    const response: ValidCouponResponse = {
+      valid: true,
+      code: discount.code,
+      discountId: discount.id,
+      discountType: discount.discount_type as 'percent' | 'amount',
+      discountPercent: discount.discount_percent ? Number(discount.discount_percent) : undefined,
+      discountAmount: discount.discount_amount_cents ?? undefined,
+      name: discount.name ?? undefined,
+    };
+
+    // Include restrictions info for UI
+    if (discount.min_amount_cents > 0 || discount.expires_at) {
+      response.restrictions = {
+        minimumAmount: discount.min_amount_cents > 0 ? discount.min_amount_cents : undefined,
+        expiresAt: discount.expires_at ?? undefined,
+      };
+    }
+
+    return NextResponse.json(response);
   } catch (error) {
     logger.error('Coupon validation error:', error);
     return NextResponse.json(
       {
-        error: 'Failed to validate coupon',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: 'Failed to validate code',
         valid: false,
       },
       { status: 500 }

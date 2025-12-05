@@ -86,10 +86,34 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        // CRITICAL: Verify price exists in Stripe and is active
-        const price = await stripe.prices.retrieve(item.priceId);
+        // HYBRID PRICING: First look up variant in database
+        const { data: variant } = await supabase
+          .from('product_variants')
+          .select(`
+            id,
+            price_usd,
+            billing_type,
+            stripe_price_id,
+            stock_quantity,
+            track_inventory,
+            is_active,
+            products:product_id (
+              is_active
+            )
+          `)
+          .eq('stripe_price_id', item.priceId)
+          .single();
 
-        if (!price.active) {
+        if (!variant) {
+          errors.push({
+            priceId: item.priceId,
+            error: 'Product variant not found',
+          });
+          continue;
+        }
+
+        // Verify variant and product are active
+        if (!variant.is_active) {
           errors.push({
             priceId: item.priceId,
             error: 'This product is no longer available',
@@ -97,60 +121,79 @@ export async function POST(req: NextRequest) {
           continue;
         }
 
-        // Verify product is active
-        const productId = typeof price.product === 'string' ? price.product : price.product?.id;
-        if (productId) {
-          const product = await stripe.products.retrieve(productId);
-          if (!product.active) {
+        const product = variant.products as any;
+        if (!product?.is_active) {
+          errors.push({
+            priceId: item.priceId,
+            error: 'This product is no longer available',
+          });
+          continue;
+        }
+
+        // Check billing type for special handling
+        const isSubscription = variant.billing_type === 'recurring';
+
+        // ONE-TIME: Validate price exists in database
+        if (!isSubscription) {
+          if (!variant.price_usd || variant.price_usd <= 0) {
             errors.push({
               priceId: item.priceId,
-              error: 'This product is no longer available',
+              error: 'Product price not configured',
+            });
+            continue;
+          }
+          // No Stripe validation needed for one-time items!
+        }
+
+        // SUBSCRIPTIONS: Must validate Stripe price exists
+        if (isSubscription) {
+          try {
+            const stripePrice = await stripe.prices.retrieve(item.priceId);
+            if (!stripePrice.active) {
+              errors.push({
+                priceId: item.priceId,
+                error: 'Subscription price is no longer available',
+              });
+              continue;
+            }
+          } catch {
+            errors.push({
+              priceId: item.priceId,
+              error: 'Invalid subscription. Please contact support.',
+            });
+            continue;
+          }
+
+          // Enforce quantity = 1 for subscriptions
+          if (item.quantity > 1) {
+            errors.push({
+              priceId: item.priceId,
+              error: 'Subscriptions must have quantity of 1',
             });
             continue;
           }
         }
 
-        // CRITICAL: Check inventory levels in database
-        const { data: variant } = await supabase
-          .from('product_variants')
-          .select('id, stock_quantity, track_inventory, name')
-          .eq('stripe_price_id', item.priceId)
-          .single();
-
-        if (variant) {
-          // If inventory tracking is enabled, verify stock
-          if (variant.track_inventory) {
-            if (variant.stock_quantity === null) {
-              errors.push({
-                priceId: item.priceId,
-                error: 'Stock information unavailable',
-              });
-              continue;
-            }
-
-            if (variant.stock_quantity < item.quantity) {
-              errors.push({
-                priceId: item.priceId,
-                error: variant.stock_quantity === 0
-                  ? 'Out of stock'
-                  : `Only ${variant.stock_quantity} available`,
-                available: variant.stock_quantity,
-              });
-              continue;
-            }
+        // INVENTORY CHECK: For both types
+        if (variant.track_inventory) {
+          if (variant.stock_quantity === null) {
+            errors.push({
+              priceId: item.priceId,
+              error: 'Stock information unavailable',
+            });
+            continue;
           }
-        } else {
-          // Variant not found in database - this shouldn't happen
-          logger.warn('Cart validation: Variant not found for price', { priceId: item.priceId });
-        }
 
-        // For subscriptions, enforce quantity = 1
-        if (price.type === 'recurring' && item.quantity > 1) {
-          errors.push({
-            priceId: item.priceId,
-            error: 'Subscriptions must have quantity of 1',
-          });
-          continue;
+          if (variant.stock_quantity < item.quantity) {
+            errors.push({
+              priceId: item.priceId,
+              error: variant.stock_quantity === 0
+                ? 'Out of stock'
+                : `Only ${variant.stock_quantity} available`,
+              available: variant.stock_quantity,
+            });
+            continue;
+          }
         }
 
       } catch (error) {

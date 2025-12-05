@@ -18,7 +18,10 @@ interface CheckoutRequestBody {
 
   // Cart-based checkout
   items?: CartItemRequest[];
-  couponCode?: string;
+
+  // Discount codes - prefer promotionCodeId for proper restriction handling
+  promotionCodeId?: string; // Stripe promotion code ID (promo_xxx) - has restrictions
+  couponCode?: string;      // Fallback: raw coupon ID - no restrictions
 
   // URLs
   successPath?: string;
@@ -62,6 +65,7 @@ export async function POST(req: NextRequest) {
       priceId,
       mode,
       items,
+      promotionCodeId,
       couponCode,
       successPath,
       cancelPath,
@@ -135,82 +139,119 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // Fetch price from Stripe to ensure it's valid and active
-        try {
-          const price = await stripeClient.prices.retrieve(item.priceId);
+        // HYBRID PRICING: Look up variant from database first
+        const { data: variant } = await supabase
+          .from('product_variants')
+          .select(`
+            id,
+            label,
+            price_usd,
+            billing_type,
+            stripe_price_id,
+            track_inventory,
+            stock_quantity,
+            products:product_id (
+              id,
+              name,
+              image_url,
+              is_active
+            )
+          `)
+          .eq('stripe_price_id', item.priceId)
+          .eq('is_active', true)
+          .single();
 
-          // Security checks
-          if (!price.active) {
+        if (!variant) {
+          return NextResponse.json(
+            { error: `Product variant not found for: ${item.priceId}` },
+            { status: 400 }
+          );
+        }
+
+        const product = variant.products as any;
+        if (!product?.is_active) {
+          return NextResponse.json(
+            { error: `Product is not available` },
+            { status: 400 }
+          );
+        }
+
+        // Detect billing type and check for mixed cart
+        const isSubscription = variant.billing_type === 'recurring';
+        const billingType = isSubscription ? 'subscription' : 'one-time';
+        billingTypes.add(billingType);
+
+        // CRITICAL: Prevent mixing one-time and subscription items
+        if (billingTypes.size > 1) {
+          return NextResponse.json(
+            {
+              error: 'Cannot mix one-time purchases and subscriptions in the same cart. Please checkout separately.',
+              details: 'Stripe requires separate checkout sessions for one-time and recurring billing.'
+            },
+            { status: 400 }
+          );
+        }
+
+        // Set checkout mode based on billing type
+        if (isSubscription) {
+          checkoutMode = 'subscription';
+
+          // Enforce quantity=1 for subscription items
+          if (item.quantity > 1) {
             return NextResponse.json(
-              { error: `Price ${item.priceId} is not active` },
+              { error: `Subscription items must have quantity of 1. Item ${item.priceId} has quantity ${item.quantity}` },
               { status: 400 }
             );
           }
 
-          // Verify price belongs to an active product
-          const productId = typeof price.product === 'string' ? price.product : price.product.id;
-          const product = await stripeClient.products.retrieve(productId);
-
-          if (!product.active) {
-            return NextResponse.json(
-              { error: `Product for price ${item.priceId} is not active` },
-              { status: 400 }
-            );
-          }
-
-          // INVENTORY CHECK: Get variant ID for reservation
-          const { data: variant } = await supabase
-            .from('product_variants')
-            .select('id, track_inventory, stock_quantity')
-            .eq('stripe_price_id', item.priceId)
-            .single();
-
-          if (!variant) {
-            return NextResponse.json(
-              { error: `Variant not found for price ${item.priceId}` },
-              { status: 400 }
-            );
-          }
-
-          // Detect billing type and check for mixed cart
-          const billingType = price.type === 'recurring' ? 'subscription' : 'one-time';
-          billingTypes.add(billingType);
-
-          // CRITICAL: Prevent mixing one-time and subscription items
-          if (billingTypes.size > 1) {
-            return NextResponse.json(
-              {
-                error: 'Cannot mix one-time purchases and subscriptions in the same cart. Please checkout separately.',
-                details: 'Stripe requires separate checkout sessions for one-time and recurring billing.'
-              },
-              { status: 400 }
-            );
-          }
-
-          // Set checkout mode based on billing type
-          if (price.type === 'recurring') {
-            checkoutMode = 'subscription';
-
-            // Enforce quantity=1 for subscription items
-            if (item.quantity > 1) {
+          // SUBSCRIPTIONS: Must validate Stripe price exists (required by Stripe)
+          try {
+            const stripePrice = await stripeClient.prices.retrieve(item.priceId);
+            if (!stripePrice.active) {
               return NextResponse.json(
-                { error: `Subscription items must have quantity of 1. Item ${item.priceId} has quantity ${item.quantity}` },
+                { error: `Subscription price is not active` },
                 { status: 400 }
               );
             }
+          } catch (error) {
+            logger.error(`❌ Invalid subscription price ID: ${item.priceId}`, error);
+            return NextResponse.json(
+              { error: `Invalid subscription price. Please contact support.` },
+              { status: 400 }
+            );
           }
 
+          // Subscription: Use Stripe price ID (required)
           validatedLineItems.push({
             price: item.priceId,
             quantity: item.quantity,
-            variantId: variant.id, // Store for reservation
+            variantId: variant.id,
+            isSubscription: true,
           });
-        } catch (error) {
-          logger.error(`❌ Invalid price ID: ${item.priceId}`, error);
-          return NextResponse.json(
-            { error: `Invalid price ID: ${item.priceId}` },
-            { status: 400 }
-          );
+        } else {
+          // ONE-TIME: Use dynamic pricing from database (no Stripe price validation needed)
+          const unitAmount = Math.round((variant.price_usd || 0) * 100);
+
+          if (unitAmount <= 0) {
+            return NextResponse.json(
+              { error: `Invalid price for product: ${product.name}` },
+              { status: 400 }
+            );
+          }
+
+          validatedLineItems.push({
+            price_data: {
+              currency: 'usd',
+              unit_amount: unitAmount,
+              product_data: {
+                name: `${product.name} - ${variant.label}`,
+                images: product.image_url ? [product.image_url] : [],
+              },
+            },
+            quantity: item.quantity,
+            variantId: variant.id,
+            isSubscription: false,
+          });
         }
       }
 
@@ -296,11 +337,23 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Strip variantId before passing to Stripe (it's only for our internal use)
-      const stripeLineItems = validatedLineItems.map(({ price, quantity }) => ({
-        price,
-        quantity,
-      }));
+      // Strip internal fields before passing to Stripe
+      // HYBRID: Handle both price (subscriptions) and price_data (one-time)
+      const stripeLineItems = validatedLineItems.map((item: any) => {
+        if (item.isSubscription) {
+          // Subscription: Use Stripe price ID
+          return {
+            price: item.price,
+            quantity: item.quantity,
+          };
+        } else {
+          // One-time: Use dynamic price_data
+          return {
+            price_data: item.price_data,
+            quantity: item.quantity,
+          };
+        }
+      });
 
       // Create Stripe checkout session (inventory is now reserved)
       const checkoutSession = await createCartCheckoutSession(
@@ -314,7 +367,8 @@ export async function POST(req: NextRequest) {
             ...metadata,
             reservationTrackingId, // Store for later mapping
           },
-          couponCode,
+          promotionCodeId, // Preferred: applies with restrictions (first-time, min amount, etc.)
+          couponCode,      // Fallback: raw coupon (no restrictions)
           idempotencyKey,
         },
         stripeClient

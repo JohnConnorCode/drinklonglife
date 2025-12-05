@@ -10,7 +10,6 @@ import {
   DocumentIcon,
   HomeIcon,
   UsersIcon,
-  TagIcon,
   ComposeIcon,
   BlockContentIcon,
   HeartIcon,
@@ -208,10 +207,6 @@ export const deskStructure: StructureResolver = (S: any) =>
                 .title('Partnership Perks')
                 .icon(StarIcon)
                 .child(S.documentTypeList('partnershipPerk').title('Partnership Perks')),
-              S.listItem()
-                .title('Discounts')
-                .icon(TagIcon)
-                .child(S.documentTypeList('userDiscount').title('Discounts')),
               S.listItem()
                 .title('Upsell Offers')
                 .icon(HeartIcon)
