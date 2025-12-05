@@ -11,7 +11,6 @@ interface FooterProps {
 }
 
 export function Footer({ siteSettings, navigation }: FooterProps) {
-  const footerLinks = navigation?.footerLinks || [];
   const legalLinks = navigation?.legalLinks || [];
   const social = siteSettings?.social || {};
 
@@ -91,23 +90,60 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
           <div>
             <h4 className="font-semibold text-sm mb-4">Explore</h4>
             <ul className="space-y-2">
-              {footerLinks
-                .filter((link: any) => link.title?.toLowerCase() !== 'ingredients')
-                .map((link: any) => (
-                <li key={link.title}>
-                  <Link
-                    href={
-                      link.reference?.slug?.current
-                        ? `/${link.reference.slug.current}`
-                        : link.externalUrl || '#'
-                    }
-                    className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
-                  >
-                    {link.title}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link
+                  href="/blends"
+                  className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
+                >
+                  Blends
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
+                >
+                  About
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/how-we-make-it"
+                  className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
+                >
+                  How We Make It
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/journal"
+                  className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
+                >
+                  Journal
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/faq"
+                  className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
+                >
+                  FAQ
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/referral"
+                  className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
+                >
+                  Ambassadors
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
+                </Link>
+              </li>
             </ul>
           </div>
 

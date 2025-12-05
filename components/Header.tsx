@@ -210,7 +210,24 @@ export function Header({ siteSettings, navigation }: HeaderProps) {
                 );
               })}
 
-            {/* Ambassadors Link (hardcoded) */}
+            {/* About Link */}
+            <Link
+              href="/about"
+              className={clsx(
+                'group text-xs lg:text-sm font-heading font-medium transition-colors relative whitespace-nowrap',
+                pathname === '/about' ? 'text-accent-primary' : 'text-gray-700 hover:text-black'
+              )}
+            >
+              About
+              <span
+                className={clsx(
+                  'absolute -bottom-1 left-0 h-0.5 bg-accent-primary transition-all duration-300',
+                  pathname === '/about' ? 'w-full' : 'w-0 group-hover:w-full'
+                )}
+              />
+            </Link>
+
+            {/* Ambassadors Link */}
             <Link
               href="/referral"
               className={clsx(
@@ -427,6 +444,19 @@ export function Header({ siteSettings, navigation }: HeaderProps) {
                     </Link>
                   );
                 })}
+
+              {/* About Link */}
+              <Link
+                href="/about"
+                className={clsx(
+                  'block px-4 py-3 text-base font-medium rounded-lg transition-all duration-300',
+                  pathname === '/about'
+                    ? 'bg-gradient-to-r from-accent-yellow/20 to-accent-green/20 text-accent-primary'
+                    : 'text-gray-700 hover:bg-gray-50'
+                )}
+              >
+                About
+              </Link>
 
               {/* Ambassadors Link */}
               <Link
