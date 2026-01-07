@@ -35,7 +35,7 @@ console.log('🚀 Creating Stripe Subscription Products...\n');
 const subscriptionProducts = [
   {
     name: 'Green Bomb - Monthly Subscription',
-    description: 'Monthly subscription for Green Bomb cold-pressed sauce',
+    description: 'Monthly subscription for Green Bomb cold-pressed juice',
     sizes: [
       { name: 'Gallon', price: 49.99 },
       { name: 'Half Gallon', price: 29.99 },
@@ -44,7 +44,7 @@ const subscriptionProducts = [
   },
   {
     name: 'Red Bomb - Monthly Subscription',
-    description: 'Monthly subscription for Red Bomb cold-pressed sauce',
+    description: 'Monthly subscription for Red Bomb cold-pressed juice',
     sizes: [
       { name: 'Gallon', price: 49.99 },
       { name: 'Half Gallon', price: 29.99 },
@@ -53,7 +53,7 @@ const subscriptionProducts = [
   },
   {
     name: 'Yellow Bomb - Monthly Subscription',
-    description: 'Monthly subscription for Yellow Bomb cold-pressed sauce',
+    description: 'Monthly subscription for Yellow Bomb cold-pressed juice',
     sizes: [
       { name: 'Gallon', price: 49.99 },
       { name: 'Half Gallon', price: 29.99 },

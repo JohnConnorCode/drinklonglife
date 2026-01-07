@@ -2,7 +2,7 @@ import { Section } from '@/components/Section';
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm';
 
 export const metadata = {
-  title: 'Reset Password | Portland Fresh',
+  title: 'Reset Password | Long Life',
   description: 'Set your new password',
 };
 

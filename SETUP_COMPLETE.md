@@ -1,6 +1,6 @@
-# ✅ Portland Fresh Project — Setup Complete
+# ✅ Long Life Project — Setup Complete
 
-Your production-ready **Portland Fresh** marketing site with **Next.js 14** + **Sanity CMS** is ready for deployment.
+Your production-ready **Long Life** marketing site with **Next.js 14** + **Sanity CMS** is ready for deployment.
 
 ## What's Been Created
 
@@ -46,7 +46,7 @@ Your production-ready **Portland Fresh** marketing site with **Next.js 14** + **
 
 ### 📁 Project Structure
 ```
-Portland Fresh/
+DrinkLongLife/
 ├── app/                    # Next.js routes
 │   ├── page.tsx           # Home
 │   ├── blends/            # Blends collection
@@ -77,7 +77,7 @@ Portland Fresh/
 
 ### 1. Clone the Repository
 ```bash
-cd /Users/johnconnor/Documents/GitHub/Portland Fresh
+cd /Users/johnconnor/Documents/GitHub/DrinkLongLife
 ```
 
 ### 2. Install Dependencies
@@ -179,7 +179,7 @@ See **DEPLOYMENT.md** for step-by-step Vercel deployment with environment config
 
 ## Summary
 
-You now have a **production-grade, fully editable, content-driven marketing site** for Portland Fresh. Every page, every image, every piece of copy can be managed from Sanity Studio without touching code.
+You now have a **production-grade, fully editable, content-driven marketing site** for Long Life. Every page, every image, every piece of copy can be managed from Sanity Studio without touching code.
 
 **Next step:** Deploy to Vercel! 🚀
 

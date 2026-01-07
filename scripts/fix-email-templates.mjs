@@ -38,7 +38,7 @@ const templatesToUpdate = [
     template_name: 'welcome',
     category: 'account',
     description: 'Welcome Email - New Account Registration',
-    subject_template: 'Welcome to Portland Fresh! 🌱',
+    subject_template: 'Welcome to Long Life! 🌱',
     data_schema: {
       customerName: 'string',
       customerEmail: 'string',
@@ -55,16 +55,16 @@ const templatesToUpdate = [
     <div class="email-container">
       {{standardHeader}}
       <div class="content">
-        <h1>Welcome to Portland Fresh!</h1>
+        <h1>Welcome to Long Life!</h1>
         <p>Hi {{customerName}},</p>
         <p>
-          Thank you for joining Portland Fresh! We're thrilled to have you as part of our wellness community.
+          Thank you for joining Long Life! We're thrilled to have you as part of our wellness community.
         </p>
 
         <div class="highlight-box">
           <h3 style="margin-top: 0;">What's Next?</h3>
           <ul style="margin-bottom: 0;">
-            <li>Explore our cold-pressed sauce blends</li>
+            <li>Explore our cold-pressed juice blends</li>
             <li>Learn about our regenerative farming partners</li>
             <li>Start your wellness journey with a subscription</li>
           </ul>
@@ -73,7 +73,7 @@ const templatesToUpdate = [
         <p>Ready to get started?</p>
 
         <div style="text-align: center;">
-          <a href="https://pdxfreshfoods.com/blends" class="button">
+          <a href="https://drinklonglife.com/blends" class="button">
             Explore Our Blends
           </a>
         </div>
@@ -84,7 +84,7 @@ const templatesToUpdate = [
 
         <p>
           Here's to your health!<br>
-          <strong>The Portland Fresh Team</strong>
+          <strong>The Long Life Team</strong>
         </p>
       </div>
       {{standardFooter}}
@@ -98,7 +98,7 @@ const templatesToUpdate = [
     template_name: 'password_reset',
     category: 'account',
     description: 'Password Reset Request',
-    subject_template: 'Reset Your Password - Portland Fresh',
+    subject_template: 'Reset Your Password - Long Life',
     data_schema: {
       customerName: 'string',
       resetUrl: 'string',
@@ -119,7 +119,7 @@ const templatesToUpdate = [
         <h1>Reset Your Password</h1>
         <p>Hi {{customerName}},</p>
         <p>
-          We received a request to reset your password for your Portland Fresh account.
+          We received a request to reset your password for your Long Life account.
           Click the button below to set a new password.
         </p>
 
@@ -140,7 +140,7 @@ const templatesToUpdate = [
 
         <p style="color: #6b7280; font-size: 13px;">
           For security reasons, this link can only be used once. If you need to reset your
-          password again, please visit <a href="https://pdxfreshfoods.com/forgot-password">pdxfreshfoods.com/forgot-password</a>.
+          password again, please visit <a href="https://drinklonglife.com/forgot-password">drinklonglife.com/forgot-password</a>.
         </p>
       </div>
       {{standardFooter}}
@@ -197,13 +197,13 @@ const templatesToUpdate = [
         <div class="highlight-box">
           <h3 style="margin-top: 0;">Important Reminder</h3>
           <p style="margin-bottom: 0;">
-            Please refrigerate your sauce immediately upon arrival.
-            Our cold-pressed sauces are best enjoyed within 5 days of delivery for maximum freshness and nutrition.
+            Please refrigerate your juice immediately upon arrival.
+            Our cold-pressed juices are best enjoyed within 5 days of delivery for maximum freshness and nutrition.
           </p>
         </div>
 
         <p>
-          Thank you for choosing Portland Fresh!
+          Thank you for choosing Long Life!
         </p>
       </div>
       {{standardFooter}}
@@ -217,7 +217,7 @@ const templatesToUpdate = [
     template_name: 'newsletter_welcome',
     category: 'marketing',
     description: 'Newsletter Welcome Email',
-    subject_template: 'Welcome to Portland Fresh! 🌱',
+    subject_template: 'Welcome to Long Life! 🌱',
     data_schema: {
       email: 'string',
     },
@@ -251,14 +251,14 @@ const templatesToUpdate = [
         </div>
 
         <div style="text-align: center;">
-          <a href="https://pdxfreshfoods.com/blends" class="button">
+          <a href="https://drinklonglife.com/blends" class="button">
             Explore Our Blends
           </a>
         </div>
 
         <p>
           Here's to your health!<br>
-          <strong>The Portland Fresh Team</strong>
+          <strong>The Long Life Team</strong>
         </p>
       </div>
       {{standardFooter}}

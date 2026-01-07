@@ -301,7 +301,7 @@ export default defineType({
       name: 'communityHashtagText',
       title: 'Community Hashtag Text',
       type: 'string',
-      initialValue: 'Tag #PortlandFresh to join a community of home cooks and local food lovers.',
+      initialValue: 'Tag #DrinkLongLife to join a community that chooses nature over noise.',
     }),
     defineField({
       name: 'newsletterCta',

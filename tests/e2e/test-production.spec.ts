@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('Production checkout redirects to Stripe', async ({ page }) => {
   // Go to production site
-  await page.goto('https://pdxfreshfoods.com');
+  await page.goto('https://drinklonglife.com');
 
   // Wait for page to load
   await page.waitForLoadState('networkidle');

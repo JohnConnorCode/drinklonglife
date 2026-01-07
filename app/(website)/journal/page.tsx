@@ -12,8 +12,8 @@ import { NewsletterSection } from '@/components/NewsletterSection';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: 'Journal | Portland Fresh',
-  description: 'Stories, recipes, and kitchen notes about sauces, pesto, salsa, and Portland sourcing.',
+  title: 'Journal | Long Life',
+  description: 'Stories, recipes, and insights about wellness and our cold-pressed juices.',
 };
 
 async function getPosts() {
@@ -60,7 +60,7 @@ export default async function JournalPage() {
           </FadeIn>
           <FadeIn direction="up" delay={0.3}>
             <p className="text-xl sm:text-2xl text-white/95 leading-relaxed max-w-3xl mx-auto drop-shadow-md">
-              Stories, recipes, and sourcing notes from our sauce kitchen and Portland markets.
+              Stories, recipes, and insights about wellness and our cold-pressed juices.
             </p>
           </FadeIn>
         </div>
@@ -90,7 +90,7 @@ export default async function JournalPage() {
                 )}
                 <div className="flex flex-col justify-center">
                   <div className="flex items-center gap-3 mb-4 text-sm text-gray-600">
-                    <span>{featuredPost.author || 'Portland Fresh'}</span>
+                    <span>{featuredPost.author || 'Long Life'}</span>
                     <span>•</span>
                     {featuredPost.publishedAt && (
                       <span>{new Date(featuredPost.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
@@ -144,7 +144,7 @@ export default async function JournalPage() {
                   )}
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-3 text-xs text-gray-500">
-                      <span>{post.author || 'Portland Fresh'}</span>
+                      <span>{post.author || 'Long Life'}</span>
                       {post.publishedAt && (
                         <>
                           <span>•</span>

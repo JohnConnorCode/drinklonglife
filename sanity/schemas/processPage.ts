@@ -16,7 +16,7 @@ export default defineType({
       name: 'heroSubheading',
       title: 'Hero Subheading',
       type: 'string',
-      initialValue: 'Cold-blended, packed in reusable containers, no shortcuts.',
+      initialValue: 'Cold-pressed, same-day bottled, no shortcuts.',
     }),
 
     // Process Steps (reuse existing processStep references)
@@ -75,7 +75,7 @@ export default defineType({
       title: 'Batch Commitment Text',
       type: 'text',
       rows: 3,
-      initialValue: 'We could make more. We could cut corners. We don\'t. Portland Fresh grows by making the same thing, better, week after week. That\'s the craft.',
+      initialValue: 'We could make more. We could cut corners. We don\'t. Long Life grows by making the same thing, better, week after week. That\'s the craft.',
     }),
     defineField({
       name: 'commitmentBadge',
@@ -90,7 +90,7 @@ export default defineType({
       title: 'Responsible Language Disclaimer',
       type: 'text',
       rows: 3,
-      initialValue: 'Responsible Language: We make sauce, not medical claims. Everyone is different. If you have a condition, talk to your practitioner. Our commitment is clean inputs and honest process.',
+      initialValue: 'Responsible Language: We make juice, not medical claims. Everyone is different. If you have a condition, talk to your practitioner. Our commitment is clean inputs and honest process.',
     }),
 
     defineField({

@@ -34,7 +34,7 @@ export function ErrorState({
       <p className="text-sm text-gray-500 mt-6">
         If this problem persists, please{' '}
         <a
-          href="mailto:support@pdxfreshfoods.com"
+          href="mailto:support@longlife.com"
           className="text-accent-primary hover:text-accent-dark font-semibold"
         >
           contact support

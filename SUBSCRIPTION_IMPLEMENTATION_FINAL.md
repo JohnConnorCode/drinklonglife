@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Full subscription e-commerce implementation for Portland Fresh juice products, including:
+Full subscription e-commerce implementation for Long Life juice products, including:
 - Database schema with recurring billing support
 - 9 Stripe subscription products (3 blends × 3 sizes)
 - DRY frontend architecture with subscription toggle UI

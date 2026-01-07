@@ -82,7 +82,7 @@ Each document now contains:
 
 ### Production Webhook Endpoint
 ```
-https://pdxfreshfoods.com/api/stripe/webhook
+https://drinklonglife.com/api/stripe/webhook
 ```
 
 ### Webhook Secret (Production)
@@ -95,7 +95,7 @@ whsec_d9vvwSrAHjyCe7paqi4g2QP0aaD7J9ZU
 1. Go to https://dashboard.stripe.com
 2. Navigate to **Developers → Webhooks**
 3. Click **Add endpoint**
-4. Enter URL: `https://pdxfreshfoods.com/api/stripe/webhook`
+4. Enter URL: `https://drinklonglife.com/api/stripe/webhook`
 5. Select events:
    - ✅ `checkout.session.completed`
    - ✅ `payment_intent.succeeded`
@@ -109,7 +109,7 @@ whsec_d9vvwSrAHjyCe7paqi4g2QP0aaD7J9ZU
 
 ### Via Sanity Studio (Recommended)
 
-1. Visit: https://pdxfreshfoods.sanity.studio
+1. Visit: https://drinklonglife.sanity.studio
 2. Find "Stripe Settings" document
 3. Change `mode` field:
    - `test` = Sandbox mode (no real charges)
@@ -119,7 +119,7 @@ whsec_d9vvwSrAHjyCe7paqi4g2QP0aaD7J9ZU
 
 ### Via Admin Panel
 
-1. Visit: https://pdxfreshfoods.com/admin/stripe
+1. Visit: https://drinklonglife.com/admin/stripe
 2. View current mode status
 3. Follow instructions to change mode in Sanity
 
@@ -142,8 +142,8 @@ whsec_d9vvwSrAHjyCe7paqi4g2QP0aaD7J9ZU
 - Webhooks: https://dashboard.stripe.com/webhooks
 
 ### Admin Panel
-- Stripe mode indicator: https://pdxfreshfoods.com/admin/stripe
-- User management: https://pdxfreshfoods.com/admin/users
+- Stripe mode indicator: https://drinklonglife.com/admin/stripe
+- User management: https://drinklonglife.com/admin/users
 
 ### Supabase
 - Orders table: Check for new production orders
@@ -154,7 +154,7 @@ whsec_d9vvwSrAHjyCe7paqi4g2QP0aaD7J9ZU
 
 ### To Immediately Stop All Transactions
 
-1. Go to Sanity Studio: https://pdxfreshfoods.sanity.studio
+1. Go to Sanity Studio: https://drinklonglife.sanity.studio
 2. Open "Stripe Settings"
 3. Change mode from `production` to `test`
 4. Click **Publish**
@@ -178,8 +178,8 @@ whsec_d9vvwSrAHjyCe7paqi4g2QP0aaD7J9ZU
 ## Support & Resources
 
 - Stripe Dashboard: https://dashboard.stripe.com
-- Sanity Studio: https://pdxfreshfoods.sanity.studio
-- Admin Panel: https://pdxfreshfoods.com/admin/stripe
+- Sanity Studio: https://drinklonglife.sanity.studio
+- Admin Panel: https://drinklonglife.com/admin/stripe
 - Stripe Docs: https://stripe.com/docs
 - Sanity Docs: https://www.sanity.io/docs
 

@@ -1,4 +1,4 @@
-# Portland Fresh - Launch QA Checklist
+# Long Life - Launch QA Checklist
 
 **Date**: _____________
 **Tested By**: _____________
@@ -90,7 +90,7 @@
 - [ ] Blend pages have dynamic meta titles
 - [ ] Journal posts have dynamic meta titles
 - [ ] Fallback to Site Settings if page meta missing
-- [ ] Title template applied correctly (e.g., "Page | Portland Fresh")
+- [ ] Title template applied correctly (e.g., "Page | Long Life")
 
 ### Sitemap & Robots
 - [ ] `/sitemap.xml` accessible and valid

@@ -79,7 +79,7 @@ export default defineType({
           name: 'titleTemplate',
           title: 'Title Template',
           type: 'string',
-          description: 'Use %s for page title. E.g., "%s | Portland Fresh"',
+          description: 'Use %s for page title. E.g., "%s | Long Life"',
         }),
         defineField({
           name: 'twitterHandle',

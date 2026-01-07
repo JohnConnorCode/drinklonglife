@@ -45,7 +45,7 @@ Your e-commerce platform now has **complete control** through Supabase with a cu
 ## 🗂️ File Structure
 
 ```
-/home/user/pdxfresh/
+/home/user/drinklonglife/
 ├── app/
 │   ├── (admin)/admin/products/
 │   │   ├── page.tsx                 # Product list

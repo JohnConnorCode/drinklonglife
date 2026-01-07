@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
  * Diagnostic test to check what data is available on production blend pages
  */
 
-const PRODUCTION_URL = 'https://pdxfreshfoods.com';
+const PRODUCTION_URL = 'https://drinklonglife.com';
 
 test.describe('Production Diagnostic - Blend Page Data', () => {
   test('should check green-bomb page HTML and data', async ({ page }) => {

@@ -24,7 +24,7 @@ const SIZE_OPTIONS = [
   { value: 'gallon', label: 'Gallon' },
   { value: 'half_gallon', label: 'Half Gallon' },
   { value: 'shot', label: 'Shot' },
-  { value: 'container', label: 'Container' },
+  { value: 'bottle', label: 'Bottle' },
   { value: 'case', label: 'Case' },
 ];
 

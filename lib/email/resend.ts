@@ -13,4 +13,4 @@ export const isEmailConfigured = () => {
 };
 
 // Default sender email (configure in Resend dashboard)
-export const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Portland Fresh <orders@pdxfreshfoods.com>';
+export const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Long Life <orders@drinklonglife.com>';

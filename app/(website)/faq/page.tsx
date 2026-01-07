@@ -30,8 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const faqPage = await getFAQPage();
 
   return {
-    title: faqPage?.seo?.metaTitle || 'FAQ | Portland Fresh',
-    description: faqPage?.seo?.metaDescription || 'Frequently asked questions about Portland Fresh sauces, subscriptions, and ordering.',
+    title: faqPage?.seo?.metaTitle || 'FAQ | Long Life',
+    description: faqPage?.seo?.metaDescription || 'Frequently asked questions about Long Life juices and ordering.',
   };
 }
 
@@ -147,7 +147,7 @@ export default async function FAQPage() {
               We're here to help! Reach out to our team and we'll get back to you within 24 hours.
             </p>
             <a
-              href="mailto:hello@pdxfreshfoods.com"
+              href="mailto:hello@drinklonglife.com"
               className="inline-block px-8 py-4 bg-accent-primary text-white rounded-full font-semibold text-lg hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Contact Us

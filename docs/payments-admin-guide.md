@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide explains how to manage the Stripe + Sanity payments system for Portland Fresh. You can manage everything through the Stripe Dashboard and Sanity Studio—**no code required**.
+This guide explains how to manage the Stripe + Sanity payments system for Long Life. You can manage everything through the Stripe Dashboard and Sanity Studio—**no code required**.
 
 ---
 

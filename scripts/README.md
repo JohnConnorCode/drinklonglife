@@ -1,6 +1,6 @@
 # Scripts Directory
 
-This directory contains utility scripts for managing the Portland Fresh e-commerce platform. All product-related scripts use **Supabase + Stripe only** (NOT Sanity CMS).
+This directory contains utility scripts for managing the DrinkLongLife e-commerce platform. All product-related scripts use **Supabase + Stripe only** (NOT Sanity CMS).
 
 ## Essential Product & Stripe Scripts
 

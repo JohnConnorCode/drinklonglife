@@ -227,7 +227,7 @@ NEXTAUTH_SECRET=... (different from dev)
 ## Project Structure
 
 ```
-pdxfresh/
+drinklonglife/
 ├── app/
 │   ├── api/
 │   │   ├── auth/[...nextauth]/    # NextAuth API routes

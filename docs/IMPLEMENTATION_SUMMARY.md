@@ -2,7 +2,7 @@
 
 ## Overview
 
-A complete, production-ready Stripe + Sanity + Next.js payment system has been successfully implemented for the Portland Fresh application. The system supports both **subscriptions** and **one-time payments**, with full support for **product variants** (Gallons, Half Gallons, Shots).
+A complete, production-ready Stripe + Sanity + Next.js payment system has been successfully implemented for the Long Life application. The system supports both **subscriptions** and **one-time payments**, with full support for **product variants** (Gallons, Half Gallons, Shots).
 
 ---
 
@@ -298,7 +298,7 @@ Updated build script:
 ## 🗂️ File Structure
 
 ```
-pdxfresh/
+drinklonglife/
 ├── app/
 │   ├── api/
 │   │   ├── auth/

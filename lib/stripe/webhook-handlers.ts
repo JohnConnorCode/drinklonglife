@@ -225,7 +225,7 @@ export async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Se
             data: {
               customerName: session.customer_details?.name || 'there',
               referralCode: profile?.referral_code || '',
-              referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com'}/referral/${profile?.referral_code || ''}`,
+              referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com'}/referral/${profile?.referral_code || ''}`,
             },
             userId,
           });
@@ -440,7 +440,7 @@ export async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
         amount: (invoice.amount_due / 100).toFixed(2),
         currency: invoice.currency?.toUpperCase() || 'USD',
         retryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString(), // 3 days from now
-        updatePaymentUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com'}/account/billing`,
+        updatePaymentUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com'}/account/billing`,
       },
       userId: profile?.id,
     });

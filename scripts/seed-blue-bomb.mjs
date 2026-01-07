@@ -65,12 +65,12 @@ const blueBombProduct = {
   best_for: ['Midday balance', 'Early evening', 'Diabetic-friendly', 'Metabolic support'],
   label_color: 'blue',
   image_url: '/blue-bomb.png',
-  image_alt: 'Blue Bomb cold-pressed sauce blend',
+  image_alt: 'Blue Bomb cold-pressed juice blend',
   is_featured: true,
   is_active: true,
   display_order: 4,
-  meta_title: 'Blue Bomb - Balance & Blood Sugar Support | Portland Fresh',
-  meta_description: 'Diabetic-friendly cold-pressed sauce with nopal, spinach, cucumber, aloe, and watercress. Stabilize blood sugar and maintain steady energy throughout your day.',
+  meta_title: 'Blue Bomb - Balance & Blood Sugar Support | Long Life',
+  meta_description: 'Diabetic-friendly cold-pressed juice with nopal, spinach, cucumber, aloe, and watercress. Stabilize blood sugar and maintain steady energy throughout your day.',
 };
 
 // Blue Bomb ingredients
@@ -281,7 +281,7 @@ async function seedBlueBomb() {
       description: blueBombProduct.tagline,
       images: blueBombProduct.image_url.startsWith('http')
         ? [blueBombProduct.image_url]
-        : [`https://pdxfreshfoods.com${blueBombProduct.image_url}`],
+        : [`https://drinklonglife.com${blueBombProduct.image_url}`],
       metadata: {
         supabase_product_id: product.id,
         slug: blueBombProduct.slug,
@@ -330,7 +330,7 @@ async function seedBlueBomb() {
     }
 
     console.log('\n✨ Blue Bomb seeding complete!');
-    console.log(`\n🔗 Product URL: https://pdxfreshfoods.com/blends/blue-bomb`);
+    console.log(`\n🔗 Product URL: https://drinklonglife.com/blends/blue-bomb`);
 
     return product.id;
   } catch (error) {

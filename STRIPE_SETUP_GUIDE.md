@@ -84,7 +84,7 @@ yarn dev
 ### Step 2: Set Environment Variables in Vercel
 
 1. Go to https://vercel.com/dashboard
-2. Select your project (`pdxfresh`)
+2. Select your project (`drinklonglife`)
 3. Go to **Settings** → **Environment Variables**
 4. Add these variables:
 

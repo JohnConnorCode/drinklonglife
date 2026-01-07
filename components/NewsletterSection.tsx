@@ -14,9 +14,9 @@ interface NewsletterSectionProps {
 }
 
 export function NewsletterSection({
-  header = 'Join the Portland Fresh Dispatch',
-  subtext = 'Weekly menus, pickup windows, and farm stories straight from our Buckman kitchen. No noise—just what you need to plan your next drop.',
-  footnote = 'No spam. Just seasonal intel and early access to limited runs.',
+  header = 'Join the Long Life NEWSLETTER',
+  subtext = 'Be the first to know about new Bombs, pop-up events, weekly batch drops, giveaways, and behind-the-scenes lab work. Your health journey deserves front-row access.',
+  footnote = 'We send only value — fresh drops, no spam.',
   listId,
   className = '',
   showHeader = true,

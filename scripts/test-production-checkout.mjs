@@ -13,8 +13,8 @@ async function testProductionCheckout() {
 
   try {
     // Navigate to production site
-    console.log('📍 Navigating to https://pdxfreshfoods.com/blends/green-bomb...');
-    await page.goto('https://pdxfreshfoods.com/blends/green-bomb', {
+    console.log('📍 Navigating to https://drinklonglife.com/blends/green-bomb...');
+    await page.goto('https://drinklonglife.com/blends/green-bomb', {
       waitUntil: 'networkidle',
       timeout: 30000
     });
@@ -100,7 +100,7 @@ async function testProductionCheckout() {
 
     // Test one-time purchase too
     console.log('\n\n📍 Testing ONE-TIME purchase...');
-    await page.goto('https://pdxfreshfoods.com/blends/green-bomb', {
+    await page.goto('https://drinklonglife.com/blends/green-bomb', {
       waitUntil: 'networkidle',
       timeout: 30000
     });

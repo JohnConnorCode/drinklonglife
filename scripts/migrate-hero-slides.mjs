@@ -68,28 +68,28 @@ async function uploadImageFromFile(filePath, filename) {
 // Slide content to migrate
 const slideContent = [
   {
-    heading: 'Dips & Sauces Made Fresh in Portland',
-    subheading: 'Weekly batches of pesto, salsa, chimichurri, and zhug using organic produce from Oregon farms.',
-    ctaText: 'Shop Sauces',
+    heading: 'Peak Performance Starts Here',
+    subheading: 'Cold-pressed, small-batch juices crafted for serious athletes and health-conscious humans.',
+    ctaText: 'Shop Blends',
     ctaLink: '/blends',
-    desktopFile: 'public/portland-fresh-new-1.jpg',
-    mobileFile: 'public/portland-fresh-new-2.jpg',
+    desktopFile: 'public/slider-desktop-1.png',
+    mobileFile: 'public/slider-mobile-1.png',
   },
   {
-    heading: 'Made From Local Ingredients',
-    subheading: 'Only olive oil, citrus, and raw apple cider vinegar—never fillers, sugar, or preservatives.',
+    heading: 'Real Ingredients. Real Results.',
+    subheading: 'No concentrates. No shortcuts. Just whole fruits, roots, and greens pressed fresh weekly.',
     ctaText: 'Our Process',
     ctaLink: '/how-we-make-it',
-    desktopFile: 'public/portland-fresh-new-3.jpg',
-    mobileFile: 'public/portland-fresh-new-4.jpg',
+    desktopFile: 'public/slider-desktop-2.png',
+    mobileFile: 'public/slider-mobile-2.png',
   },
   {
-    heading: 'Find Us at New Seasons & Local Markets',
-    subheading: 'Portland Fresh is rooted in Buckman and pours back into every neighborhood we serve.',
-    ctaText: 'Where to Buy',
-    ctaLink: '/contact',
-    desktopFile: 'public/portland-fresh-new-5.jpg',
-    mobileFile: 'public/portland-fresh-new-6.jpg',
+    heading: 'Small-Batch Integrity',
+    subheading: 'Limited runs. First come, first served. Made in Indiana with ingredients you can trace.',
+    ctaText: 'Learn More',
+    ctaLink: '/about',
+    desktopFile: 'public/slider-desktop-3.png',
+    mobileFile: 'public/slider-mobile-3.png',
   },
 ];
 

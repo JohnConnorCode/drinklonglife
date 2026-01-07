@@ -1,6 +1,6 @@
-# Portland Fresh Website Content Guide
+# Long Life Website Content Guide
 
-This guide contains all the copy for the Portland Fresh website, organized by Sanity CMS sections. Use this to populate your Sanity Studio with premium, movement-oriented content.
+This guide contains all the copy for the Long Life website, organized by Sanity CMS sections. Use this to populate your Sanity Studio with premium, movement-oriented content.
 
 ---
 
@@ -9,13 +9,13 @@ This guide contains all the copy for the Portland Fresh website, organized by Sa
 **Navigate to:** Sanity Studio → Site Settings
 
 ```
-Title: Portland Fresh
+Title: Long Life
 Tagline: Real juice. Real people.
 Contact Email: hello@longlife.com
 Address: Indiana, USA
 
 Social Links:
-- Instagram: @Portland Fresh
+- Instagram: @DrinkLongLife
 - (Add other social URLs as needed)
 ```
 
@@ -121,7 +121,7 @@ Standards:
 ### Community Blurb
 ```
 We grow by word of mouth. Taste it. Share it. Bring a friend to pickup day.
-Tag #Portland Fresh to join a community that chooses nature over noise.
+Tag #DrinkLongLife to join a community that chooses nature over noise.
 ```
 
 ---
@@ -162,7 +162,7 @@ Featured: Yes
 Display Order: 1
 
 SEO:
-Meta Title: Yellow Bomb - Energy & Focus Juice | Portland Fresh
+Meta Title: Yellow Bomb - Energy & Focus Juice | Long Life
 Meta Description: Cold-pressed tropical juice blend for natural energy, focus, and mood elevation. Made with guava, orange, ginger, and more.
 ```
 
@@ -197,7 +197,7 @@ Featured: Yes
 Display Order: 2
 
 SEO:
-Meta Title: Red Bomb - Detox & Recovery Juice | Portland Fresh
+Meta Title: Red Bomb - Detox & Recovery Juice | Long Life
 Meta Description: Cold-pressed beet and berry juice for circulation, detox, and cellular recovery. A powerful reset formula.
 ```
 
@@ -233,7 +233,7 @@ Featured: Yes
 Display Order: 3
 
 SEO:
-Meta Title: Green Bomb - Hydration & Clarity Juice | Portland Fresh
+Meta Title: Green Bomb - Hydration & Clarity Juice | Long Life
 Meta Description: Cold-pressed green juice for hydration, gut balance, and mental clarity. Your daily baseline blend.
 ```
 
@@ -324,7 +324,7 @@ For each ingredient, add:
 ```markdown
 # Return to nature in a world of machines.
 
-Modern life is efficient but empty. Portland Fresh exists to bring people back to real nourishment and clear minds. We make fresh, functional blends in small batches, serve a committed community, then refine based on real feedback. We are starting local and building something worthy of global attention.
+Modern life is efficient but empty. Long Life exists to bring people back to real nourishment and clear minds. We make fresh, functional blends in small batches, serve a committed community, then refine based on real feedback. We are starting local and building something worthy of global attention.
 
 ## Our promise
 
@@ -358,7 +358,7 @@ Create these initial posts:
 1. **Why cold-pressed matters**
 2. **The truth about "juice" with no juice**
 3. **How to choose a daily baseline blend**
-4. **Inside a Portland Fresh batch day**
+4. **Inside a Long Life batch day**
 
 ---
 

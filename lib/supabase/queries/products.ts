@@ -6,7 +6,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 import { createClient as createBrowserClient } from '@supabase/supabase-js';
-import { PORTLAND_FRESH_PRODUCTS, StaticProductData, StaticProductCategory } from '@/lib/data/portlandFreshProducts';
 
 // =====================================================
 // TYPE DEFINITIONS
@@ -23,9 +22,6 @@ export interface Product {
   how_to_use: any | null;
   function_list: string[] | null;
   best_for: string[] | null;
-  ingredients_preview?: string[] | null;
-  weight?: string | null;
-  heat_level?: string | null;
   label_color: 'yellow' | 'red' | 'green' | 'blue' | null;
   image_url: string | null;
   image_alt: string | null;
@@ -38,8 +34,6 @@ export interface Product {
   created_at: string;
   updated_at: string;
   published_at: string | null;
-  category?: StaticProductCategory | null;
-  contains_nuts?: boolean | null;
 }
 
 export interface ProductWithIngredients extends Product {
@@ -84,232 +78,6 @@ export interface ProductVariant {
 }
 
 // =====================================================
-// STATIC DATA HELPERS
-// =====================================================
-
-const STATIC_PRODUCT_MAP = new Map(PORTLAND_FRESH_PRODUCTS.map((product) => [product.slug, product]));
-
-function createPortableTextBlock(slug: string, key: string, text?: string) {
-  if (!text) return null;
-  return [
-    {
-      _type: 'block',
-      _key: `${slug}-${key}`,
-      style: 'normal',
-      children: [
-        {
-          _type: 'span',
-          _key: `${slug}-${key}-0`,
-          text,
-        },
-      ],
-    },
-  ];
-}
-
-function createPortableList(slug: string, key: string, items?: string[]) {
-  if (!items || items.length === 0) return null;
-  return items.map((item, index) => ({
-    _type: 'block',
-    _key: `${slug}-${key}-${index}`,
-    style: 'normal',
-    listItem: 'bullet',
-    children: [
-      {
-        _type: 'span',
-        _key: `${slug}-${key}-${index}-0`,
-        text: item,
-      },
-    ],
-  }));
-}
-
-function detectIngredientType(name: string): Ingredient['type'] {
-  const lower = name.toLowerCase();
-  if (lower.includes('parsley') || lower.includes('cilantro') || lower.includes('basil') || lower.includes('arugula') || lower.includes('spinach') || lower.includes('kale') || lower.includes('oregano')) {
-    return 'herb';
-  }
-  if (lower.includes('tomato') || lower.includes('lemon') || lower.includes('lime') || lower.includes('apple')) {
-    return 'fruit';
-  }
-  if (lower.includes('garlic') || lower.includes('onion')) {
-    return 'root';
-  }
-  return 'other';
-}
-
-function createStaticIngredientEntries(staticProduct: StaticProductData) {
-  return staticProduct.ingredients.map((ingredient, index) => ({
-    id: `static-${staticProduct.slug}-ingredient-${index}`,
-    display_order: index + 1,
-    ingredient: {
-      id: `static-ingredient-${staticProduct.slug}-${index}`,
-      name: ingredient,
-      type: detectIngredientType(ingredient),
-      seasonality: null,
-      function: null,
-      sourcing_story: null,
-      nutritional_profile: null,
-      notes: null,
-      image_url: null,
-      image_alt: null,
-    } as Ingredient,
-  }));
-}
-
-function createStaticVariant(staticProduct: StaticProductData, productId: string) {
-  return [
-    {
-      id: `static-${staticProduct.slug}-variant`,
-      product_id: productId,
-      size_key: 'container',
-      label: `${staticProduct.weight} container`,
-      stripe_price_id: '',
-      is_default: true,
-      display_order: 1,
-      is_active: true,
-      price_usd: staticProduct.price ?? null,
-      sku: null,
-      billing_type: undefined,
-      recurring_interval: undefined,
-      recurring_interval_count: undefined,
-      stock_quantity: undefined,
-      track_inventory: false,
-      low_stock_threshold: undefined,
-    },
-  ];
-}
-
-function mapStaticProductToSummary(staticProduct: StaticProductData): Product {
-  const now = new Date().toISOString();
-  const summaryBlock = createPortableTextBlock(staticProduct.slug, 'summary', staticProduct.summary);
-  const storyBlock = createPortableTextBlock(staticProduct.slug, 'story', staticProduct.story);
-  const usesList = createPortableList(staticProduct.slug, 'uses', staticProduct.uses);
-
-  return {
-    id: `static-${staticProduct.slug}`,
-    name: staticProduct.name,
-    slug: staticProduct.slug,
-    tagline: staticProduct.tagline,
-    description: summaryBlock,
-    story: storyBlock,
-    detailed_function: storyBlock,
-    how_to_use: usesList,
-    function_list: staticProduct.uses,
-    best_for: staticProduct.bestFor,
-    ingredients_preview: staticProduct.ingredients,
-    weight: staticProduct.weight,
-    heat_level: staticProduct.heat || null,
-    label_color: staticProduct.labelColor,
-    image_url: staticProduct.image,
-    image_alt: staticProduct.imageAlt,
-    stripe_product_id: null,
-    is_featured: staticProduct.isFeatured ?? true,
-    is_active: true,
-    display_order: staticProduct.displayOrder,
-    meta_title: staticProduct.metaTitle ?? `${staticProduct.name} | Portland Fresh`,
-    meta_description: staticProduct.metaDescription ?? staticProduct.summary,
-    created_at: now,
-    updated_at: now,
-    published_at: now,
-    category: staticProduct.category,
-    contains_nuts: staticProduct.containsNuts ?? null,
-  };
-}
-
-function mergeProductWithStaticSummary(product: Product): Product {
-  const staticData = STATIC_PRODUCT_MAP.get(product.slug);
-  if (!staticData) return product;
-  const summaryBlock = createPortableTextBlock(staticData.slug, 'summary', staticData.summary);
-  const storyBlock = createPortableTextBlock(staticData.slug, 'story', staticData.story);
-  const usesList = createPortableList(staticData.slug, 'uses', staticData.uses);
-
-  return {
-    ...product,
-    name: staticData.name,
-    tagline: staticData.tagline,
-    function_list: staticData.uses,
-    best_for: staticData.bestFor,
-    ingredients_preview: staticData.ingredients,
-    weight: staticData.weight,
-    heat_level: staticData.heat || null,
-    label_color: staticData.labelColor,
-    image_url: staticData.image,
-    image_alt: staticData.imageAlt,
-    is_featured: staticData.isFeatured ?? product.is_featured,
-    display_order: staticData.displayOrder,
-    meta_title: staticData.metaTitle ?? product.meta_title,
-    meta_description: staticData.metaDescription ?? product.meta_description,
-    description: product.description ?? summaryBlock,
-    story: product.story ?? storyBlock,
-    detailed_function: product.detailed_function ?? storyBlock,
-    how_to_use: product.how_to_use ?? usesList,
-    category: staticData.category,
-    contains_nuts: staticData.containsNuts ?? null,
-  };
-}
-
-function ensureStaticSummaries(products: Product[]): Product[] {
-  const summaries = products
-    .filter((product) => STATIC_PRODUCT_MAP.has(product.slug))
-    .map((product) => mergeProductWithStaticSummary(product));
-
-  if (summaries.length === 0) {
-    return PORTLAND_FRESH_PRODUCTS.map(mapStaticProductToSummary);
-  }
-
-  const existing = new Set(summaries.map((product) => product.slug));
-  PORTLAND_FRESH_PRODUCTS.forEach((staticProduct) => {
-    if (!existing.has(staticProduct.slug)) {
-      summaries.push(mapStaticProductToSummary(staticProduct));
-    }
-  });
-
-  return summaries.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
-}
-
-function mapStaticProductToDetail(staticProduct: StaticProductData): ProductWithIngredients {
-  const summary = mapStaticProductToSummary(staticProduct);
-  return {
-    ...summary,
-    description: staticProduct.summary,
-    story: staticProduct.story,
-    detailed_function: null,
-    how_to_use: null,
-    ingredients: createStaticIngredientEntries(staticProduct),
-    variants: createStaticVariant(staticProduct, summary.id),
-  };
-}
-
-function mergeProductDetailWithStatic(product: ProductWithIngredients): ProductWithIngredients {
-  const staticData = STATIC_PRODUCT_MAP.get(product.slug);
-  if (!staticData) return product;
-  return {
-    ...product,
-    name: staticData.name,
-    tagline: staticData.tagline,
-    image_url: staticData.image,
-    image_alt: staticData.imageAlt,
-    function_list: staticData.uses,
-    best_for: staticData.bestFor,
-    ingredients_preview: staticData.ingredients,
-    weight: staticData.weight,
-    heat_level: staticData.heat || null,
-    label_color: staticData.labelColor,
-    meta_title: staticData.metaTitle ?? product.meta_title,
-    meta_description: staticData.metaDescription ?? product.meta_description,
-    ingredients:
-      product.ingredients && product.ingredients.length > 0
-        ? product.ingredients
-        : createStaticIngredientEntries(staticData),
-    variants:
-      product.variants && product.variants.length > 0
-        ? product.variants
-        : createStaticVariant(staticData, product.id),
-  };
-}
-
-// =====================================================
 // QUERY FUNCTIONS
 // =====================================================
 
@@ -342,10 +110,10 @@ export async function getAllProducts(): Promise<Product[]> {
 
   if (error) {
     logger.error('Error fetching products:', error);
-    return PORTLAND_FRESH_PRODUCTS.map(mapStaticProductToSummary);
+    return [];
   }
 
-  return ensureStaticSummaries((data as Product[]) || []);
+  return data as Product[];
 }
 
 /**
@@ -353,35 +121,6 @@ export async function getAllProducts(): Promise<Product[]> {
  */
 export interface ProductWithMinPrice extends Product {
   min_price: number | null;
-}
-
-function mapStaticProductToMinPrice(staticProduct: StaticProductData): ProductWithMinPrice {
-  return {
-    ...mapStaticProductToSummary(staticProduct),
-    min_price: staticProduct.price ?? null,
-  };
-}
-
-function ensureStaticMinPriceSummaries(products: ProductWithMinPrice[]): ProductWithMinPrice[] {
-  const summaries = products
-    .filter((product) => STATIC_PRODUCT_MAP.has(product.slug))
-    .map((product) => ({
-      ...mergeProductWithStaticSummary(product),
-      min_price: product.min_price,
-    }));
-
-  if (summaries.length === 0) {
-    return PORTLAND_FRESH_PRODUCTS.map(mapStaticProductToMinPrice);
-  }
-
-  const existing = new Set(summaries.map((product) => product.slug));
-  PORTLAND_FRESH_PRODUCTS.forEach((staticProduct) => {
-    if (!existing.has(staticProduct.slug)) {
-      summaries.push(mapStaticProductToMinPrice(staticProduct));
-    }
-  });
-
-  return summaries.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
 }
 
 /**
@@ -414,10 +153,11 @@ export async function getAllProductsWithMinPrice(): Promise<ProductWithMinPrice[
 
   if (error) {
     logger.error('Error fetching products with prices:', error);
-    return PORTLAND_FRESH_PRODUCTS.map(mapStaticProductToMinPrice);
+    return [];
   }
 
-  const calculated = (data || []).map((product: any) => {
+  // Calculate minimum price for each product
+  return (data || []).map((product: any) => {
     const variants = product.product_variants || [];
     const prices = variants
       .map((v: { price_usd: number | null }) => v.price_usd)
@@ -432,8 +172,6 @@ export async function getAllProductsWithMinPrice(): Promise<ProductWithMinPrice[
       min_price: minPrice,
     } as ProductWithMinPrice;
   });
-
-  return ensureStaticMinPriceSummaries(calculated);
 }
 
 /**
@@ -468,10 +206,10 @@ export async function getAllProductsForStaticGen(): Promise<Product[]> {
 
   if (error) {
     logger.error('Error fetching products for static gen:', error);
-    return PORTLAND_FRESH_PRODUCTS.map(mapStaticProductToSummary);
+    return [];
   }
 
-  return ensureStaticSummaries((data as Product[]) || []);
+  return data as Product[];
 }
 
 /**
@@ -530,10 +268,10 @@ export async function getProductBySlug(
 
   if (error) {
     logger.error('Error fetching product:', error);
-    const fallback = STATIC_PRODUCT_MAP.get(slug);
-    return fallback ? mapStaticProductToDetail(fallback) : null;
+    return null;
   }
 
+  // Sort ingredients and variants by display_order and filter active variants
   if (data) {
     data.ingredients = data.ingredients?.sort(
       (a: any, b: any) => a.display_order - b.display_order
@@ -543,12 +281,7 @@ export async function getProductBySlug(
       .sort((a: any, b: any) => a.display_order - b.display_order) || [];
   }
 
-  const staticData = STATIC_PRODUCT_MAP.get(slug);
-  if (!data) {
-    return staticData ? mapStaticProductToDetail(staticData) : null;
-  }
-
-  return mergeProductDetailWithStatic(data as ProductWithIngredients);
+  return data as ProductWithIngredients;
 }
 
 /**
@@ -597,16 +330,20 @@ export async function getActiveStripeProducts(): Promise<ProductWithIngredients[
 
   if (error) {
     logger.error('Error fetching Stripe products:', error);
-    return PORTLAND_FRESH_PRODUCTS.map(mapStaticProductToDetail);
+    return [];
   }
 
-  const productsWithVariants = (data || [])
-    .filter((product: any) => STATIC_PRODUCT_MAP.has(product.slug) && product.variants && product.variants.length > 0)
-    .map((product: any) => mergeProductDetailWithStatic(product as ProductWithIngredients));
+  // Filter products that have active variants
+  const productsWithVariants = (data || []).filter(
+    (product: any) => product.variants && product.variants.length > 0
+  );
 
-  if (productsWithVariants.length === 0) {
-    return PORTLAND_FRESH_PRODUCTS.map(mapStaticProductToDetail);
-  }
+  // Sort variants by display_order
+  productsWithVariants.forEach((product: any) => {
+    product.variants = product.variants
+      ?.filter((v: any) => v.is_active)
+      .sort((a: any, b: any) => a.display_order - b.display_order) || [];
+  });
 
   return productsWithVariants as ProductWithIngredients[];
 }
@@ -640,22 +377,10 @@ export async function getFeaturedProducts(): Promise<Product[]> {
 
   if (error) {
     logger.error('Error fetching featured products:', error);
-    return PORTLAND_FRESH_PRODUCTS.filter((product) => product.isFeatured !== false)
-      .map(mapStaticProductToSummary)
-      .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+    return [];
   }
 
-  const merged = ensureStaticSummaries((data as Product[]) || []).filter((product) =>
-    (STATIC_PRODUCT_MAP.get(product.slug)?.isFeatured ?? true)
-  );
-
-  if (merged.length === 0) {
-    return PORTLAND_FRESH_PRODUCTS.filter((product) => product.isFeatured !== false)
-      .map(mapStaticProductToSummary)
-      .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
-  }
-
-  return merged.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+  return data as Product[];
 }
 
 /**

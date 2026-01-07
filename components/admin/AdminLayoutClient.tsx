@@ -28,7 +28,7 @@ export function AdminLayoutClient({
               />
             </div>
             <div>
-              <div className="font-heading text-lg font-bold text-gray-900">Portland Fresh</div>
+              <div className="font-heading text-lg font-bold text-gray-900">Long Life</div>
               <div className="text-xs text-accent-primary font-medium">Admin Console</div>
             </div>
           </Link>
@@ -51,7 +51,7 @@ export function AdminLayoutClient({
             />
           </div>
           <div>
-            <div className="font-heading text-base font-bold text-gray-900">Portland Fresh</div>
+            <div className="font-heading text-base font-bold text-gray-900">Long Life</div>
             <div className="text-xs text-accent-primary font-medium">Admin</div>
           </div>
         </Link>
@@ -80,7 +80,7 @@ export function AdminLayoutClient({
         <footer className="flex-shrink-0 border-t border-gray-200 bg-white mt-auto">
           <div className="px-6 lg:px-8 py-4">
             <p className="text-sm text-gray-500 text-center">
-              Portland Fresh Admin Console
+              Long Life Admin Console
             </p>
           </div>
         </footer>

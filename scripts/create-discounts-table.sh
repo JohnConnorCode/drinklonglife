@@ -38,7 +38,7 @@ else
     -d '[
       {"code": "SAVE20", "name": "20% Off", "description": "Get 20% off your order", "discount_type": "percent", "discount_percent": 20, "is_active": true},
       {"code": "WELCOME10", "name": "$10 Off First Order", "description": "$10 off orders over $50", "discount_type": "amount", "discount_amount_cents": 1000, "min_amount_cents": 5000, "first_time_only": true, "is_active": true},
-      {"code": "SAUCE25", "name": "25% Off", "description": "Special 25% discount", "discount_type": "percent", "discount_percent": 25, "is_active": true}
+      {"code": "JUICE25", "name": "25% Off", "description": "Special 25% discount", "discount_type": "percent", "discount_percent": 25, "is_active": true}
     ]'
 
   echo ""

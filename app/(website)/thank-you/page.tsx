@@ -10,7 +10,7 @@ import { upsellOffersQuery } from '@/lib/sanity.queries';
 import { logger } from '@/lib/logger';
 
 export const metadata: Metadata = {
-  title: 'Thank You! | Portland Fresh',
+  title: 'Thank You! | Long Life',
   description: 'Thank you for your purchase',
 };
 
@@ -199,7 +199,7 @@ export default async function ThankYouPage({ searchParams }: ThankYouPageProps) 
               </div>
               <h3 className="font-semibold mb-2">Enjoy!</h3>
               <p className="text-sm text-gray-600">
-                Start experiencing the benefits of Portland Fresh. Check your account
+                Start experiencing the benefits of Long Life. Check your account
                 for exclusive perks and resources.
               </p>
             </div>

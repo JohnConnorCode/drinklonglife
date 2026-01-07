@@ -176,8 +176,8 @@ const STANDARD_STYLES = `
 
 const STANDARD_HEADER = `
 <div class="header">
-  <div class="logo">Portland Fresh</div>
-  <div class="tagline">Farm-Pressed Nutrition</div>
+  <div class="logo">Long Life</div>
+  <div class="tagline">Cold-Pressed Wellness</div>
 </div>
 `;
 
@@ -185,17 +185,17 @@ const STANDARD_FOOTER = `
 <div class="footer">
   <!-- Ambassador CTA - appears in all customer emails -->
   <div style="background-color: #ecfdf5; padding: 16px 20px; margin: 0 -20px 20px -20px; border-top: 2px solid #22c55e;">
-    <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #166534;">Love Portland Fresh? Become an Ambassador!</p>
+    <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #166534;">Love Long Life? Become an Ambassador!</p>
     <p style="margin: 0 0 12px 0; font-size: 13px; color: #15803d;">Earn rewards when you share the wellness with friends.</p>
-    <a href="https://pdxfreshfoods.com/ambassador" style="display: inline-block; background-color: #22c55e; color: #ffffff; padding: 8px 20px; text-decoration: none; border-radius: 20px; font-size: 13px; font-weight: 600;">Join the Movement</a>
+    <a href="https://drinklonglife.com/ambassador" style="display: inline-block; background-color: #22c55e; color: #ffffff; padding: 8px 20px; text-decoration: none; border-radius: 20px; font-size: 13px; font-weight: 600;">Join the Movement</a>
   </div>
 
-  <p style="margin: 0 0 8px 0;">Questions? Contact us at <a href="mailto:support@pdxfreshfoods.com" style="color: #22c55e;">support@pdxfreshfoods.com</a></p>
+  <p style="margin: 0 0 8px 0;">Questions? Contact us at <a href="mailto:support@drinklonglife.com" style="color: #22c55e;">support@drinklonglife.com</a></p>
 
   <!-- CAN-SPAM Compliance: Physical Address Required -->
   <p style="margin: 8px 0; font-size: 12px; color: #9ca3af;">
-    Portland Fresh, Inc.<br>
-    Portland, OR
+    Long Life, Inc.<br>
+    Los Angeles, CA
   </p>
 
   <p style="margin-top: 15px; font-size: 11px; color: #9ca3af;">
@@ -206,107 +206,65 @@ const STANDARD_FOOTER = `
 `;
 
 /**
- * Apply a formatter to a value
- */
-function applyFormatter(value: any, formatter: string, currency: string): string {
-  if (value === null || value === undefined) return '';
-
-  switch (formatter) {
-    case 'currency':
-      const amount = typeof value === 'number' ? value : parseFloat(String(value));
-      return isNaN(amount) ? String(value) : formatCurrency(amount, currency);
-    case 'formatDate':
-      const date = new Date(String(value));
-      return isNaN(date.getTime()) ? String(value) : date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-    case 'uppercase':
-      return String(value).toUpperCase();
-    case 'lowercase':
-      return String(value).toLowerCase();
-    default:
-      return String(value);
-  }
-}
-
-/**
- * Get nested value from object using dot notation
- */
-function getNestedValue(obj: Record<string, any>, path: string): any {
-  const parts = path.split('.');
-  let current: any = obj;
-  for (const part of parts) {
-    if (current === null || current === undefined) return undefined;
-    current = current[part];
-  }
-  return current;
-}
-
-/**
- * Process array loops: {{#items}}...{{/items}}
- */
-function processLoops(template: string, data: Record<string, any>, currency: string): string {
-  const loopRegex = /\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g;
-
-  return template.replace(loopRegex, (_, arrayName, innerTemplate) => {
-    const array = data[arrayName];
-    if (!Array.isArray(array)) return '';
-
-    return array.map((item, index) => {
-      const itemContext = typeof item === 'object' && item !== null
-        ? { ...item, _index: index }
-        : { _value: item, _index: index };
-      return processVariables(innerTemplate, itemContext, currency);
-    }).join('');
-  });
-}
-
-/**
- * Process simple variables with optional formatters: {{variable|formatter}}
- */
-function processVariables(template: string, data: Record<string, any>, currency: string): string {
-  const variableRegex = /\{\{(\w+(?:\.\w+)*)(?:\|(\w+))?\}\}/g;
-
-  return template.replace(variableRegex, (_, variablePath, formatter) => {
-    const value = getNestedValue(data, variablePath);
-    if (value === undefined || value === null) return '';
-
-    if (formatter) {
-      return applyFormatter(value, formatter, currency);
-    }
-
-    if (typeof value === 'string') {
-      return escapeHtml(value);
-    }
-
-    return String(value);
-  });
-}
-
-/**
  * Substitute {{variables}} in template with actual data
- * Supports:
- * - Simple variables: {{variableName}}
- * - Nested objects: {{order.id}}
- * - Arrays with loops: {{#items}}...{{/items}}
- * - Formatters: {{amount|currency}} or {{date|formatDate}}
  */
 function substituteVariables(template: string, data: Record<string, any>): string {
   let result = template;
-  const currency = data.currency || 'usd';
 
   // First, inject standard partials (DRY - defined once, used everywhere)
   result = result.replace(/{{standardStyles}}/g, STANDARD_STYLES);
   result = result.replace(/{{standardHeader}}/g, STANDARD_HEADER);
   result = result.replace(/{{standardFooter}}/g, STANDARD_FOOTER);
 
-  // Process loops first (they may contain variables)
-  result = processLoops(result, data, currency);
+  // Handle special {{itemsTable}} variable for order confirmations
+  if (template.includes('{{itemsTable}}') && data.items && Array.isArray(data.items)) {
+    const itemsHtml = `
+<table class="items-table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${data.items.map((item: any) => `
+    <tr>
+      <td>${escapeHtml(item.name)}</td>
+      <td>${item.quantity}</td>
+      <td>${formatCurrency(item.price, data.currency || 'usd')}</td>
+    </tr>
+    `).join('')}
+  </tbody>
+</table>
+    `.trim();
 
-  // Process simple variables with formatters
-  result = processVariables(result, data, currency);
+    result = result.replace('{{itemsTable}}', itemsHtml);
+  }
 
-  // Replace unsubscribe/preferences URLs
-  result = result.replace(/{{unsubscribeUrl}}/g, `https://pdxfreshfoods.com/unsubscribe?token=${data.unsubscribe_token || ''}`);
-  result = result.replace(/{{preferencesUrl}}/g, `https://pdxfreshfoods.com/account/email-preferences`);
+  // Replace all {{variableName}} with actual values
+  for (const [key, value] of Object.entries(data)) {
+    const pattern = new RegExp(`{{${key}}}`, 'g');
+
+    // Format special types
+    let formattedValue = value;
+    if (key === 'subtotal' || key === 'total' || key === 'planPrice') {
+      formattedValue = formatCurrency(value as number, data.currency || 'usd');
+    } else if (typeof value === 'string') {
+      formattedValue = escapeHtml(value);
+    } else if (value === null || value === undefined) {
+      formattedValue = '';
+    } else if (typeof value === 'object') {
+      // Skip complex objects (like items array)
+      continue;
+    }
+
+    result = result.replace(pattern, String(formattedValue));
+  }
+
+  // Replace unsubscribe/preferences URLs (these should be generated by the system)
+  result = result.replace(/{{unsubscribeUrl}}/g, `https://drinklonglife.com/unsubscribe?token={{unsubscribe_token}}`);
+  result = result.replace(/{{preferencesUrl}}/g, `https://drinklonglife.com/account/email-preferences`);
 
   return result;
 }
@@ -389,7 +347,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const resendApiKey = Deno.env.get('RESEND_API_KEY')!;
-    const emailFrom = Deno.env.get('EMAIL_FROM') || 'Portland Fresh <hello@pdxfreshfoods.com>';
+    const emailFrom = Deno.env.get('EMAIL_FROM') || 'Long Life <hello@drinklonglife.com>';
 
     if (!resendApiKey) {
       throw new Error('RESEND_API_KEY not configured');

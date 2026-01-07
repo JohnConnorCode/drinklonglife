@@ -265,7 +265,7 @@ RESEND_API_KEY=re_your_resend_api_key_here
 **Supabase Edge Function** (Project Settings → Edge Functions):
 ```bash
 RESEND_API_KEY=re_your_resend_api_key_here
-EMAIL_FROM="Portland Fresh <hello@pdxfreshfoods.com>"
+EMAIL_FROM="Long Life <hello@drinklonglife.com>"
 ```
 
 ### Database Tables

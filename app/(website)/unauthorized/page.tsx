@@ -4,7 +4,7 @@ import { Section } from '@/components/Section';
 import { FadeIn } from '@/components/animations';
 
 export const metadata: Metadata = {
-  title: 'Unauthorized | Portland Fresh',
+  title: 'Unauthorized | Long Life',
   description: 'You do not have access to this page',
 };
 

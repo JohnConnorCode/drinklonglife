@@ -47,7 +47,7 @@ export function BlendsGrid({ blends, showFilters = true, maxColumns = 3, maxItem
         <FadeIn direction="up" className="mb-12">
           <div className="flex flex-col items-center gap-4">
             <h2 className="font-heading text-2xl font-bold text-gray-900">
-              Filter by use case
+              Filter by function
             </h2>
             <div className="flex flex-wrap justify-center gap-3">
               <button
@@ -58,7 +58,7 @@ export function BlendsGrid({ blends, showFilters = true, maxColumns = 3, maxItem
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
                 }`}
               >
-                All Sauces
+                All Blends
               </button>
               {allFunctions.map((func) => (
                 <button
@@ -75,7 +75,7 @@ export function BlendsGrid({ blends, showFilters = true, maxColumns = 3, maxItem
               ))}
             </div>
             <p className="text-sm text-gray-500 mt-2">
-              {filteredBlends.length} sauce{filteredBlends.length !== 1 ? 's' : ''} found
+              {filteredBlends.length} blend{filteredBlends.length !== 1 ? 's' : ''} found
             </p>
           </div>
         </FadeIn>
@@ -100,11 +100,11 @@ export function BlendsGrid({ blends, showFilters = true, maxColumns = 3, maxItem
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-            <p className="text-xl text-gray-600 mb-2">No sauces found</p>
+            <p className="text-xl text-gray-600 mb-2">No blends found</p>
             <p className="text-sm text-gray-500">
               {selectedFilter !== 'all'
-                ? `No sauces match the "${selectedFilter}" filter. Try a different option.`
-                : 'No sauces available at the moment. Fresh batches are on the way.'}
+                ? `No blends match the "${selectedFilter}" function. Try a different filter.`
+                : 'No blends available at the moment. Check back soon!'}
             </p>
           </div>
         </FadeIn>

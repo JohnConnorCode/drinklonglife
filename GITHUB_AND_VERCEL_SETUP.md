@@ -3,7 +3,7 @@
 ## What's Been Done
 
 ### ✅ GitHub Repository
-- **Repo**: https://github.com/JohnConnorCode/pdxfresh
+- **Repo**: https://github.com/JohnConnorCode/drinklonglife
 - **Status**: Code pushed, main branch set up
 - **Initial Commit**: All project files
 - **Visibility**: Public (ready for webhooks)
@@ -20,7 +20,7 @@ You need a **Sanity project**. If you don't have one yet:
 1. Go to https://sanity.io
 2. Create account (free)
 3. Create new project:
-   - Name: `Portland Fresh`
+   - Name: `Long Life`
    - Dataset: `production`
 4. Copy your **Project ID** from Settings
 5. Create a **Read Token** in API Tokens section
@@ -29,7 +29,7 @@ You need a **Sanity project**. If you don't have one yet:
 
 1. **Open Vercel**: https://vercel.com/new
 2. **Connect GitHub**: Click "Continue with GitHub"
-3. **Find & Import**: Search for `pdxfresh` → Click "Import"
+3. **Find & Import**: Search for `drinklonglife` → Click "Import"
 4. **Add Environment Variables** (before clicking Deploy):
    ```
    NEXT_PUBLIC_SANITY_PROJECT_ID = abc123...
@@ -40,8 +40,8 @@ You need a **Sanity project**. If you don't have one yet:
 6. **Wait**: 2-3 minutes for build & deployment
 
 ### Your Live Site
-- **URL**: https://pdxfreshfoods.vercel.app
-- **Sanity Studio**: https://pdxfreshfoods.vercel.app/studio
+- **URL**: https://drinklonglife.vercel.app
+- **Sanity Studio**: https://drinklonglife.vercel.app/studio
 - **Custom Domain**: Add in Vercel Settings → Domains
 
 ---
@@ -77,10 +77,10 @@ Once deployed, go to your Sanity Studio and create:
 
 ## Useful Links
 
-- **GitHub Repo**: https://github.com/JohnConnorCode/pdxfresh
+- **GitHub Repo**: https://github.com/JohnConnorCode/drinklonglife
 - **Vercel Dashboard**: https://vercel.com/dashboard
 - **Sanity Project**: https://sanity.io/manage
-- **Sanity Studio**: https://pdxfreshfoods.vercel.app/studio
+- **Sanity Studio**: https://drinklonglife.vercel.app/studio
 - **Documentation**: See README.md for full setup guide
 
 ---
@@ -106,7 +106,7 @@ For instant updates when content changes:
 
 1. Go to Sanity project → API Webhooks
 2. Create webhook:
-   - URL: `https://pdxfreshfoods.vercel.app/api/revalidate`
+   - URL: `https://drinklonglife.vercel.app/api/revalidate`
    - Token: `Bearer your-revalidate-token`
 3. Add `REVALIDATE_SECRET` env var in Vercel
 4. Publish in Sanity → Site updates instantly

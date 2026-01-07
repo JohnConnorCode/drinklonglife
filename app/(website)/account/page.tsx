@@ -16,7 +16,7 @@ import { AccountUpsellCompact } from '@/components/upsells/AccountUpsellSection'
 import { isFeatureEnabled } from '@/lib/feature-flags';
 
 export const metadata: Metadata = {
-  title: 'My Account | Portland Fresh',
+  title: 'My Account | Long Life',
   description: 'Manage your subscriptions and purchases',
 };
 
@@ -396,7 +396,7 @@ export default async function AccountPage() {
                     Questions about your account?
                   </p>
                   <a
-                    href="mailto:support@pdxfreshfoods.com"
+                    href="mailto:support@longlife.com"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-white text-accent-primary rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm shadow-sm"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

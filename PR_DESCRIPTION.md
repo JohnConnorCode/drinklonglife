@@ -1,8 +1,8 @@
-# Add premium end-to-end website copy for Portland Fresh
+# Add premium end-to-end website copy for Long Life
 
 ## Summary
 
-This PR adds complete, premium website copy for Portland Fresh—grounded, movement-oriented messaging that converts on day one and scales from Indiana kitchen to global brand.
+This PR adds complete, premium website copy for Long Life—grounded, movement-oriented messaging that converts on day one and scales from Indiana kitchen to global brand.
 
 ## What's New
 
@@ -30,12 +30,12 @@ This PR adds complete, premium website copy for Portland Fresh—grounded, movem
 
 #### Site Settings
 ```
-Title: Portland Fresh
+Title: Long Life
 Tagline: Real juice. Real people.
 Contact Email: hello@longlife.com
 Address: Indiana, USA
 Social:
-  - Instagram: @Portland Fresh
+  - Instagram: @DrinkLongLife
 ```
 
 #### Navigation → Primary Links
@@ -83,7 +83,7 @@ Ingredients: Guava, Orange, Ginger, Mango, Spinach, Pineapple, Papaya, Cucumber
 Description: Bright tropicals and clean greens built for mornings and momentum.
 Featured: ✓ Yes
 Display Order: 1
-SEO Title: Yellow Bomb - Energy & Focus Juice | Portland Fresh
+SEO Title: Yellow Bomb - Energy & Focus Juice | Long Life
 SEO Description: Cold-pressed tropical juice blend for natural energy, focus, and mood elevation. Made with guava, orange, ginger, and more.
 ```
 
@@ -98,7 +98,7 @@ Ingredients: Beet, Carrot, Strawberry, Papaya, Red Cabbage, Red Apple, Raspberry
 Description: Earthy roots with red fruit lift. The go-to after tough weeks. Red Bomb supports circulation and cellular recovery.
 Featured: ✓ Yes
 Display Order: 2
-SEO Title: Red Bomb - Detox & Recovery Juice | Portland Fresh
+SEO Title: Red Bomb - Detox & Recovery Juice | Long Life
 SEO Description: Cold-pressed beet and berry juice for circulation, detox, and cellular recovery. A powerful reset formula.
 ```
 
@@ -113,7 +113,7 @@ Ingredients: Spinach, Celery, Green Apple, Romaine, Pineapple, Pear, Mint, Parsl
 Description: Crisp and cooling. A daily baseline for body and brain. Green Bomb combines hydrating greens with natural sweetness.
 Featured: ✓ Yes
 Display Order: 3
-SEO Title: Green Bomb - Hydration & Clarity Juice | Portland Fresh
+SEO Title: Green Bomb - Hydration & Clarity Juice | Long Life
 SEO Description: Cold-pressed green juice for hydration, gut balance, and mental clarity. Your daily baseline blend.
 ```
 
@@ -356,7 +356,7 @@ See **`CONTENT_GUIDE.md`** for complete copy details, including:
 **Community Growth:**
 - Word-of-mouth emphasis
 - Local-to-global narrative
-- #Portland Fresh community building
+- #DrinkLongLife community building
 
 **Conversion Optimized:**
 - Clear CTAs throughout
@@ -383,4 +383,4 @@ This copy draws from best practices of leading cold-pressed juice brands:
 - **BluePrint/Suja** - Organic standards and purpose
 - **Pulp & Press** - Community-first growth model
 
-All adapted for Portland Fresh's unique positioning as a small-batch, local-first, transparency-driven brand.
+All adapted for Long Life's unique positioning as a small-batch, local-first, transparency-driven brand.

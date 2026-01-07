@@ -9,11 +9,11 @@ export const revalidate = 3600; // Revalidate every hour
 
 // Pricing page settings - can be moved to database later
 const pageSettings = {
-  title: 'Build Your Portland Pantry',
-  subtitle: 'Simple, transparent pricing for pestos, salsa, chimichurri, and spreads',
+  title: 'Choose Your Plan',
+  subtitle: 'Simple, transparent pricing for your wellness journey',
   seo: {
-    metaTitle: 'Sauce Pricing | Portland Fresh',
-    metaDescription: 'Choose containers, weekly subscriptions, or wholesale trays of Portland Fresh sauces and pestos.',
+    metaTitle: 'Pricing | Long Life',
+    metaDescription: 'Choose the perfect plan for your wellness journey.',
   },
 };
 
@@ -31,27 +31,6 @@ export default async function PricingPage() {
     <>
       {/* Hero */}
       <Section className="bg-gradient-to-br from-accent-cream via-accent-yellow/20 to-accent-green/20 py-24 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/portland-fresh-new-13.jpg"
-            alt="Portland Fresh sauces in production"
-            fill
-            className="object-cover hidden md:block scale-110 animate-ken-burns"
-            priority
-            quality={90}
-            sizes="100vw"
-          />
-          <Image
-            src="/portland-fresh-new-6.jpg"
-            alt="Portland Fresh sauces in production"
-            fill
-            className="object-cover md:hidden scale-110 animate-ken-burns"
-            priority
-            quality={90}
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-accent-cream/95 via-accent-yellow/80 to-accent-green/75" />
-        </div>
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent-yellow/30 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent-green/30 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
 
@@ -71,7 +50,7 @@ export default async function PricingPage() {
           </FadeIn>
           <FadeIn direction="up" delay={0.3}>
             <p className="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
-              Fresh sauces delivered in returnable containers or food-service trays. Order once or subscribe for standing kitchen drops.
+              Fresh cold-pressed juices delivered to your door. Choose one-time purchase or save with a monthly subscription.
             </p>
           </FadeIn>
         </div>
@@ -157,7 +136,7 @@ export default async function PricingPage() {
         <div className="max-w-4xl mx-auto">
           <FadeIn direction="up" className="text-center mb-12">
             <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-6">
-              Why Choose Portland Fresh?
+              Why Choose Long Life?
             </h2>
           </FadeIn>
           <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-3 gap-8">
@@ -168,14 +147,14 @@ export default async function PricingPage() {
                 description: 'All transactions are encrypted and secured by Stripe',
               },
               {
-                icon: '🧊',
-                title: 'Fresh Logistics',
-                description: 'Cold-packed each week and delivered in insulated totes',
+                icon: '🔄',
+                title: 'Flexible Plans',
+                description: 'One-time purchase or save with monthly subscriptions',
               },
               {
-                icon: '🌿',
-                title: 'Local Ingredients',
-                description: 'Sourced from Portland growers and blended within 48 hours',
+                icon: '⚡',
+                title: 'Fresh Weekly',
+                description: 'Cold-pressed fresh every week from local ingredients',
               },
             ].map((item, idx) => (
               <div key={idx} className="text-center">

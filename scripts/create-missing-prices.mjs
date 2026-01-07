@@ -111,7 +111,7 @@ async function main() {
       console.log('   Creating Stripe product in PRODUCTION...');
       const product = await stripe.products.create({
         name: 'Yellow Bomb',
-        description: 'Our signature immune-boosting sauce blend with turmeric, ginger, and citrus.',
+        description: 'Our signature immune-boosting juice blend with turmeric, ginger, and citrus.',
         active: true,
       });
       stripeProductId = product.id;

@@ -91,7 +91,7 @@ async function auditOrders() {
   try {
     const webhookEndpoints = await stripe.webhookEndpoints.list();
     const prodEndpoint = webhookEndpoints.data.find(w =>
-      w.url.includes('pdxfreshfoods.com') && w.status === 'enabled'
+      w.url.includes('drinklonglife.com') && w.status === 'enabled'
     );
 
     if (prodEndpoint) {
@@ -100,7 +100,7 @@ async function auditOrders() {
       // Check recent webhook attempts (if available via API)
       // Note: Stripe API doesn't expose failed webhook history directly
     } else {
-      critical('No active webhook endpoint for pdxfreshfoods.com!');
+      critical('No active webhook endpoint for drinklonglife.com!');
     }
   } catch (e) {
     warning(`Could not check webhooks: ${e.message}`);
@@ -267,7 +267,7 @@ async function auditNewsletter() {
 
   // Test the newsletter API
   try {
-    const res = await fetch('https://pdxfreshfoods.com/api/newsletter', {
+    const res = await fetch('https://drinklonglife.com/api/newsletter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: '' })
@@ -289,7 +289,7 @@ async function auditContactForm() {
   console.log('='.repeat(60) + '\n');
 
   try {
-    const res = await fetch('https://pdxfreshfoods.com/api/contact', {
+    const res = await fetch('https://drinklonglife.com/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({})
@@ -314,7 +314,7 @@ async function auditPasswordReset() {
 
   // Check if forgot-password page exists
   try {
-    const res = await fetch('https://pdxfreshfoods.com/forgot-password');
+    const res = await fetch('https://drinklonglife.com/forgot-password');
     if (res.ok) {
       ok('Forgot password page exists');
     } else {
@@ -364,7 +364,7 @@ async function auditAPIEndpoints() {
 
   for (const ep of endpoints) {
     try {
-      const res = await fetch(`https://pdxfreshfoods.com${ep.url}`, {
+      const res = await fetch(`https://drinklonglife.com${ep.url}`, {
         method: ep.method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ep.body)

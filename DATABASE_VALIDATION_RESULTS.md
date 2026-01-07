@@ -40,7 +40,7 @@ Most likely: **User has not signed up yet**
 ### 1. Create User Account
 **BEFORE running the SQL script, you must create the user account:**
 
-1. Navigate to https://pdxfreshfoods.com/login (or /signup)
+1. Navigate to https://drinklonglife.com/login (or /signup)
 2. Sign up with email: `jt.connor88@gmail.com`
 3. Complete the sign-up process
 4. Verify email if required
@@ -93,8 +93,8 @@ Expected output:
 
 ### 4. Test Admin Access Manually
 
-1. Log in to https://pdxfreshfoods.com/login with jt.connor88@gmail.com
-2. Navigate to https://pdxfreshfoods.com/admin
+1. Log in to https://drinklonglife.com/login with jt.connor88@gmail.com
+2. Navigate to https://drinklonglife.com/admin
 3. Verify you are NOT redirected to `/unauthorized`
 4. Verify admin dashboard loads without errors
 5. Check browser console for any errors
@@ -103,7 +103,7 @@ Expected output:
 
 To populate the orders table and test the webhook:
 
-1. Navigate to https://pdxfreshfoods.com/blends
+1. Navigate to https://drinklonglife.com/blends
 2. Select a blend
 3. Click "Reserve Now" on a size option
 4. Complete checkout with Stripe test card: `4242 4242 4242 4242`

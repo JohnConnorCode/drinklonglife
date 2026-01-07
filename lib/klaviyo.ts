@@ -157,7 +157,7 @@ export async function trackPurchaseEvent(event: KlaviyoPurchaseEvent): Promise<b
       OrderId: event.orderId,
       Categories: event.items.map(() => 'Juice').filter((v, _i, a) => a.indexOf(v) === _i),
       ItemNames: event.items.map(i => i.name),
-      Brands: ['Portland Fresh'],
+      Brands: ['Long Life'],
       Items: event.items.map(item => ({
         ProductID: item.productId || item.sku || item.name,
         SKU: item.sku || item.name,

@@ -4,8 +4,8 @@ import { Section } from '@/components/Section';
 import { FadeIn } from '@/components/animations';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | Portland Fresh',
-  description: 'Read our terms and conditions for using Portland Fresh services, purchasing products, and subscriptions.',
+  title: 'Terms & Conditions | Long Life',
+  description: 'Read our terms and conditions for using Long Life services, purchasing products, and subscriptions.',
 };
 
 export default function TermsPage() {
@@ -17,25 +17,23 @@ export default function TermsPage() {
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Desktop Image */}
           <Image
-            src="/portland-fresh-new-11.jpg"
-            alt="Portland Fresh chef stirring a batch of chimichurri"
+            src="/slider-desktop-3.png"
+            alt="Terms and Conditions"
             fill
             className="object-cover hidden md:block scale-110 animate-ken-burns"
             priority
             quality={90}
             sizes="100vw"
-            style={{ objectPosition: 'center 40%' }}
           />
           {/* Mobile Image */}
           <Image
-            src="/portland-fresh-new-12.jpg"
-            alt="Sauce tasting spoons laid out on the Portland Fresh line"
+            src="/slider-mobile-3.png"
+            alt="Terms and Conditions"
             fill
             className="object-cover md:hidden scale-110 animate-ken-burns"
             priority
             quality={90}
             sizes="100vw"
-            style={{ objectPosition: 'center 45%' }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-accent-cream/90 via-accent-yellow/70 to-accent-green/70" />
         </div>
@@ -66,13 +64,13 @@ export default function TermsPage() {
 
               <div className="bg-gradient-to-br from-accent-yellow/10 to-accent-green/10 p-8 rounded-2xl mb-12 border-2 border-accent-yellow/30">
                 <p className="text-lg mb-0">
-                  Welcome to Portland Fresh. By accessing our website, ordering our products, or using our services, you agree to be bound by these Terms and Conditions. Please read them carefully.
+                  Welcome to Long Life. By accessing our website, ordering our products, or using our services, you agree to be bound by these Terms and Conditions. Please read them carefully.
                 </p>
               </div>
 
               <h2>1. Acceptance of Terms</h2>
               <p>
-                By accessing and using the Portland Fresh website and services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                By accessing and using the Long Life website and services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
               </p>
 
               <h2>2. Products and Services</h2>
@@ -142,7 +140,7 @@ export default function TermsPage() {
               <h2>6. Returns and Refunds</h2>
               <h3>6.1 Perishable Products</h3>
               <p>
-                Due to the perishable nature of our sauces, pestos, and salsa, we cannot accept returns of opened or consumed products except in cases of product defect or quality issues.
+                Due to the perishable nature of our cold-pressed juices, we cannot accept returns of opened or consumed products except in cases of product defect or quality issues.
               </p>
 
               <h3>6.2 Quality Issues</h3>
@@ -168,12 +166,12 @@ export default function TermsPage() {
 
               <h3>7.3 Food Safety</h3>
               <p>
-                Our products are made fresh and have limited shelf life. Please refrigerate immediately upon receipt and consume by the date indicated on the container.
+                Our products are made fresh and have limited shelf life. Please refrigerate immediately upon receipt and consume by the date indicated on the bottle.
               </p>
 
               <h2>8. Intellectual Property</h2>
               <p>
-                All content on this website, including text, graphics, logos, images, and software, is the property of Portland Fresh and protected by copyright and trademark laws. You may not reproduce, distribute, or create derivative works without our express written permission.
+                All content on this website, including text, graphics, logos, images, and software, is the property of Long Life and protected by copyright and trademark laws. You may not reproduce, distribute, or create derivative works without our express written permission.
               </p>
 
               <h2>9. User Conduct</h2>
@@ -188,7 +186,7 @@ export default function TermsPage() {
 
               <h2>11. Limitation of Liability</h2>
               <p>
-                To the fullest extent permitted by law, Portland Fresh shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from:
+                To the fullest extent permitted by law, Long Life shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from:
               </p>
               <ul>
                 <li>Your use or inability to use our services</li>
@@ -199,12 +197,12 @@ export default function TermsPage() {
 
               <h2>12. Indemnification</h2>
               <p>
-                You agree to indemnify, defend, and hold harmless Portland Fresh and its officers, directors, employees, and agents from any claims, liabilities, damages, losses, and expenses arising out of or in any way connected with your access to or use of our services or your violation of these Terms.
+                You agree to indemnify, defend, and hold harmless Long Life and its officers, directors, employees, and agents from any claims, liabilities, damages, losses, and expenses arising out of or in any way connected with your access to or use of our services or your violation of these Terms.
               </p>
 
               <h2>13. Governing Law</h2>
               <p>
-                These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Portland Fresh operates, without regard to its conflict of law provisions.
+                These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Long Life operates, without regard to its conflict of law provisions.
               </p>
 
               <h2>14. Changes to Terms</h2>
@@ -224,8 +222,8 @@ export default function TermsPage() {
               <div className="bg-gradient-to-br from-accent-primary/10 to-accent-green/10 p-6 rounded-xl my-6 not-prose">
                 <p className="mb-2">
                   <strong className="text-gray-900">Email:</strong>{' '}
-                  <a href="mailto:hello@pdxfreshfoods.com" className="text-accent-primary hover:underline">
-                    hello@pdxfreshfoods.com
+                  <a href="mailto:hello@drinklonglife.com" className="text-accent-primary hover:underline">
+                    hello@drinklonglife.com
                   </a>
                 </p>
                 <p className="mb-0">

@@ -38,7 +38,7 @@ export default defineType({
       name: 'communityHashtag',
       title: 'Community Hashtag',
       type: 'string',
-      description: 'E.g., "#PortlandFresh"',
+      description: 'E.g., "#DrinkLongLife"',
     }),
     defineField({
       name: 'communityMessage',

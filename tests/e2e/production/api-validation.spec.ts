@@ -13,7 +13,7 @@
 import { test, expect } from '@playwright/test';
 import Stripe from 'stripe';
 
-const PRODUCTION_URL = 'https://pdxfreshfoods.com';
+const PRODUCTION_URL = 'https://drinklonglife.com';
 
 // Production price IDs from STRIPE_PRODUCTION_COMPLETE.md
 const PRODUCTION_PRICES = {

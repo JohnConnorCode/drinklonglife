@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '..', '.env.local') });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -315,7 +315,7 @@ async function testProductionAPI() {
 
 async function runAllTests() {
   console.log('╔════════════════════════════════════════════════╗');
-  console.log('║     COMPLETE CHECKOUT TEST - Portland Fresh     ║');
+  console.log('║     COMPLETE CHECKOUT TEST - DrinkLongLife     ║');
   console.log('╚════════════════════════════════════════════════╝');
   console.log(`\nTesting against: ${SITE_URL}`);
   console.log(`Stripe mode: ${process.env.STRIPE_SECRET_KEY?.startsWith('sk_live') ? 'LIVE' : 'TEST'}`);

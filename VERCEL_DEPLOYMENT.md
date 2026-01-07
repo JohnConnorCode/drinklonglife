@@ -1,12 +1,12 @@
-# Portland Fresh - Vercel Deployment Guide
+# Long Life - Vercel Deployment Guide
 
-Complete step-by-step instructions for deploying Portland Fresh to Vercel.
+Complete step-by-step instructions for deploying Long Life to Vercel.
 
 ---
 
 ## Prerequisites
 
-- [ ] GitHub repository with Portland Fresh codebase
+- [ ] GitHub repository with Long Life codebase
 - [ ] Vercel account (free tier works)
 - [ ] Sanity project created and seeded
 - [ ] All environment variables ready (see `.env.example`)
@@ -20,7 +20,7 @@ Complete step-by-step instructions for deploying Portland Fresh to Vercel.
 1. Go to [vercel.com](https://vercel.com) and log in
 2. Click **"Add New..." → "Project"**
 3. Select **"Import Git Repository"**
-4. Choose your Portland Fresh repository from GitHub
+4. Choose your Long Life repository from GitHub
 5. Click **"Import"**
 
 ### Step 2: Configure Build Settings

@@ -8,16 +8,16 @@ import { test, expect } from '@playwright/test';
  * The checkout API uses idempotency keys to prevent double charges.
  * Running tests in parallel can cause conflicts.
  *
- * Usage: SITE_URL=https://pdxfreshfoods.com npx playwright test tests/e2e/checkout-e2e.spec.ts --workers=1
+ * Usage: SITE_URL=https://drinklonglife.com npx playwright test tests/e2e/checkout-e2e.spec.ts --workers=1
  */
 
-const SITE_URL = process.env.SITE_URL || 'https://pdxfreshfoods.com';
+const SITE_URL = process.env.SITE_URL || 'https://drinklonglife.com';
 
 test.describe('Checkout E2E', () => {
   test('Guest checkout - add to cart and reach Stripe', async ({ page }) => {
     // 1. Go to a product page
     await page.goto(`${SITE_URL}/blends/yellow-bomb`);
-    await expect(page).toHaveTitle(/Yellow Bomb|Portland Fresh/i);
+    await expect(page).toHaveTitle(/Yellow Bomb|Long Life/i);
 
     // 2. Find and click Add to Cart button
     const addToCartButton = page.locator('button:has-text("Add to Cart"), button:has-text("Add To Cart")').first();

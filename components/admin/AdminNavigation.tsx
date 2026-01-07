@@ -34,7 +34,7 @@ const navLinks: NavLink[] = [
   { divider: true, label: 'Operations' },
   { href: '/admin/fulfillment', label: 'Fulfillment', icon: Truck, description: 'Shipping & tracking' },
   { href: '/admin/inventory', label: 'Inventory', icon: Boxes, description: 'Stock management' },
-  { href: '/admin/products', label: 'Products', icon: Package, description: 'Sauces & pricing' },
+  { href: '/admin/products', label: 'Products', icon: Package, description: 'Blends & pricing' },
   { href: '/admin/ingredients', label: 'Ingredients', icon: Leaf, description: 'Ingredient database' },
   { divider: true, label: 'Marketing' },
   { href: '/admin/referrals', label: 'Referrals', icon: Users, description: 'Ambassador program' },

@@ -56,32 +56,32 @@ const journalPosts = [
   {
     _id: 'post-cold-press-vs-hpp',
     _type: 'post',
-    title: 'Cold-Press vs. HPP: What Your Sauce Label Isn\'t Telling You',
+    title: 'Cold-Press vs. HPP: What Your Juice Label Isn\'t Telling You',
     slug: { _type: 'slug', current: 'cold-press-vs-hpp' },
-    excerpt: 'Most sauce labeled "cold-pressed" today isn\'t truly cold-pressed. Here\'s the difference that matters for your health—and why Portland Fresh chose a different path.',
-    author: 'Portland Fresh',
+    excerpt: 'Most juice labeled "cold-pressed" today isn\'t truly cold-pressed. Here\'s the difference that matters for your health—and why Long Life chose a different path.',
+    author: 'Long Life',
     category: 'nutrition',
     isPublished: true,
     publishedAt: new Date().toISOString(),
     seo: {
-      metaTitle: 'Cold-Press vs. HPP Sauce: The Truth About "Cold-Pressed" Labels | Portland Fresh',
-      metaDescription: 'Discover why most "cold-pressed" sauce isn\'t what you think. Learn the difference between true hydraulic cold-pressing and HPP, and why it matters for nutrition.',
+      metaTitle: 'Cold-Press vs. HPP Juice: The Truth About "Cold-Pressed" Labels | Long Life',
+      metaDescription: 'Discover why most "cold-pressed" juice isn\'t what you think. Learn the difference between true hydraulic cold-pressing and HPP, and why it matters for nutrition.',
     },
     content: createPortableText(`## The Label Says Cold-Pressed. But Is It?
 
-Walk down any grocery aisle and you'll see it everywhere: "Cold-Pressed." It sounds clean. Natural. Healthy. But here's what most people don't realize—the majority of packaged sauces wearing that label have been processed using a method called HPP (High-Pressure Processing) that fundamentally changes what ends up in your container.
+Walk down any grocery aisle and you'll see it everywhere: "Cold-Pressed." It sounds clean. Natural. Healthy. But here's what most people don't realize—the majority of bottled juices wearing that label have been processed using a method called HPP (High-Pressure Processing) that fundamentally changes what ends up in your bottle.
 
 ## What HPP Actually Does
 
 HPP isn't juicing. It's preservation.
 
-After the sauce is packed, it's submerged in water and subjected to extreme pressure—up to 87,000 pounds per square inch. This crushes bacteria and extends shelf life from days to months.
+After the juice is bottled, it's submerged in water and subjected to extreme pressure—up to 87,000 pounds per square inch. This crushes bacteria and extends shelf life from days to months.
 
-The result? Sauce that can sit on a shelf for 30 to 60 days. Easier distribution. Smoother logistics. But also flatter flavor, dulled color, reduced enzyme activity, and a sensory profile that's safe—but no longer fresh.
+The result? Juice that can sit on a shelf for 30 to 60 days. Easier distribution. Smoother logistics. But also flatter flavor, dulled color, reduced enzyme activity, and a sensory profile that's safe—but no longer fresh.
 
 ## True Cold-Pressing Is Different
 
-Genuine hydraulic cold-pressing works the way nature intended. Thousands of pounds of pressure extract sauce from whole fruits and vegetables without heat, without oxidation, and without compromise.
+Genuine hydraulic cold-pressing works the way nature intended. Thousands of pounds of pressure extract juice from whole fruits and vegetables without heat, without oxidation, and without compromise.
 
 The trade-off? A shelf life of just 2 to 5 days. It requires real daily production, careful handling, and a commitment to freshness over convenience.
 
@@ -91,40 +91,40 @@ But that's exactly the point.
 
 When it comes to nutrition, the difference matters:
 
-True cold-pressed sauce maintains higher levels of polyphenols, vitamin C, antioxidants, and active enzymes. These compounds are sensitive—they degrade under pressure, heat, and time. HPP is chosen for scalability, not nutritional quality.
+True cold-pressed juice maintains higher levels of polyphenols, vitamin C, antioxidants, and active enzymes. These compounds are sensitive—they degrade under pressure, heat, and time. HPP is chosen for scalability, not nutritional quality.
 
-## The Portland Fresh Standard
+## The Long Life Standard
 
 Here's how we see it:
 
-HPP extends how long the sauce lasts.
-Cold-pressing extends how much the sauce gives you.
+HPP extends how long the juice lasts.
+Cold-pressing extends how much the juice gives you.
 
-Portland Fresh aligns with the original meaning of cold-pressing—prioritizing freshness, integrity, and nutrient density over shortcuts and shelf stability.
+Long Life aligns with the original meaning of cold-pressing—prioritizing freshness, integrity, and nutrient density over shortcuts and shelf stability.
 
-When you reach for Portland Fresh, you're tasting sauce the way it was meant to be made. No compromises. No fine print. Just real nourishment, pressed fresh and delivered fast.
+When you drink Long Life, you're drinking juice the way it was meant to be made. No compromises. No fine print. Just real nourishment, pressed fresh and delivered fast.
 
-That's the Portland Fresh difference.`),
+That's the Long Life difference.`),
   },
   {
     _id: 'post-best-times-for-drinks',
     _type: 'post',
-    title: 'When to Use Each Portland Fresh Sauce: A Guide to Timing Your Meals',
+    title: 'When to Drink Each Long Life Blend: A Guide to Timing Your Wellness',
     slug: { _type: 'slug', current: 'best-times-for-drinks' },
-    excerpt: 'Your kitchen has a natural rhythm. Our sauces are designed to match it. Here\'s when to use each Portland Fresh sauce for maximum impact.',
-    author: 'Portland Fresh',
+    excerpt: 'Your body has a natural rhythm. Our blends are designed to match it. Here\'s when to drink each Long Life juice for maximum benefit.',
+    author: 'Long Life',
     category: 'wellness',
     isPublished: true,
     publishedAt: new Date().toISOString(),
     seo: {
-      metaTitle: 'Best Times to Use Portland Fresh Sauces: Timing Guide',
-      metaDescription: 'Learn the optimal moments for each Portland Fresh sauce. Reset, Cleanse, Rise, and Balance—designed to work with your kitchen rhythm.',
+      metaTitle: 'Best Times to Drink Cold-Pressed Juice: Long Life Timing Guide',
+      metaDescription: 'Learn the optimal time of day for each Long Life blend. Reset, Cleanse, Rise, and Balance—designed to work with your body\'s natural rhythm.',
     },
     content: createPortableText(`## Your Body Runs on Rhythm
 
 Every system in your body follows a pattern. Energy rises and falls. Digestion activates and rests. Focus sharpens and softens. The key to real wellness isn't fighting these cycles—it's working with them.
 
-That's why Portland Fresh sauces aren't random. Each one is designed to match a specific moment your kitchen moves through naturally throughout the day.
+That's why Long Life blends aren't random. Each one is designed to match a specific state your body moves through naturally throughout the day.
 
 ## RESET — Red Bomb
 ### Best in the Morning
@@ -176,9 +176,9 @@ Mornings are for cleansing and activating.
 Afternoons are for lifting and defending.
 Evenings are for balancing and stabilizing.
 
-Portland Fresh drinks aren't random—they follow the natural rhythm of your body so every bottle matches the exact state you're in.
+Long Life drinks aren't random—they follow the natural rhythm of your body so every bottle matches the exact state you're in.
 
-Choose your mood. Trust your body. Let Portland Fresh do the rest.`),
+Choose your mood. Trust your body. Let Long Life do the rest.`),
   },
 ];
 

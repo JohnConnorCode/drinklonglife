@@ -7,9 +7,6 @@
  * - Better footer with social links
  */
 
-import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
-
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -18,8 +15,8 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   process.exit(1);
 }
 
-const LOGO_URL = 'https://pdxfreshfoods.com/long-life-logo.png';
-const SITE_URL = 'https://pdxfreshfoods.com';
+const LOGO_URL = 'https://drinklonglife.com/long-life-logo.png';
+const SITE_URL = 'https://drinklonglife.com';
 
 // Brand colors
 const COLORS = {
@@ -39,7 +36,7 @@ const ambassadorCTA = `
   <tr>
     <td style="background: linear-gradient(135deg, ${COLORS.dark} 0%, #2d2d2d 100%); border-radius: 12px; padding: 24px; text-align: center;">
       <p style="color: ${COLORS.yellow}; font-size: 11px; font-weight: 700; letter-spacing: 2px; margin: 0 0 10px 0; text-transform: uppercase;">JOIN THE MOVEMENT</p>
-      <h3 style="color: #ffffff; font-size: 20px; font-weight: 700; margin: 0 0 10px 0;">Become a Portland Fresh Ambassador</h3>
+      <h3 style="color: #ffffff; font-size: 20px; font-weight: 700; margin: 0 0 10px 0;">Become a Long Life Ambassador</h3>
       <p style="color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.5; margin: 0 0 16px 0;">Share wellness. Earn rewards. Help others discover cold-pressed nutrition.</p>
       <a href="${SITE_URL}/referral" style="display: inline-block; background-color: ${COLORS.yellow}; color: ${COLORS.dark}; padding: 12px 28px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 14px;">Learn More →</a>
     </td>
@@ -56,7 +53,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
   <meta name="x-apple-disable-message-reformatting">
   <meta name="color-scheme" content="light">
   <meta name="supported-color-schemes" content="light">
-  <title>Portland Fresh</title>
+  <title>Long Life</title>
   <style>
     :root { color-scheme: light; supported-color-schemes: light; }
     body, table, td, p, a, li { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
@@ -88,7 +85,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
                 <table role="presentation" cellpadding="0" cellspacing="0">
                   <tr>
                     <td align="center">
-                      <img src="${LOGO_URL}" alt="Portland Fresh" width="56" style="display: block; width: 56px; height: auto;">
+                      <img src="${LOGO_URL}" alt="Long Life" width="56" style="display: block; width: 56px; height: auto;">
                     </td>
                   </tr>
                   <tr>
@@ -121,13 +118,13 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
                 <!-- Social Links -->
                 <tr>
                   <td align="center" style="padding-bottom: 24px;">
-                    <a href="https://instagram.com/pdxfreshfoods" style="display: inline-block; margin: 0 8px; text-decoration: none;">
+                    <a href="https://instagram.com/drinklonglife" style="display: inline-block; margin: 0 8px; text-decoration: none;">
                       <img src="https://cdn-icons-png.flaticon.com/32/174/174855.png" alt="Instagram" width="24" height="24" style="opacity: 0.6;">
                     </a>
-                    <a href="https://facebook.com/pdxfreshfoods" style="display: inline-block; margin: 0 8px; text-decoration: none;">
+                    <a href="https://facebook.com/drinklonglife" style="display: inline-block; margin: 0 8px; text-decoration: none;">
                       <img src="https://cdn-icons-png.flaticon.com/32/174/174848.png" alt="Facebook" width="24" height="24" style="opacity: 0.6;">
                     </a>
-                    <a href="https://tiktok.com/@pdxfreshfoods" style="display: inline-block; margin: 0 8px; text-decoration: none;">
+                    <a href="https://tiktok.com/@drinklonglife" style="display: inline-block; margin: 0 8px; text-decoration: none;">
                       <img src="https://cdn-icons-png.flaticon.com/32/3046/3046121.png" alt="TikTok" width="24" height="24" style="opacity: 0.6;">
                     </a>
                   </td>
@@ -152,7 +149,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
                 <tr>
                   <td align="center" style="color: ${COLORS.lightGray}; font-size: 12px; line-height: 1.6;">
                     <p style="margin: 0;">Cold-Pressed Wellness, Delivered Fresh</p>
-                    <p style="margin: 8px 0 0 0;">© 2025 Portland Fresh Saucery. Made with 🥬 in Indiana.</p>
+                    <p style="margin: 8px 0 0 0;">© 2025 Long Life Juicery. Made with 🥬 in Indiana.</p>
                   </td>
                 </tr>
 
@@ -208,7 +205,7 @@ const templates = [
   // 1. ORDER CONFIRMATION
   {
     name: 'order_confirmation',
-    subject: "We're on it! Your Portland Fresh order is confirmed 🧃",
+    subject: "We're on it! Your Long Life order is confirmed 🧃",
     preheader: 'Fresh, cold-pressed goodness coming your way.',
     html: emailWrapper(`
       <div style="text-align: center; margin-bottom: 32px;">
@@ -219,27 +216,15 @@ const templates = [
       <p style="color: ${COLORS.gray}; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Order #{{orderNumber}}</p>
 
       <p style="color: ${COLORS.dark}; font-size: 16px; line-height: 1.7; margin: 0 0 24px 0;">
-        Your fresh, cold-pressed sauces are being prepared with care. We source only the finest organic ingredients and press them fresh for maximum nutrition.
+        Your fresh, cold-pressed juices are being prepared with care. We source only the finest organic ingredients and press them fresh for maximum nutrition.
       </p>
 
       ${highlightBox(`
         <p style="color: ${COLORS.gray}; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 16px 0;">ORDER SUMMARY</p>
         <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-          {{#items}}
-          <tr>
-            <td style="color: ${COLORS.dark}; font-size: 15px; padding: 12px 0; border-bottom: 1px solid #e5e5e5;">
-              {{name}} <span style="color: ${COLORS.gray};">× {{quantity}}</span>
-            </td>
-            <td align="right" style="color: ${COLORS.dark}; font-size: 15px; padding: 12px 0; border-bottom: 1px solid #e5e5e5;">{{price|currency}}</td>
-          </tr>
-          {{/items}}
-          <tr>
-            <td style="color: ${COLORS.gray}; font-size: 14px; padding: 12px 0;">Subtotal</td>
-            <td align="right" style="color: ${COLORS.dark}; font-size: 14px; padding: 12px 0;">{{subtotal|currency}}</td>
-          </tr>
           <tr>
             <td style="color: ${COLORS.dark}; font-size: 18px; font-weight: 700; padding: 16px 0; border-top: 2px solid ${COLORS.primary};">Total</td>
-            <td align="right" style="color: ${COLORS.primary}; font-size: 18px; font-weight: 700; padding: 16px 0; border-top: 2px solid ${COLORS.primary};">{{total|currency}}</td>
+            <td align="right" style="color: ${COLORS.primary}; font-size: 18px; font-weight: 700; padding: 16px 0; border-top: 2px solid ${COLORS.primary};">{{total}}</td>
           </tr>
         </table>
       `)}
@@ -247,7 +232,7 @@ const templates = [
       ${button('Track Your Order', SITE_URL + '/account/orders')}
 
       <p style="color: ${COLORS.gray}; font-size: 14px; line-height: 1.6; text-align: center; margin: 0 0 16px 0;">
-        <strong>Pro tip:</strong> Refrigerate your sauces as soon as they arrive for maximum freshness and nutrition!
+        <strong>Pro tip:</strong> Refrigerate your juices as soon as they arrive for maximum freshness and nutrition!
       </p>
 
       ${ambassadorCTA}
@@ -261,7 +246,7 @@ const templates = [
   // 2. SUBSCRIPTION CONFIRMATION
   {
     name: 'subscription_confirmation',
-    subject: "You're in! Welcome to the Portland Fresh family 🌱",
+    subject: "You're in! Welcome to the Long Life family 🌱",
     preheader: 'Your subscription is active. Wellness delivered, on repeat.',
     html: emailWrapper(`
       <div style="text-align: center; margin-bottom: 32px;">
@@ -301,7 +286,7 @@ const templates = [
   // 3. WELCOME (New Signup)
   {
     name: 'welcome',
-    subject: "Welcome to Portland Fresh — let's get you glowing 🌿",
+    subject: "Welcome to Long Life — let's get you glowing 🌿",
     preheader: 'Your wellness journey starts now.',
     html: emailWrapper(`
       <div style="text-align: center; margin-bottom: 32px;">
@@ -312,7 +297,7 @@ const templates = [
       <p style="color: ${COLORS.gray}; font-size: 18px; margin: 0 0 32px 0; text-align: center;">You just joined a movement.</p>
 
       <p style="color: ${COLORS.dark}; font-size: 16px; line-height: 1.7; margin: 0 0 24px 0;">
-        Portland Fresh isn't just sauce — it's a commitment to feeling your absolute best. Our cold-pressed blends are packed with raw, organic nutrition that your body craves.
+        Long Life isn't just juice — it's a commitment to feeling your absolute best. Our cold-pressed blends are packed with raw, organic nutrition that your body craves.
       </p>
 
       ${highlightBox(`
@@ -356,7 +341,7 @@ const templates = [
       </div>
 
       <h1 style="color: ${COLORS.dark}; font-size: 32px; font-weight: 700; margin: 0 0 16px 0; text-align: center; line-height: 1.2;">You're officially in!</h1>
-      <p style="color: ${COLORS.gray}; font-size: 18px; margin: 0 0 32px 0; text-align: center;">Welcome to the Portland Fresh community.</p>
+      <p style="color: ${COLORS.gray}; font-size: 18px; margin: 0 0 32px 0; text-align: center;">Welcome to the Long Life community.</p>
 
       <p style="color: ${COLORS.dark}; font-size: 16px; line-height: 1.7; margin: 0 0 24px 0;">
         Get ready for your inbox to be a whole lot healthier. Here's what you can expect from us:
@@ -418,7 +403,7 @@ const templates = [
   // 6. SHIPPING CONFIRMATION
   {
     name: 'shipping_confirmation',
-    subject: "It's on the way! Your Portland Fresh order shipped 📦",
+    subject: "It's on the way! Your Long Life order shipped 📦",
     preheader: 'Track your package and prepare your fridge!',
     html: emailWrapper(`
       <div style="text-align: center; margin-bottom: 32px;">
@@ -429,7 +414,7 @@ const templates = [
       <p style="color: ${COLORS.gray}; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Order #{{orderNumber}}</p>
 
       <p style="color: ${COLORS.dark}; font-size: 16px; line-height: 1.7; margin: 0 0 24px 0;">
-        Hey {{customerName}}, great news! Your fresh sauces have left our facility and are heading your way. Time to clear some fridge space!
+        Hey {{customerName}}, great news! Your fresh juices have left our facility and are heading your way. Time to clear some fridge space!
       </p>
 
       ${highlightBox(`
@@ -481,7 +466,7 @@ const templates = [
 
       <p style="color: ${COLORS.gray}; font-size: 14px; line-height: 1.6; text-align: center; margin: 24px 0 0 0;">
         We'd really appreciate your feedback. What could we have done better?<br>
-        <a href="mailto:hello@pdxfreshfoods.com?subject=Feedback" style="color: ${COLORS.primary}; font-weight: 600;">Share your thoughts →</a>
+        <a href="mailto:hello@drinklonglife.com?subject=Feedback" style="color: ${COLORS.primary}; font-weight: 600;">Share your thoughts →</a>
       </p>
     `, "You'll still have access until your period ends.")
   },
@@ -521,7 +506,7 @@ const templates = [
   // 9. PASSWORD RESET
   {
     name: 'password_reset',
-    subject: 'Reset your Portland Fresh password',
+    subject: 'Reset your Long Life password',
     preheader: 'Click the link to create a new password.',
     html: emailWrapper(`
       <div style="text-align: center; margin-bottom: 32px;">

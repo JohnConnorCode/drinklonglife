@@ -13,8 +13,8 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   process.exit(1);
 }
 
-const LOGO_URL = 'https://pdxfreshfoods.com/long-life-logo.png';
-const SITE_URL = 'https://pdxfreshfoods.com';
+const LOGO_URL = 'https://drinklonglife.com/long-life-logo.png';
+const SITE_URL = 'https://drinklonglife.com';
 
 // Base email wrapper with responsive design
 const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
@@ -23,7 +23,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Portland Fresh</title>
+  <title>Long Life</title>
   <!--[if mso]>
   <noscript>
     <xml>
@@ -67,7 +67,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
           <!-- Header with logo -->
           <tr>
             <td align="center" style="background-color: #0f5348; padding: 32px 40px;">
-              <img src="${LOGO_URL}" alt="Portland Fresh" width="160" style="display: block; width: 160px; max-width: 100%;">
+              <img src="${LOGO_URL}" alt="Long Life" width="160" style="display: block; width: 160px; max-width: 100%;">
             </td>
           </tr>
 
@@ -84,7 +84,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
               <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="center" style="padding-bottom: 16px;">
-                    <a href="${SITE_URL}" style="color: #0f5348; text-decoration: none; font-weight: 600; font-size: 16px;">Portland Fresh</a>
+                    <a href="${SITE_URL}" style="color: #0f5348; text-decoration: none; font-weight: 600; font-size: 16px;">Long Life</a>
                     <span style="color: #999; margin: 0 12px;">|</span>
                     <a href="${SITE_URL}/blends" style="color: #666; text-decoration: none; font-size: 14px;">Shop</a>
                     <span style="color: #999; margin: 0 12px;">|</span>
@@ -96,7 +96,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
                 <tr>
                   <td align="center" style="color: #999; font-size: 12px; line-height: 1.6;">
                     <p style="margin: 0;">Cold-Pressed Wellness</p>
-                    <p style="margin: 8px 0 0 0;">&copy; ${new Date().getFullYear()} Portland Fresh. All rights reserved.</p>
+                    <p style="margin: 8px 0 0 0;">&copy; ${new Date().getFullYear()} Long Life. All rights reserved.</p>
                   </td>
                 </tr>
               </table>
@@ -131,8 +131,8 @@ const templates = [
     template_name: 'order_confirmation',
     description: 'Order Confirmation Email',
     category: 'orders',
-    subject_template: 'Your Portland Fresh Order #{{orderNumber}} is Confirmed!',
-    preheader: 'Thank you for your order! Your fresh sauces are being prepared.',
+    subject_template: 'Your Long Life Order #{{orderNumber}} is Confirmed!',
+    preheader: 'Thank you for your order! Your fresh juices are being prepared.',
     data_schema: {
       orderNumber: 'string',
       customerName: 'string',
@@ -150,7 +150,7 @@ const templates = [
 
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
         Hi {{customerName}},<br><br>
-        Thank you for your order! We're preparing your fresh, cold-pressed sauces with care. You'll receive a shipping confirmation once your order is on its way.
+        Thank you for your order! We're preparing your fresh, cold-pressed juices with care. You'll receive a shipping confirmation once your order is on its way.
       </p>
 
       ${divider}
@@ -179,9 +179,9 @@ const templates = [
       ${button('View Order', SITE_URL + '/account/orders')}
 
       <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 24px 0 0 0;">
-        Questions about your order? Reply to this email or contact us at <a href="mailto:hello@pdxfreshfoods.com" style="color: #0f5348;">hello@pdxfreshfoods.com</a>
+        Questions about your order? Reply to this email or contact us at <a href="mailto:hello@drinklonglife.com" style="color: #0f5348;">hello@drinklonglife.com</a>
       </p>
-    `, 'Thank you for your order! Your fresh sauces are being prepared.')
+    `, 'Thank you for your order! Your fresh juices are being prepared.')
   },
 
   // 2. Subscription Confirmation
@@ -190,7 +190,7 @@ const templates = [
     description: 'Subscription Welcome Email',
     category: 'subscriptions',
     subject_template: 'Welcome to Your {{planName}} Subscription!',
-    preheader: 'Your subscription is active. Fresh sauces on their way!',
+    preheader: 'Your subscription is active. Fresh juices on their way!',
     data_schema: {
       customerName: 'string',
       customerEmail: 'string',
@@ -206,7 +206,7 @@ const templates = [
       </div>
 
       <h1 style="color: #0f5348; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; text-align: center;">Subscription Active!</h1>
-      <p style="color: #666; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Welcome to the Portland Fresh family</p>
+      <p style="color: #666; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Welcome to the Long Life family</p>
 
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
         Hi {{customerName}},<br><br>
@@ -236,7 +236,7 @@ const templates = [
       <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 24px 0 0 0; text-align: center;">
         You can pause, modify, or cancel your subscription anytime from your account.
       </p>
-    `, 'Your subscription is active. Fresh sauces coming your way!')
+    `, 'Your subscription is active. Fresh juices coming your way!')
   },
 
   // 3. Welcome Email (New Signup)
@@ -244,7 +244,7 @@ const templates = [
     template_name: 'welcome',
     description: 'Welcome Email for New Users',
     category: 'notifications',
-    subject_template: 'Welcome to Portland Fresh, {{customerName}}!',
+    subject_template: 'Welcome to Long Life, {{customerName}}!',
     preheader: 'Your journey to wellness starts here.',
     data_schema: {
       customerName: 'string'
@@ -254,12 +254,12 @@ const templates = [
         <div style="display: inline-block; background-color: #8cbfa4; border-radius: 50%; width: 64px; height: 64px; line-height: 64px; font-size: 32px;">🌱</div>
       </div>
 
-      <h1 style="color: #0f5348; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; text-align: center;">Welcome to Portland Fresh!</h1>
+      <h1 style="color: #0f5348; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; text-align: center;">Welcome to Long Life!</h1>
       <p style="color: #666; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Your wellness journey starts now</p>
 
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
         Hi {{customerName}},<br><br>
-        Welcome to the Portland Fresh community! We're thrilled to have you join us on your journey to better health through cold-pressed nutrition.
+        Welcome to the Long Life community! We're thrilled to have you join us on your journey to better health through cold-pressed nutrition.
       </p>
 
       <div style="background-color: #f8f7f6; border-radius: 12px; padding: 24px; margin: 24px 0;">
@@ -299,7 +299,7 @@ const templates = [
     template_name: 'newsletter_welcome',
     description: 'Newsletter Subscription Welcome',
     category: 'marketing',
-    subject_template: "You're In! Welcome to the Portland Fresh Newsletter 🌱",
+    subject_template: "You're In! Welcome to the Long Life Newsletter 🌱",
     preheader: 'Get exclusive wellness tips, recipes, and offers.',
     data_schema: {
       email: 'string'
@@ -313,7 +313,7 @@ const templates = [
       <p style="color: #666; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Welcome to our wellness community</p>
 
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
-        Thanks for subscribing to the Portland Fresh newsletter! You'll be the first to know about:
+        Thanks for subscribing to the Long Life newsletter! You'll be the first to know about:
       </p>
 
       <div style="background-color: #f8f7f6; border-radius: 12px; padding: 24px; margin: 24px 0;">
@@ -388,7 +388,7 @@ const templates = [
     template_name: 'password_reset',
     description: 'Password Reset Request',
     category: 'notifications',
-    subject_template: 'Reset Your Portland Fresh Password',
+    subject_template: 'Reset Your Long Life Password',
     preheader: 'Click the link to reset your password.',
     data_schema: {
       resetLink: 'string',
@@ -427,7 +427,7 @@ const templates = [
     template_name: 'shipping_confirmation',
     description: 'Order Shipped Notification',
     category: 'orders',
-    subject_template: 'Your Portland Fresh Order is On Its Way! 📦',
+    subject_template: 'Your Long Life Order is On Its Way! 📦',
     preheader: 'Your order has shipped! Track your package.',
     data_schema: {
       orderNumber: 'string',
@@ -447,7 +447,7 @@ const templates = [
 
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
         Hi {{customerName}},<br><br>
-        Great news! Your Portland Fresh order is on its way to you. Fresh, cold-pressed goodness coming soon!
+        Great news! Your Long Life order is on its way to you. Fresh, cold-pressed goodness coming soon!
       </p>
 
       <div style="background-color: #f8f7f6; border-radius: 12px; padding: 24px; margin: 24px 0;">
@@ -471,7 +471,7 @@ const templates = [
       ${button('Track Package', '{{trackingUrl}}')}
 
       <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 24px 0 0 0; text-align: center;">
-        For the freshest experience, refrigerate your sauces upon arrival!
+        For the freshest experience, refrigerate your juices upon arrival!
       </p>
     `, 'Your order has shipped! Track your package.')
   },
@@ -481,7 +481,7 @@ const templates = [
     template_name: 'subscription_canceled',
     description: 'Subscription Cancellation Confirmation',
     category: 'subscriptions',
-    subject_template: 'Your Portland Fresh Subscription Has Been Canceled',
+    subject_template: 'Your Long Life Subscription Has Been Canceled',
     preheader: 'We are sorry to see you go.',
     data_schema: {
       customerName: 'string',
@@ -508,7 +508,7 @@ const templates = [
 
       <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 24px 0 0 0;">
         We'd love to hear your feedback. What could we have done better?<br>
-        <a href="mailto:hello@pdxfreshfoods.com" style="color: #0f5348;">hello@pdxfreshfoods.com</a>
+        <a href="mailto:hello@drinklonglife.com" style="color: #0f5348;">hello@drinklonglife.com</a>
       </p>
     `, 'We are sorry to see you go.')
   },
@@ -550,7 +550,7 @@ const templates = [
       ${button('Update Payment Method', SITE_URL + '/account/billing')}
 
       <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 24px 0 0 0;">
-        Need help? Contact us at <a href="mailto:hello@pdxfreshfoods.com" style="color: #0f5348;">hello@pdxfreshfoods.com</a>
+        Need help? Contact us at <a href="mailto:hello@drinklonglife.com" style="color: #0f5348;">hello@drinklonglife.com</a>
       </p>
     `, 'Please update your payment method to continue your subscription.')
   }

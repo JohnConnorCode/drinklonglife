@@ -7,8 +7,8 @@ import { FadeIn } from '@/components/animations';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Login | Portland Fresh',
-  description: 'Sign in to your Portland Fresh account',
+  title: 'Login | Long Life',
+  description: 'Sign in to your Long Life account',
 };
 
 export default async function LoginPage({
@@ -40,7 +40,7 @@ export default async function LoginPage({
                   Welcome Back
                 </h1>
                 <p className="text-gray-600">
-                  Sign in to your Portland Fresh account
+                  Sign in to your Long Life account
                 </p>
               </div>
 
@@ -61,7 +61,7 @@ export default async function LoginPage({
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-4 bg-white text-gray-500">
-                    New to Portland Fresh?
+                    New to Long Life?
                   </span>
                 </div>
               </div>

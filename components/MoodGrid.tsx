@@ -14,43 +14,43 @@ interface MoodCard {
 
 const moods: MoodCard[] = [
   {
-    mood: 'BASIL',
-    tagline: 'Bright herbs, toasted hazelnut, and lemon zest. Built for pasta, eggs, and sandwiches.',
-    ingredients: 'Genovese basil, hazelnut oil, pecorino, Meyer lemon, garlic confit',
-    purpose: 'Finish pasta • Layer on focaccia • Fold into omelets',
-    color: '#16a34a',
-    gradientFrom: 'from-emerald-500/20',
-    gradientTo: 'to-emerald-600/10',
-    slug: 'green-bomb',
-  },
-  {
-    mood: 'ROASTED',
-    tagline: 'Wood-fired tomato salsa with smoked chilies and charred citrus.',
-    ingredients: 'Roma tomatoes, smoked jalapeño, charred onion, Valencia orange',
-    purpose: 'Top tacos • Blend into beans • Dip crudités',
-    color: '#c2410c',
-    gradientFrom: 'from-orange-600/20',
-    gradientTo: 'to-rose-600/10',
+    mood: 'RESET',
+    tagline: 'Circulate. Awaken. Power up.',
+    ingredients: 'Beet, Strawberry, Carrot, Papaya, Red Apple',
+    purpose: 'Natural energy + circulation support',
+    color: '#ef4444',
+    gradientFrom: 'from-red-500/20',
+    gradientTo: 'to-red-600/5',
     slug: 'red-bomb',
   },
   {
-    mood: 'CITRUS',
-    tagline: 'Parsley-packed chimichurri brightened with preserved lemon and fennel pollen.',
-    ingredients: 'Parsley, cilantro, preserved lemon, fennel pollen, smoked paprika',
-    purpose: 'Finish grilled fish • Marinate veggies • Spoon over grain bowls',
-    color: '#ca8a04',
-    gradientFrom: 'from-amber-500/20',
-    gradientTo: 'to-lime-500/10',
+    mood: 'CLEANSE',
+    tagline: 'Flush out. Hydrate. Rebuild your gut.',
+    ingredients: 'Spinach, Cucumber, Celery, Romaine, Green Apple',
+    purpose: 'Detox, hydration, gut health',
+    color: '#22c55e',
+    gradientFrom: 'from-green-500/20',
+    gradientTo: 'to-green-600/5',
+    slug: 'green-bomb',
+  },
+  {
+    mood: 'RISE',
+    tagline: 'Uplift. Strengthen. Light up your day.',
+    ingredients: 'Mango, Orange, Ginger, Guava, Pineapple',
+    purpose: 'Immunity + mood elevation',
+    color: '#eab308',
+    gradientFrom: 'from-yellow-500/20',
+    gradientTo: 'to-yellow-600/5',
     slug: 'yellow-bomb',
   },
   {
-    mood: 'SMOKED',
-    tagline: 'Charred serrano crema with cashews for dipping, dressing, drizzling.',
-    ingredients: 'Serrano peppers, roasted garlic, cultured cashew cream, lime',
-    purpose: 'Dress salads • Serve with chips • Drizzle on roasted veg',
-    color: '#2563eb',
+    mood: 'BALANCE',
+    tagline: 'Stabilize. Center. Stay steady.',
+    ingredients: 'Nopal, Spinach, Cucumber, Aloe Vera, Asparagus',
+    purpose: 'Blood sugar balance + metabolic stability',
+    color: '#3b82f6',
     gradientFrom: 'from-blue-500/20',
-    gradientTo: 'to-slate-600/10',
+    gradientTo: 'to-blue-600/5',
     slug: 'blue-bomb',
   },
 ];
@@ -106,7 +106,7 @@ export function MoodGrid() {
                   <div className="space-y-2.5 sm:space-y-3">
                     <div>
                       <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-white/40 block mb-1">
-                        Star Ingredients
+                        Key Ingredients
                       </span>
                       <p className="text-white/60 text-[11px] sm:text-xs leading-relaxed line-clamp-2">
                         {mood.ingredients}
@@ -115,7 +115,7 @@ export function MoodGrid() {
 
                     <div className="hidden sm:block">
                       <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-white/40 block mb-1">
-                        Best For
+                        Benefits
                       </span>
                       <p className="text-white/60 text-[11px] sm:text-xs">
                         {mood.purpose}
@@ -129,7 +129,7 @@ export function MoodGrid() {
                       className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wide group-hover:gap-2.5 transition-all duration-300"
                       style={{ color: mood.color }}
                     >
-                      Order
+                      Reserve
                       <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
@@ -156,7 +156,7 @@ export function MoodGrid() {
               href="/blends"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-medium hover:bg-white/10 hover:border-white/20 transition-all duration-300"
             >
-              Browse All Sauces
+              View All Blends
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

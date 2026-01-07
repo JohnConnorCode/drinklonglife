@@ -1,5 +1,5 @@
 /**
- * Design Tokens for Portland Fresh
+ * Design Tokens for Long Life
  * Centralized system for colors, spacing, typography, and more
  */
 
@@ -7,43 +7,45 @@
   /* === COLORS === */
 
   /* Brand Colors */
-  --color-forest: #1f5b4c;
-  --color-rain: #0f1f1a;
-  --color-honey: #f2a93b;
-  --color-mint: #8ecfbc;
-  --color-rose: #f28d6d;
+  --color-yellow: #f4c430;
+  --color-yellow-light: #f9e080;
+  --color-yellow-dark: #d4a410;
 
-  --color-forest-light: #3a7b67;
-  --color-honey-light: #f8c063;
-  --color-mint-light: #bfe6d8;
+  --color-red: #e63946;
+  --color-red-light: #ff6b77;
+  --color-red-dark: #c41e2a;
+
+  --color-green: #52b788;
+  --color-green-light: #7fd9ad;
+  --color-green-dark: #2d8a5f;
 
   /* Neutral Colors */
   --color-white: #ffffff;
-  --color-black: #0b150f;
+  --color-black: #0d0d0d;
 
-  --color-gray-50: #f9f7f2;
-  --color-gray-100: #f1ebe2;
-  --color-gray-200: #e1dacd;
-  --color-gray-300: #cfc6b5;
-  --color-gray-400: #a79f90;
-  --color-gray-500: #7e786c;
-  --color-gray-600: #5c564d;
-  --color-gray-700: #3f3b33;
-  --color-gray-800: #27231d;
-  --color-gray-900: #14120f;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
 
   /* Semantic Colors */
   --color-background: var(--color-white);
-  --color-foreground: var(--color-rain);
+  --color-foreground: var(--color-black);
   --color-muted: var(--color-gray-100);
   --color-muted-foreground: var(--color-gray-600);
   --color-border: var(--color-gray-200);
 
   /* Status Colors */
-  --color-success: var(--color-forest);
-  --color-error: #db3d32;
-  --color-warning: var(--color-honey);
-  --color-info: #2f6db0;
+  --color-success: var(--color-green);
+  --color-error: #dc2626;
+  --color-warning: var(--color-yellow);
+  --color-info: #3b82f6;
 
   /* === SPACING === */
   /* 4px base unit, t-shirt sizing */
@@ -64,8 +66,8 @@
   /* === TYPOGRAPHY === */
 
   /* Font Families */
-  --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display: 'Playfair Display', 'Georgia', serif;
+  --font-sans: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   /* Font Sizes */
   --text-xs: 0.75rem;      /* 12px */

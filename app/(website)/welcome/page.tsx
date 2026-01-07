@@ -6,8 +6,8 @@ import { FadeIn } from '@/components/animations';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Welcome | Portland Fresh',
-  description: 'Welcome to Portland Fresh',
+  title: 'Welcome | Long Life',
+  description: 'Welcome to Long Life',
 };
 
 export default async function WelcomePage() {
@@ -39,7 +39,7 @@ export default async function WelcomePage() {
               Welcome, {firstName}!
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              You're now part of the Portland Fresh community. Here's what you can do next.
+              You're now part of the Long Life community. Here's what you can do next.
             </p>
           </div>
         </FadeIn>
@@ -55,10 +55,10 @@ export default async function WelcomePage() {
                 <span className="text-3xl">🥤</span>
               </div>
               <h3 className="font-heading text-xl font-bold mb-2 group-hover:text-accent-primary transition-colors">
-                Explore Sauces
+                Explore Blends
               </h3>
               <p className="text-sm text-gray-600">
-                Discover our pestos, salsa, chimichurri, and spreads for every meal.
+                Discover our range of functional cold-pressed juices designed for your wellness
               </p>
             </Link>
           </FadeIn>
@@ -75,7 +75,7 @@ export default async function WelcomePage() {
                 Start a Subscription
               </h3>
               <p className="text-sm text-gray-600">
-                Save 15% with recurring deliveries of your favorite sauces
+                Save 15% with recurring deliveries of your favorite blends
               </p>
             </Link>
           </FadeIn>
@@ -139,7 +139,7 @@ export default async function WelcomePage() {
                     Share the wellness with friends
                   </h3>
                   <p className="text-sm text-purple-700 mb-3">
-                    Invite friends to join Portland Fresh and you'll both get rewards! Check your account page for your unique referral link.
+                    Invite friends to join Long Life and you'll both get rewards! Check your account page for your unique referral link.
                   </p>
                   <Link
                     href="/account"
@@ -162,24 +162,24 @@ export default async function WelcomePage() {
                 </div>
                 <div>
                   <h3 className="font-heading text-lg font-bold mb-2">
-                    What makes Portland Fresh different?
+                    What makes Long Life different?
                   </h3>
                   <ul className="text-sm text-gray-600 space-y-2">
                     <li className="flex items-start gap-2">
                       <span className="text-accent-green font-bold">✓</span>
-                      <span>Blended within 48 hours of harvest for bold flavor</span>
+                      <span>Cold-pressed within 24 hours for maximum nutrients</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-accent-green font-bold">✓</span>
-                      <span>Sauce collections designed for specific cooking moments</span>
+                      <span>Functional blends designed for specific wellness goals</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-accent-green font-bold">✓</span>
-                      <span>Organic herbs, peppers, and aromatics sourced from local farms</span>
+                      <span>Organic ingredients sourced from local farms</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-accent-green font-bold">✓</span>
-                      <span>No gums, stabilizers, or artificial preservatives</span>
+                      <span>No added sugars, preservatives, or artificial ingredients</span>
                     </li>
                   </ul>
                 </div>

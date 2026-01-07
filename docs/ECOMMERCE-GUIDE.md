@@ -1,5 +1,5 @@
 # E-Commerce System Guide
-## Portland Fresh - Production-Ready Checkout & Payment Processing
+## Long Life - Production-Ready Checkout & Payment Processing
 
 **Last Updated:** November 23, 2025
 **Status:** Production Ready ✅
@@ -22,7 +22,7 @@
 
 ## Overview
 
-The Portland Fresh e-commerce system is a fully-featured, production-ready checkout and payment processing platform built on:
+The Long Life e-commerce system is a fully-featured, production-ready checkout and payment processing platform built on:
 - **Stripe** for payment processing (dual test/production mode)
 - **Supabase** for database and authentication
 - **Next.js** for server-side rendering and API routes

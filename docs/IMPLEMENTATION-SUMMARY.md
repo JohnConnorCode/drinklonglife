@@ -420,7 +420,7 @@ if (cart.items.length === 0) {
 ### Manual Webhook Retry:
 ```bash
 # Trigger webhook retry cron manually
-curl -X GET https://pdxfreshfoods.com/api/cron/retry-webhooks \
+curl -X GET https://drinklonglife.com/api/cron/retry-webhooks \
   -H "Authorization: Bearer $CRON_SECRET"
 ```
 

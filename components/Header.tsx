@@ -30,10 +30,10 @@ export function Header({ siteSettings, navigation }: HeaderProps) {
   const cartItemCount = useCartStore((state) => state.getItemCount());
 
   const blends = [
-    { name: 'Smoky Tomato Salsa', slug: 'red-bomb', color: '#c2410c' },
-    { name: 'Heritage Basil Pesto', slug: 'green-bomb', color: '#15803d' },
-    { name: 'Citrus Herb Chimichurri', slug: 'yellow-bomb', color: '#ca8a04' },
-    { name: 'Charred Serrano Crema', slug: 'blue-bomb', color: '#2563eb' },
+    { name: 'Red Bomb', slug: 'red-bomb', color: '#ef4444' },
+    { name: 'Green Bomb', slug: 'green-bomb', color: '#22c55e' },
+    { name: 'Yellow Bomb', slug: 'yellow-bomb', color: '#eab308' },
+    { name: 'Blue Bomb', slug: 'blue-bomb', color: '#3b82f6' },
   ];
 
   // Close mobile menu on route change
@@ -142,7 +142,7 @@ export function Header({ siteSettings, navigation }: HeaderProps) {
                   pathname.startsWith('/blends') ? 'text-accent-primary' : 'text-gray-700 hover:text-black'
                 )}
               >
-                Sauces
+                Blends
                 <svg className="w-3 h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -161,7 +161,7 @@ export function Header({ siteSettings, navigation }: HeaderProps) {
                     href="/blends"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-accent-primary transition-colors font-medium"
                   >
-                    All Sauces
+                    All Blends
                   </Link>
                   <div className="border-t border-gray-100 my-1"></div>
                   {blends.map((blend) => (
@@ -183,7 +183,7 @@ export function Header({ siteSettings, navigation }: HeaderProps) {
 
             {/* Other Navigation Links (filter out Blends and Ingredients) */}
             {headerLinks
-              .filter((link: any) => !['blends', 'sauces', 'ingredients'].includes(link.title?.toLowerCase()))
+              .filter((link: any) => !['blends', 'ingredients'].includes(link.title?.toLowerCase()))
               .map((link: any, index: number) => {
                 const href = link.externalUrl || (link.reference?.slug?.current ? `/${link.reference.slug.current}` : '#');
                 const isActive = pathname === href || pathname.startsWith(href + '/');
@@ -386,16 +386,16 @@ export function Header({ siteSettings, navigation }: HeaderProps) {
               {/* Blends Section */}
               <div className="mb-4">
                 <Link
-                href="/blends"
-                className={clsx(
-                  'block px-4 py-3 text-lg font-semibold rounded-lg transition-all duration-300',
-                  pathname === '/blends'
-                    ? 'bg-gradient-to-r from-accent-yellow/20 to-accent-green/20 text-accent-primary'
-                    : 'text-gray-900 hover:bg-gray-50'
-                )}
-              >
-                Shop Sauces
-              </Link>
+                  href="/blends"
+                  className={clsx(
+                    'block px-4 py-3 text-lg font-semibold rounded-lg transition-all duration-300',
+                    pathname === '/blends'
+                      ? 'bg-gradient-to-r from-accent-yellow/20 to-accent-green/20 text-accent-primary'
+                      : 'text-gray-900 hover:bg-gray-50'
+                  )}
+                >
+                  Shop Blends
+                </Link>
                 <div className="grid grid-cols-2 gap-2 mt-2 px-2">
                   {blends.map((blend) => (
                     <Link

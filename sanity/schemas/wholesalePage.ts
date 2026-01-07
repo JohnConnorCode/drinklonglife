@@ -16,7 +16,7 @@ export default defineType({
       name: 'heroTagline',
       title: 'Hero Tagline',
       type: 'string',
-      initialValue: 'Real sauce for real businesses.',
+      initialValue: 'Real juice for real businesses.',
     }),
     defineField({
       name: 'heroText',
@@ -133,7 +133,7 @@ export default defineType({
       name: 'whyHeading',
       title: 'Why Partner Heading',
       type: 'string',
-      initialValue: 'Why Partner With Portland Fresh',
+      initialValue: 'Why Partner With Long Life',
     }),
     defineField({
       name: 'benefits',
@@ -171,7 +171,7 @@ export default defineType({
       title: 'CTA Text',
       type: 'text',
       rows: 2,
-      initialValue: 'We\'re selective about who we work with. Tell us about your business and how you\'d serve Portland Fresh to your community.',
+      initialValue: 'We\'re selective about who we work with. Tell us about your business and how you\'d serve Long Life to your community.',
     }),
     defineField({
       name: 'ctaNote',

@@ -435,7 +435,7 @@ async function testAPIEndpoints() {
   console.log('🌐 LIVE SITE ENDPOINTS');
   console.log('='.repeat(60) + '\n');
 
-  const baseUrl = 'https://pdxfreshfoods.com';
+  const baseUrl = 'https://drinklonglife.com';
 
   const endpoints = [
     { path: '/', name: 'Homepage' },
@@ -468,7 +468,7 @@ async function testAPIEndpoints() {
 
 async function runAllTests() {
   console.log('\n╔══════════════════════════════════════════════════════════╗');
-  console.log('║         COMPREHENSIVE FLOW TESTS - Portland Fresh         ║');
+  console.log('║         COMPREHENSIVE FLOW TESTS - DrinkLongLife         ║');
   console.log('╚══════════════════════════════════════════════════════════╝');
   console.log(`\nTimestamp: ${new Date().toISOString()}\n`);
 

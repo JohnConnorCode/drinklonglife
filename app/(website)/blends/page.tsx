@@ -13,11 +13,11 @@ export const revalidate = 60;
 
 // Default settings as fallback
 const defaultBlendsPageSettings = {
-  heading: 'Sauce Pantry',
-  subheading: 'Pestos, salsa, chimichurri, and spreads built from Portland produce and delivered the same week.',
+  heading: 'Our Blends',
+  subheading: 'Each blend is carefully crafted with cold-pressed organic ingredients to support your wellness journey.',
   seo: {
-    metaTitle: 'Sauce Pantry | Portland Fresh',
-    metaDescription: 'Browse Portland Fresh pestos, salsa, chimichurri, and seasonal sauces. Small-batch, Portland delivery, and wholesale options.',
+    metaTitle: 'Our Blends | Long Life',
+    metaDescription: 'Explore our cold-pressed juice blends, each crafted for specific wellness functions.',
   },
 };
 
@@ -62,8 +62,8 @@ export default async function BlendsPage() {
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Desktop Image */}
           <Image
-            src="/portland-fresh-new-3.jpg"
-            alt="Portland Fresh sauce pantry"
+            src="/slider-desktop-1.png"
+            alt="Our Blends"
             fill
             className="object-cover hidden md:block scale-110 animate-ken-burns"
             priority
@@ -72,8 +72,8 @@ export default async function BlendsPage() {
           />
           {/* Mobile Image */}
           <Image
-            src="/portland-fresh-new-4.jpg"
-            alt="Portland Fresh sauce pantry"
+            src="/slider-mobile-1.png"
+            alt="Our Blends"
             fill
             className="object-cover md:hidden scale-110 animate-ken-burns"
             priority
@@ -106,7 +106,7 @@ export default async function BlendsPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
               <span className="text-sm font-semibold text-gray-800">
-                Weekly batches • Small runs • New Seasons + farmers markets
+                Weekly drops • Fresh batches • Local delivery
               </span>
             </div>
           </FadeIn>

@@ -1,6 +1,6 @@
-# Portland Fresh - Editor Quick Start Guide
+# Long Life - Editor Quick Start Guide
 
-**Welcome to the Portland Fresh Content Management System!**
+**Welcome to the Long Life Content Management System!**
 
 This guide will teach you how to update your website content in 60 seconds or less.
 
@@ -99,7 +99,7 @@ Subheadline: "Cold-pressed superfood blends..."
 **Optional**:
 - **Main Image**: Featured image (1600x900px recommended)
 - **Body**: Full article content (use rich text editor)
-- **Author**: Your name or "Portland Fresh Team"
+- **Author**: Your name or "Long Life Team"
 - **Categories**: Tags like "Production", "Sourcing"
 
 4. Click **"Publish"**
@@ -119,7 +119,7 @@ Subheadline: "Cold-pressed superfood blends..."
 
 **Example**:
 ```
-Question: "How should I store Portland Fresh juice?"
+Question: "How should I store Long Life juice?"
 Answer: "Keep frozen until ready to use. Once thawed, refrigerate..."
 ```
 

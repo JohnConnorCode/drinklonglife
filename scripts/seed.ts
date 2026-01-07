@@ -1,7 +1,7 @@
 /**
  * Sanity Content Seed Script
  *
- * Idempotent script to populate initial content for Portland Fresh
+ * Idempotent script to populate initial content for Long Life
  * Run with: npx tsx scripts/seed.ts
  */
 
@@ -69,7 +69,7 @@ async function uploadImageFromUrl(url: string, filename: string) {
 }
 
 async function seedData() {
-  console.log('🌱 Starting Portland Fresh content seed...\n');
+  console.log('🌱 Starting Long Life content seed...\n');
 
   try {
     // Upload placeholder images
@@ -77,7 +77,7 @@ async function seedData() {
 
     const heroImage = await uploadImageFromUrl(
       'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=1200&q=80',
-      'hero-sauce-containers.jpg'
+      'hero-juice-bottles.jpg'
     );
 
     const yellowBombImage = await uploadImageFromUrl(
@@ -98,17 +98,17 @@ async function seedData() {
     // Hero slider images
     const heroSlide1Image = await uploadImageFromUrl(
       'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=1920&q=90',
-      'hero-slide-1-market-herbs.jpg'
+      'hero-slide-1-green-juice.jpg'
     );
 
     const heroSlide2Image = await uploadImageFromUrl(
       'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=1920&q=90',
-      'hero-slide-2-sauce-prep.jpg'
+      'hero-slide-2-juice-bottles.jpg'
     );
 
     const heroSlide3Image = await uploadImageFromUrl(
       'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=1920&q=90',
-      'hero-slide-3-fire-roasted.jpg'
+      'hero-slide-3-turmeric.jpg'
     );
 
     // Process step images
@@ -135,7 +135,7 @@ async function seedData() {
     // Value prop images
     const valueProp1Image = await uploadImageFromUrl(
       'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=800&q=80',
-      'value-prop-1-fresh-sauce.jpg'
+      'value-prop-1-fresh-juice.jpg'
     );
 
     const valueProp2Image = await uploadImageFromUrl(
@@ -184,19 +184,19 @@ async function seedData() {
     await upsertDoc({
       _id: 'siteSettings',
       _type: 'siteSettings',
-      title: 'Portland Fresh',
-      tagline: 'Real sauce. Real people.',
-      description: 'Small-batch sauce for real humans. Cold-pressed, ingredient-dense, made weekly in Indiana. Drink what your body recognizes.',
-      contactEmail: 'hello@pdxfreshfoods.com',
+      title: 'Long Life',
+      tagline: 'Real juice. Real people.',
+      description: 'Small-batch juice for real humans. Cold-pressed, ingredient-dense, made weekly in Indiana. Drink what your body recognizes.',
+      contactEmail: 'hello@drinklonglife.com',
       address: 'Indiana, USA',
       social: {
-        instagram: 'https://instagram.com/pdxfreshfoods',
-        tiktok: 'https://tiktok.com/@pdxfreshfoods',
-        youtube: 'https://youtube.com/@pdxfreshfoods',
+        instagram: 'https://instagram.com/drinklonglife',
+        tiktok: 'https://tiktok.com/@drinklonglife',
+        youtube: 'https://youtube.com/@drinklonglife',
       },
       seo: {
-        titleTemplate: '%s | Portland Fresh',
-        twitterHandle: '@pdxfreshfoods',
+        titleTemplate: '%s | Long Life',
+        twitterHandle: '@drinklonglife',
       },
     });
 
@@ -530,7 +530,7 @@ async function seedData() {
         { _ref: sizeShot._id, _type: 'reference' },
       ],
       seo: {
-        metaTitle: 'Red Bomb | Beet Sauce for Endurance & Blood Flow',
+        metaTitle: 'Red Bomb | Beet Juice for Endurance & Blood Flow',
         metaDescription: 'Nitric oxide-rich beet blend for circulation and athletic performance. Organic, cold-pressed.',
       },
     });
@@ -558,8 +558,8 @@ async function seedData() {
         { _ref: sizeShot._id, _type: 'reference' },
       ],
       seo: {
-        metaTitle: 'Green Bomb | Celery Sauce Detox & Alkaline Blend',
-        metaDescription: 'Hydrating green sauce with celery, kale, and lemon for detox and pH balance. Organic, cold-pressed.',
+        metaTitle: 'Green Bomb | Celery Juice Detox & Alkaline Blend',
+        metaDescription: 'Hydrating green juice with celery, kale, and lemon for detox and pH balance. Organic, cold-pressed.',
       },
     });
 
@@ -567,7 +567,7 @@ async function seedData() {
     const ctaShop = await upsertDoc({
       _id: 'cta-shop-blends',
       _type: 'cta',
-      label: 'Shop Sauces',
+      label: 'Shop Blends',
       style: 'primary',
       target: {
         type: 'external',
@@ -581,9 +581,9 @@ async function seedData() {
       _type: 'homePage',
       heroSlides: [
         {
-          heading: 'Sauces that taste like Portland',
-          subheading: 'Small-batch pestos, salsa, and finishing sauces crafted from Pacific Northwest farms.',
-          ctaText: 'Shop Sauces',
+          heading: 'Peak Performance Starts Here',
+          subheading: 'Cold-pressed, small-batch juices crafted for serious athletes and health-conscious humans.',
+          ctaText: 'Shop Blends',
           ctaLink: '/blends',
           image: heroSlide1Image,
         },
@@ -603,38 +603,38 @@ async function seedData() {
         },
       ],
       hero: {
-        heading: 'Small-batch sauce for real kitchens.',
-        subheading: 'Hand-chopped, roasted, and blended weekly in Portland.\nCook with ingredients your body recognizes.',
+        heading: 'Small-batch juice for real humans.',
+        subheading: 'Cold-pressed, ingredient-dense, made weekly in Indiana.\nDrink what your body recognizes.',
         image: heroImage,
         ctaPrimary: { _ref: ctaShop._id, _type: 'reference' },
       },
       valueProps: [
         {
-          title: 'Nothing shelf-stable',
-          body: 'Only fresh herbs, peppers, nuts, and aromatics. No gums. No stabilizers.',
+          title: 'Nothing fake',
+          body: 'Only whole fruits, roots, and greens. No concentrates. No fillers.',
           image: valueProp1Image,
         },
         {
-          title: 'Crafted like service',
-          body: 'We roast, ferment, and blend in micro-batches for restaurant-level flavor.',
+          title: 'Pressed for power',
+          body: 'Cold-pressed to preserve flavor and nutrients.',
           image: valueProp2Image,
         },
         {
-          title: 'Portland-first sourcing',
-          body: 'Ingredients from Sauvie Island, Hood River, and Willamette Valley growers.',
+          title: 'Small-batch integrity',
+          body: 'Made in limited runs. First come, first served.',
           image: valueProp3Image,
         },
       ],
-      featuredBlendsHeading: 'Featured Sauces',
-      featuredBlendsSubheading: 'One batch per week. Reserve early.',
+      featuredBlendsHeading: 'Featured Blends',
+      featuredBlendsSubheading: 'Sold in weekly drops. Reserve early.',
       featuredBlends: [
         { _ref: 'blend-yellow-bomb', _type: 'reference' },
         { _ref: 'blend-red-bomb', _type: 'reference' },
         { _ref: 'blend-green-bomb', _type: 'reference' },
       ],
-      featuredBlendsCtaText: 'Order This Batch',
-      featuredBlendsSizingText: 'Container Sizes: 8 oz $14 • 12 oz $20 • Food-service trays available',
-      featuredBlendsDeliveryText: 'Pickup or local delivery each Thursday. Regional shipping coming soon.',
+      featuredBlendsCtaText: 'Reserve This Week',
+      featuredBlendsSizingText: 'Sizes: 1-Gallon $50 • ½-Gallon $35 • Shot $5',
+      featuredBlendsDeliveryText: 'Pickup or local delivery during weekly windows. Shipments coming soon.',
       statsHeading: 'By the Numbers',
       testimonialsHeading: 'What People Say',
       testimonialsSubheading: 'Real results from real humans.',
@@ -645,7 +645,7 @@ async function seedData() {
         { _ref: sizeShot._id, _type: 'reference' },
       ],
       processHeading: 'How We Make It',
-      processIntro: 'We care about every detail, from farm to container. Here\'s our process.',
+      processIntro: 'We care about every detail, from farm to bottle. Here\'s our process.',
       processSteps: [
         { _ref: 'process-1', _type: 'reference' },
         { _ref: 'process-2', _type: 'reference' },
@@ -664,7 +664,7 @@ async function seedData() {
       newsletterPlaceholder: 'Enter your email',
       newsletterButtonText: 'Notify Me',
       communityBlurb: 'We grow by word of mouth. Taste it. Share it. Bring a friend to pickup day.',
-      communityHashtagText: 'Tag #PortlandFresh to join a community of home cooks and local food lovers.',
+      communityHashtagText: 'Tag #DrinkLongLife to join a community that chooses nature over noise.',
     });
 
     // 11. About Page (Singleton)
@@ -672,9 +672,9 @@ async function seedData() {
       _id: 'aboutPage',
       _type: 'aboutPage',
       heroHeading: 'Return to nature in a world of machines.',
-      heroSubheading: 'Modern life is efficient but empty. Portland Fresh exists to bring people back to real nourishment and clear minds.',
+      heroSubheading: 'Modern life is efficient but empty. Long Life exists to bring people back to real nourishment and clear minds.',
       introText: 'We make fresh, functional blends in small batches, serve a committed community, then refine based on real feedback. We are starting local and building something worthy of global attention.',
-      whyHeading: 'Why we started Portland Fresh',
+      whyHeading: 'Why we started Long Life',
       whyContent: [
         {
           _type: 'block',
@@ -683,7 +683,7 @@ async function seedData() {
           children: [
             {
               _type: 'span',
-              text: 'The modern food system prioritizes scale over substance. Grocery store "sauce" is often concentrate mixed with water and artificial flavor. Supplements come in pills engineered in labs. Wellness has been industrialized, and somewhere along the way, we forgot what real food tastes like.',
+              text: 'The modern food system prioritizes scale over substance. Grocery store "juice" is often concentrate mixed with water and artificial flavor. Supplements come in pills engineered in labs. Wellness has been industrialized, and somewhere along the way, we forgot what real food tastes like.',
             },
           ],
         },
@@ -694,11 +694,11 @@ async function seedData() {
           children: [
             {
               _type: 'span',
-              text: 'Portland Fresh started in a small Indiana kitchen with a simple question: ',
+              text: 'Long Life started in a small Indiana kitchen with a simple question: ',
             },
             {
               _type: 'span',
-              text: 'What if we made sauce the way it should be made?',
+              text: 'What if we made juice the way it should be made?',
               marks: ['em'],
             },
             {
@@ -728,7 +728,7 @@ async function seedData() {
           children: [
             {
               _type: 'span',
-              text: 'We serve a community first—local pickup, real conversations, word-of-mouth growth. We\'re not chasing viral moments or scale-at-all-costs fundraising. We\'re building trust batch by batch.',
+              text: 'We serve a community first—local pickup, real conversations, word-of-mouth growth. We\'re not chasing viral moments or scale-at-all-costs fundraising. We\'re building trust bottle by bottle.',
             },
           ],
         },
@@ -748,15 +748,15 @@ async function seedData() {
       promises: [
         {
           title: 'Clarity over hype.',
-          description: "We won\'t make medical claims or promise magic. We make sauce with real ingredients and tell you exactly what\'s in it.",
+          description: "We won\'t make medical claims or promise magic. We make juice with real ingredients and tell you exactly what\'s in it.",
         },
         {
           title: 'Craft over shortcuts.',
-          description: "Cold-blended, packed the same day, small-batch integrity. We could make more if we compromised. We won\'t.",
+          description: "Cold-pressed, same-day bottled, small-batch integrity. We could make more if we compromised. We won\'t.",
         },
         {
           title: 'Ingredients you can point to.',
-          description: 'Every container is batch-dated. Every ingredient is tracked. If you want to know where something came from, just ask.',
+          description: 'Every bottle is batch-dated. Every ingredient is tracked. If you want to know where something came from, just ask.',
         },
       ],
       visionHeading: "Where we\'re going",
@@ -779,7 +779,7 @@ async function seedData() {
           children: [
             {
               _type: 'span',
-              text: "Our goal isn\'t to be the biggest sauce brand. It\'s to be the most honest one. A brand that people trust because we show up consistently and never cut corners. From a small Indiana kitchen to wherever this goes—Portland Fresh is about building something that lasts.",
+              text: "Our goal isn\'t to be the biggest juice brand. It\'s to be the most honest one. A brand that people trust because we show up consistently and never cut corners. From a small Indiana kitchen to wherever this goes—Long Life is about building something that lasts.",
             },
           ],
         },
@@ -804,10 +804,10 @@ async function seedData() {
         },
       ],
       ctaHeading: 'Join the movement',
-      ctaText: "We\'re building a community that values real nourishment over shortcuts. Start with a container. Stay for the craft.",
-      disclaimer: 'Responsible Language: We make sauce, not medical claims. Everyone is different. If you have a condition, talk to your practitioner. Our commitment is clean inputs and honest process.',
+      ctaText: "We\'re building a community that values real nourishment over shortcuts. Start with a bottle. Stay for the craft.",
+      disclaimer: 'Responsible Language: We make juice, not medical claims. Everyone is different. If you have a condition, talk to your practitioner. Our commitment is clean inputs and honest process.',
       seo: {
-        metaTitle: 'About | Portland Fresh',
+        metaTitle: 'About | Long Life',
         metaDescription: 'Return to nature in a world of machines. Learn about our mission to bring people back to real nourishment and clear minds.',
       },
     });
@@ -816,11 +816,11 @@ async function seedData() {
     await upsertDoc({
       _id: 'blendsPage',
       _type: 'blendsPage',
-      heading: 'Sauce Pantry',
-      subheading: 'Each sauce is carefully crafted with seasonal ingredients to elevate every meal.',
+      heading: 'Our Blends',
+      subheading: 'Each blend is carefully crafted with cold-pressed organic ingredients to support your wellness journey.',
       seo: {
-        metaTitle: 'Sauce Pantry | Portland Fresh',
-        metaDescription: 'Explore our small-batch sauces, pestos, and salsa—each crafted for specific kitchen moments.',
+        metaTitle: 'Our Blends | Long Life',
+        metaDescription: 'Explore our cold-pressed juice blends, each crafted for specific wellness functions.',
       },
     });
 
@@ -831,8 +831,8 @@ async function seedData() {
       heading: 'Frequently Asked Questions',
       subheading: 'Find answers to common questions about our products and service.',
       seo: {
-        metaTitle: 'FAQ | Portland Fresh',
-        metaDescription: 'Frequently asked questions about Portland Fresh sauces and ordering.',
+        metaTitle: 'FAQ | Long Life',
+        metaDescription: 'Frequently asked questions about Long Life juices and ordering.',
       },
     });
 
@@ -841,7 +841,7 @@ async function seedData() {
       _id: 'processPage',
       _type: 'processPage',
       heroHeading: 'How We Make It',
-      heroSubheading: 'Cold-blended, packed fresh in reusable containers, no shortcuts.',
+      heroSubheading: 'Cold-pressed, same-day bottled, no shortcuts.',
       processSteps: [
         { _ref: 'process-1', _type: 'reference' },
         { _ref: 'process-2', _type: 'reference' },
@@ -851,12 +851,12 @@ async function seedData() {
       whyHeading: 'Why Our Process Matters',
       whyCards: [
         {
-          title: 'Maximum Flavor Retention',
-          description: 'Cold-blending at low speeds preserves aromatics and texture that high-heat cooking destroys. You get living food, not shelf-stable paste.',
+          title: 'Maximum Nutrient Retention',
+          description: 'Cold-pressing at low speeds preserves enzymes and vitamins that heat pasteurization destroys. You get living food, not dead liquid.',
         },
         {
           title: 'No Concentrates or Additives',
-          description: 'Every container is 100% sauce from whole plants. Nothing fake, nothing reconstituted. Just real ingredients.',
+          description: 'Every bottle is 100% juice from whole plants. Nothing fake, nothing reconstituted. Just real ingredients.',
         },
         {
           title: 'Traceability & Accountability',
@@ -864,12 +864,12 @@ async function seedData() {
         },
       ],
       commitmentHeading: 'Small-batch integrity',
-      commitmentText: 'We could make more. We could cut corners. We don\'t. Portland Fresh grows by making the same thing, better, week after week. That\'s the craft.',
+      commitmentText: 'We could make more. We could cut corners. We don\'t. Long Life grows by making the same thing, better, week after week. That\'s the craft.',
       commitmentBadge: 'Made in limited runs. First come, first served.',
-      disclaimer: 'Responsible Language: We make sauce, not medical claims. Everyone is different. If you have a condition, talk to your practitioner. Our commitment is clean inputs and honest process.',
+      disclaimer: 'Responsible Language: We make juice, not medical claims. Everyone is different. If you have a condition, talk to your practitioner. Our commitment is clean inputs and honest process.',
       seo: {
-        metaTitle: 'How We Make It | Portland Fresh',
-        metaDescription: 'Cold-blended, packed fresh, no shortcuts. Learn about our process and commitment to quality.',
+        metaTitle: 'How We Make It | Long Life',
+        metaDescription: 'Cold-pressed, same-day bottled, no shortcuts. Learn about our process and commitment to quality.',
       },
     });
 
@@ -889,7 +889,7 @@ async function seedData() {
           children: [
             {
               _type: 'span',
-              text: 'Industrial sauce is designed for year-round consistency—same flavor, same color, same everything. That requires concentrates, flavor additives, and ingredients shipped from wherever they\'re cheapest.',
+              text: 'Industrial juice is designed for year-round consistency—same flavor, same color, same everything. That requires concentrates, flavor additives, and ingredients shipped from wherever they\'re cheapest.',
             },
           ],
         },
@@ -900,7 +900,7 @@ async function seedData() {
           children: [
             {
               _type: 'span',
-              text: 'Portland Fresh is different. We work with seasonal harvest windows and regional farms. If a strawberry crop comes in strong, we lean into it. If a supplier\'s practices don\'t meet our bar, we find another or pause until we do.',
+              text: 'Long Life is different. We work with seasonal harvest windows and regional farms. If a strawberry crop comes in strong, we lean into it. If a supplier\'s practices don\'t meet our bar, we find another or pause until we do.',
             },
           ],
         },
@@ -937,9 +937,9 @@ async function seedData() {
       farmText: 'We\'re building a network of farm partners who share our values. If you grow high-quality produce and want to work with a brand that respects your craft, let\'s talk.',
       farmFormNote: 'We partner with farms in and around Indiana first, then expand as we grow.',
       transparencyHeading: 'Transparency is our standard',
-      transparencyText: 'Have questions about where an ingredient came from, how it was grown, or why we chose it? Ask. We\'ll tell you. This level of traceability is rare in the sauce industry—we think it should be the norm.',
+      transparencyText: 'Have questions about where an ingredient came from, how it was grown, or why we chose it? Ask. We\'ll tell you. This level of traceability is rare in the juice industry—we think it should be the norm.',
       seo: {
-        metaTitle: 'Ingredients & Sourcing | Portland Fresh',
+        metaTitle: 'Ingredients & Sourcing | Long Life',
         metaDescription: 'Transparent sourcing from trusted growers. Organic-first, seasonal rotation, batch-dated quality.',
       },
     });
@@ -992,7 +992,7 @@ async function seedData() {
       plans: [
         {
           name: 'Weekly',
-          description: 'Fresh sauce every week. Build a consistent routine.',
+          description: 'Fresh juice every week. Build a consistent routine.',
           isPopular: false,
           priceItems: [
             { size: '1-Gallon', price: '$50/week' },
@@ -1017,8 +1017,8 @@ async function seedData() {
       ctaHeading: 'Ready to Start?',
       ctaText: 'Join the community. Lock in your weekly or bi-weekly drops.',
       seo: {
-        metaTitle: 'Subscriptions | Portland Fresh',
-        metaDescription: 'Subscribe to weekly or bi-weekly sauce drops. Priority access to limited runs and seasonal blends.',
+        metaTitle: 'Subscriptions | Long Life',
+        metaDescription: 'Subscribe to weekly or bi-weekly juice drops. Priority access to limited runs and seasonal blends.',
       },
     });
 
@@ -1027,14 +1027,14 @@ async function seedData() {
       _id: 'wholesalePage',
       _type: 'wholesalePage',
       heroHeading: 'Wholesale & Teams',
-      heroTagline: 'Real sauce for real businesses.',
+      heroTagline: 'Real juice for real businesses.',
       heroText: 'We partner with select cafés, gyms, and offices that value real ingredients and want to offer something better to their communities.',
       partnersHeading: 'Who We Work With',
       partnerTypes: [
         {
           emoji: '☕',
           title: 'Cafés & Markets',
-          description: 'Stock our containers and tasting cups in your cooler. Give customers a premium alternative to commodity sauce.',
+          description: 'Stock our bottles and shots in your cooler. Give customers a premium alternative to commodity juice.',
         },
         {
           emoji: '💪',
@@ -1044,22 +1044,22 @@ async function seedData() {
         {
           emoji: '🏢',
           title: 'Offices & Teams',
-          description: 'Upgrade your wellness program with weekly sauce fridges or event bars.',
+          description: 'Upgrade your wellness program with weekly juice fridges or event bars.',
         },
       ],
       programsHeading: 'Wholesale Programs',
       programs: [
         {
-          title: 'Retail Containers & Cups',
-          description: 'Stock our signature sauces in retail-ready containers. Individual portions or tasting cups for grab-and-go customers. Weekly or bi-weekly delivery.',
+          title: 'Retail Bottles & Shots',
+          description: 'Stock our signature blends in retail-ready bottles. Individual portions or shots for grab-and-go customers. Weekly or bi-weekly delivery.',
           options: [
-            { name: '16oz Containers', description: 'Wholesale pricing available' },
-            { name: '2oz Dipping Cups', description: 'Perfect for countertop displays' },
+            { name: '16oz Bottles', description: 'Wholesale pricing available' },
+            { name: '2oz Shots', description: 'Perfect for countertop displays' },
           ],
         },
         {
           title: 'Refillable Bulk Jugs',
-          description: 'Large-format jugs for high-volume locations. We deliver, you serve. Ideal for sauce bars, smoothie shops, and event catering.',
+          description: 'Large-format jugs for high-volume locations. We deliver, you serve. Ideal for juice bars, smoothie shops, and event catering.',
           options: [
             { name: '1-Gallon Jugs', description: 'Serve 16 cups per jug' },
             { name: '2.5-Gallon Jugs', description: 'For events and high-traffic days' },
@@ -1067,18 +1067,18 @@ async function seedData() {
         },
         {
           title: 'Team Wellness Fridges',
-          description: 'Keep your office or team stocked with fresh sauce. We set up a weekly delivery schedule and handle invoicing. You choose the sauce mix and quantities.',
-          note: 'Custom Programs\nPricing scales with team size. Minimum 12 containers per delivery.',
+          description: 'Keep your office or team stocked with fresh juice. We set up a weekly delivery schedule and handle invoicing. You choose the blend mix and quantities.',
+          note: 'Custom Programs\nPricing scales with team size. Minimum 12 bottles per delivery.',
           noteColor: 'border-accent-green',
         },
         {
           title: 'Event Bars & Pop-Ups',
-          description: 'Bring Portland Fresh to your event, retreat, or conference. We can provide pre-portioned containers or a full sauce bar setup with on-site service.',
+          description: 'Bring Long Life to your event, retreat, or conference. We can provide pre-packaged bottles or a full juice bar setup with on-site service.',
           note: 'Booking Required\nMinimum 48-hour notice. Pricing varies by event size and service level.',
           noteColor: 'border-accent-yellow',
         },
       ],
-      whyHeading: 'Why Partner With Portland Fresh',
+      whyHeading: 'Why Partner With Long Life',
       benefits: [
         {
           title: 'Real Ingredients',
@@ -1086,11 +1086,11 @@ async function seedData() {
         },
         {
           title: 'Small-Batch Quality',
-          description: 'We roast, blend, and pack the same day. Maximum freshness, zero compromise.',
+          description: 'We press, chill, and bottle the same day. Maximum freshness, zero compromise.',
         },
         {
           title: 'Local & Transparent',
-          description: 'Made in Indiana. We know our farms, track our lots, and batch-date every container.',
+          description: 'Made in Indiana. We know our farms, track our lots, and batch-date every bottle.',
         },
         {
           title: 'Reliable Partner',
@@ -1098,11 +1098,11 @@ async function seedData() {
         },
       ],
       ctaHeading: 'Ready to Partner?',
-      ctaText: 'We\'re selective about who we work with. Tell us about your business and how you\'d serve Portland Fresh to your community.',
+      ctaText: 'We\'re selective about who we work with. Tell us about your business and how you\'d serve Long Life to your community.',
       ctaNote: 'We typically respond within 2-3 business days.',
       seo: {
-        metaTitle: 'Wholesale & Teams | Portland Fresh',
-        metaDescription: 'Partner with Portland Fresh for wholesale sauce programs. Retail containers, bulk tubs, team wellness fridges, and event bars.',
+        metaTitle: 'Wholesale & Teams | Long Life',
+        metaDescription: 'Partner with Long Life for wholesale juice programs. Retail bottles, bulk jugs, team wellness fridges, and event bars.',
       },
     });
 
@@ -1110,7 +1110,7 @@ async function seedData() {
     await upsertDoc({
       _id: 'faq-1',
       _type: 'faq',
-      question: 'How should I store Portland Fresh sauce?',
+      question: 'How should I store Long Life juice?',
       answer: [
         {
           _type: 'block',
@@ -1146,7 +1146,7 @@ async function seedData() {
     await upsertDoc({
       _id: 'faq-4',
       _type: 'faq',
-      question: 'Are your sauces organic?',
+      question: 'Are your juices organic?',
       answer: [
         {
           _type: 'block',
@@ -1162,7 +1162,7 @@ async function seedData() {
       answer: [
         {
           _type: 'block',
-          children: [{ _type: 'span', text: 'We use a hydraulic press that extracts sauce slowly, without heat or high-speed blades. This preserves enzymes and nutrients.' }],
+          children: [{ _type: 'span', text: 'We use a hydraulic press that extracts juice slowly, without heat or high-speed blades. This preserves enzymes and nutrients.' }],
         },
       ],
     });
@@ -1194,7 +1194,7 @@ async function seedData() {
     await upsertDoc({
       _id: 'faq-8',
       _type: 'faq',
-      question: 'What makes Portland Fresh different from other sauce brands?',
+      question: 'What makes Long Life different from other juice brands?',
       answer: [
         {
           _type: 'block',
@@ -1262,7 +1262,7 @@ async function seedData() {
       _type: 'testimonial',
       name: 'Lisa K.',
       role: 'Nurse',
-      quote: 'Working 12-hour shifts, I need real fuel. Portland Fresh keeps me going without the junk.',
+      quote: 'Working 12-hour shifts, I need real fuel. Long Life keeps me going without the junk.',
       isFeatured: true,
       order: 4,
     });
@@ -1289,7 +1289,7 @@ async function seedData() {
         yearsInBusiness: 2,
         bottlesProduced: 4800,
       },
-      communityHashtag: '#PortlandFresh',
+      communityHashtag: '#DrinkLongLife',
       featuredTestimonials: [
         { _ref: testimonial1._id, _type: 'reference' },
         { _ref: testimonial2._id, _type: 'reference' },
@@ -1307,7 +1307,7 @@ async function seedData() {
       slug: { current: 'why-regenerative-farming-matters' },
       publishedAt: '2024-01-15T10:00:00Z',
       excerpt: "Regenerative agriculture isn\'t just a buzzword—it\'s the future of food. Here\'s how our farm partners are rebuilding soil health while growing nutrient-dense produce.",
-      author: 'Portland Fresh Team',
+      author: 'Long Life Team',
       categories: ['Sourcing', 'Sustainability'],
     });
 
@@ -1317,8 +1317,8 @@ async function seedData() {
       title: 'Cold-Press vs. HPP: What You Need to Know',
       slug: { current: 'cold-press-vs-hpp' },
       publishedAt: '2024-02-01T10:00:00Z',
-      excerpt: "Most \"cold-pressed\" sauce isn\'t actually cold-pressed anymore. We break down the difference between hydraulic pressing and high-pressure processing.",
-      author: 'Portland Fresh Team',
+      excerpt: "Most \"cold-pressed\" juice isn\'t actually cold-pressed anymore. We break down the difference between hydraulic pressing and high-pressure processing.",
+      author: 'Long Life Team',
       categories: ['Production', 'Transparency'],
     });
 

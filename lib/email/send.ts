@@ -41,7 +41,7 @@ export async function sendOrderConfirmationEmail(params: SendOrderConfirmationPa
     const { data, error } = await resend!.emails.send({
       from: DEFAULT_FROM_EMAIL,
       to: params.to,
-      subject: `Order Confirmation #${params.orderNumber} - Portland Fresh`,
+      subject: `Order Confirmation #${params.orderNumber} - Long Life`,
       html,
     });
 
@@ -88,7 +88,7 @@ export async function sendSubscriptionConfirmationEmail(params: SendSubscription
     const { data, error } = await resend!.emails.send({
       from: DEFAULT_FROM_EMAIL,
       to: params.to,
-      subject: `Welcome to Your ${params.planName} Subscription - Portland Fresh`,
+      subject: `Welcome to Your ${params.planName} Subscription - Long Life`,
       html,
     });
 

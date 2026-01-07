@@ -75,7 +75,7 @@ async function addBlueBomb() {
           is_active: true,
           display_order: 4,
           published_at: new Date().toISOString(),
-          meta_title: 'Blue Bomb - Blood Sugar Balance Sauce | Portland Fresh',
+          meta_title: 'Blue Bomb - Blood Sugar Balance Juice | Long Life',
           meta_description: 'Natural blood sugar support with nopal cactus, aloe vera, and greens. Stay balanced and centered.',
         })
         .eq('slug', 'blue-bomb');
@@ -120,7 +120,7 @@ async function addBlueBomb() {
       is_active: true,
       display_order: 4,
       published_at: new Date().toISOString(),
-      meta_title: 'Blue Bomb - Blood Sugar Balance Sauce | Portland Fresh',
+      meta_title: 'Blue Bomb - Blood Sugar Balance Juice | Long Life',
       meta_description: 'Natural blood sugar support with nopal cactus, aloe vera, and greens. Stay balanced and centered.',
     };
 

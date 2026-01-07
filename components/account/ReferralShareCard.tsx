@@ -20,7 +20,7 @@ export function ReferralShareCard({ referralCode, stats }: ReferralShareCardProp
   };
 
   const shareUrl = `${window.location.origin}/referral/${referralCode}`;
-  const shareText = `I've been loving the Portland Fresh sauce drops. Use my link for 10% off your first order and let's stock the fridge together.`;
+  const shareText = `I've been loving Long Life cold-pressed juices! Use my link for 10% off your first order. Your body will thank you.`;
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
 

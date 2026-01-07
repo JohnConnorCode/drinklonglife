@@ -46,13 +46,13 @@ export async function generateMetadata({
 
   if (!blend) {
     return {
-      title: 'Sauce Not Found',
-      description: 'This sauce could not be found.',
+      title: 'Blend Not Found',
+      description: 'This blend could not be found.',
     };
   }
 
   return {
-    title: blend.meta_title || `${blend.name} | Portland Fresh`,
+    title: blend.meta_title || `${blend.name} | Long Life`,
     description: blend.meta_description || blend.tagline || undefined,
     openGraph: {
       title: blend.meta_title || blend.name,
@@ -66,16 +66,16 @@ export default async function BlendPage({ params }: BlendPageProps) {
   const blend = await getBlend(params.slug);
   const allBlends = await getAllProducts();
 
-  // Get other sauces (exclude current one)
+  // Get other blends (exclude current one)
   const otherBlends = allBlends.filter((b: any) => b.slug !== params.slug).slice(0, 3);
 
   if (!blend) {
     return (
       <Section>
         <div className="text-center py-12">
-          <h1 className="text-3xl font-bold mb-4">Sauce Not Found</h1>
+          <h1 className="text-3xl font-bold mb-4">Blend Not Found</h1>
           <Link href="/blends" className="text-accent-primary hover:underline">
-            Back to Sauces
+            Back to Blends
           </Link>
         </div>
       </Section>
@@ -90,8 +90,6 @@ export default async function BlendPage({ params }: BlendPageProps) {
   };
 
   const gradientClass = blend.label_color ? labelColorMap[blend.label_color] || 'from-accent-primary/80 to-accent-primary' : 'from-accent-primary/80 to-accent-primary';
-  const readableCategory = blend.category ? blend.category.replace(/-/g, ' ') : null;
-  const containsNuts = Boolean(blend.contains_nuts);
 
   return (
     <>
@@ -111,7 +109,6 @@ export default async function BlendPage({ params }: BlendPageProps) {
                       src={blend.image_url}
                       alt={blend.image_alt || blend.name}
                       fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
                       className="object-cover"
                       priority
                     />
@@ -139,55 +136,21 @@ export default async function BlendPage({ params }: BlendPageProps) {
                 <p className="text-xl sm:text-2xl text-gray-700 leading-relaxed">{blend.tagline}</p>
               )}
             </FadeIn>
-            {(blend.weight || blend.heat_level || readableCategory || containsNuts) && (
-              <FadeIn direction="right" delay={0.35}>
-                <div className="flex flex-wrap gap-3 text-sm font-semibold text-gray-600">
-                  {blend.weight && (
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-gray-200">
-                      <svg className="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h16" />
-                      </svg>
-                      {blend.weight}
-                    </span>
-                  )}
-                  {blend.heat_level && (
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-gray-200">
-                      <svg className="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3c2.755 2.755 4 5.51 4 8.265C16 15.02 13.314 18 12 21c-1.314-3-4-5.98-4-9.735C8 8.51 9.245 5.755 12 3z" />
-                      </svg>
-                      {blend.heat_level} heat
-                    </span>
-                  )}
-                  {readableCategory && (
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-gray-200 capitalize">
-                      <svg className="w-3.5 h-3.5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                      {readableCategory}
-                    </span>
-                  )}
-                  {containsNuts && (
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-gray-200 text-accent-primary">
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3c-3.866 0-7 2.42-7 5.405C5 13.19 12 21 12 21s7-7.81 7-12.595C19 5.42 15.866 3 12 3z" />
-                      </svg>
-                      Contains nuts
-                    </span>
-                  )}
-                </div>
-              </FadeIn>
-            )}
-            {blend.best_for && blend.best_for.length > 0 && (
-              <FadeIn direction="right" delay={0.4}>
+            <FadeIn direction="right" delay={0.4}>
+              {blend.function_list && blend.function_list.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {blend.best_for.map((idea: string) => (
-                    <span key={idea} className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold uppercase tracking-wide">
-                      {idea}
+                  {blend.function_list.map((func: string) => (
+                    <span
+                      key={func}
+                      className="px-3 py-1.5 bg-white backdrop-blur-sm rounded-full text-sm font-semibold text-gray-800 shadow-sm border border-accent-yellow/30"
+                    >
+                      {func}
                     </span>
                   ))}
                 </div>
-              </FadeIn>
-            )}
+              )}
+            </FadeIn>
+
             {/* Description - Moved up here for better flow */}
             {blend.description && (
               <FadeIn direction="right" delay={0.5}>
@@ -219,93 +182,11 @@ export default async function BlendPage({ params }: BlendPageProps) {
                     href="#pricing"
                     className="block w-full text-center px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
-                    Order This Batch
+                    Reserve This Batch
                   </Link>
                 </div>
               </FadeIn>
             )}
-          </div>
-        </div>
-      </Section>
-
-      {/* Serving Rituals */}
-      {blend.function_list && blend.function_list.length > 0 && (
-        <Section className="bg-gradient-to-b from-accent-cream/40 via-white to-accent-cream/20 py-12 sm:py-16">
-          <div className="max-w-5xl mx-auto">
-            <FadeIn direction="up" className="text-center mb-10">
-              <p className="text-sm uppercase tracking-[0.3em] text-gray-400 mb-2">How We Serve It</p>
-              <h2 className="font-heading text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Kitchen rituals for this batch</h2>
-              <p className="text-base text-gray-600">
-                Straight from the Portland Fresh fridge to your table. Spoon, drizzle, toss—no cooking required.
-              </p>
-            </FadeIn>
-            <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-3 gap-6">
-              {blend.function_list.map((idea: string) => (
-                <FadeIn key={idea} direction="up" className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col gap-3">
-                  <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent-primary">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Ritual
-                  </div>
-                  <h3 className="font-heading text-xl text-gray-900">{idea}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {blend.name} was built for this moment—use a spoonful to {idea.toLowerCase()} and let the aromatics do the work.
-                  </p>
-                </FadeIn>
-              ))}
-            </StaggerContainer>
-          </div>
-        </Section>
-      )}
-
-      {/* Chef Notes */}
-      {blend.story && (
-        <Section className="bg-white py-12 sm:py-16">
-          <div className="max-w-4xl mx-auto">
-            <FadeIn direction="up">
-              <div className="bg-gray-50 border border-gray-200 rounded-3xl p-8 sm:p-10 shadow-md">
-                <p className="text-sm uppercase tracking-[0.3em] text-gray-400 mb-3">Chef notes</p>
-                <h2 className="font-heading text-3xl font-bold text-gray-900 mb-6">{blend.name} in the kitchen</h2>
-                <div className="prose prose-lg max-w-none">
-                  <RichText value={blend.story} />
-                </div>
-              </div>
-            </FadeIn>
-          </div>
-        </Section>
-      )}
-
-      {/* Kitchen Logistics */}
-      <Section className="bg-gray-900 text-white py-12 sm:py-16">
-        <div className="max-w-5xl mx-auto">
-          <FadeIn direction="up" className="text-center mb-10">
-            <p className="text-sm uppercase tracking-[0.3em] text-white/50 mb-2">How to get it</p>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-3">Portland-first distribution</h2>
-            <p className="text-base text-white/70">
-              Pick up from our Buckman kitchen, find us at New Seasons + farmers markets, or schedule limited bike delivery inside the city core.
-            </p>
-          </FadeIn>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                title: 'Buckman pickups',
-                body: 'Thursday evening + Sunday morning windows. Bring your cooler bag or grab one of ours.',
-              },
-              {
-                title: 'Market partners',
-                body: 'Shop select New Seasons locations or our weekly farmers market booths for grab-and-go containers.',
-              },
-              {
-                title: 'Local delivery',
-                body: 'Bike and EV drops Tuesday + Friday inside SE, NE, and inner SW Portland for qualifying orders.',
-              },
-            ].map((item) => (
-              <FadeIn key={item.title} direction="up" className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur">
-                <h3 className="font-heading text-xl font-semibold mb-2 text-white">{item.title}</h3>
-                <p className="text-sm text-white/70">{item.body}</p>
-              </FadeIn>
-            ))}
           </div>
         </div>
       </Section>
@@ -316,7 +197,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
           <div className="relative z-10">
             <FadeIn direction="up" className="text-center mb-8">
               <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2 leading-tight">
-                Sourced Ingredients
+                Premium Ingredients
               </h2>
               <p className="text-lg text-gray-600">Sourced from trusted regenerative farms</p>
             </FadeIn>
@@ -400,7 +281,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
               <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2 leading-tight">
                 Choose your size
               </h2>
-              <p className="text-lg text-gray-600">Batch-blended each week and packed for pickup or local delivery windows</p>
+              <p className="text-lg text-gray-600">Fresh-pressed and ready for pickup or delivery</p>
             </FadeIn>
             <VariantSelector
               variants={blend.variants}
@@ -412,15 +293,15 @@ export default async function BlendPage({ params }: BlendPageProps) {
         </Section>
       )}
 
-      {/* Related Sauces - Other Products */}
+      {/* Related Blends - Other Products */}
       {otherBlends && otherBlends.length > 0 && (
         <Section className="bg-white py-12 sm:py-16 border-t border-gray-100">
           <FadeIn direction="up">
             <div className="text-center mb-8">
               <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2 leading-tight">
-                Explore More Sauces
+                Explore Other Blends
               </h2>
-              <p className="text-lg text-gray-600">Discover more small-batch flavor combinations</p>
+              <p className="text-lg text-gray-600">Discover more cold-pressed wellness</p>
             </div>
           </FadeIn>
           <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
@@ -434,7 +315,7 @@ export default async function BlendPage({ params }: BlendPageProps) {
                 href="/blends"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                <span>View All Sauces</span>
+                <span>View All Blends</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>

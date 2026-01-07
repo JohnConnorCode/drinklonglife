@@ -134,7 +134,8 @@ export const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({
         <div className="content">
           <p>Hi {customerName},</p>
           <p>
-            Thank you for your order! We're excited to get your fresh sauces and pestos to you.
+            Thank you for your order! We're excited to get your fresh, cold-pressed wellness
+            blends to you.
           </p>
 
           <div className="order-info">
@@ -196,15 +197,15 @@ export const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({
           </ul>
 
           <div style={{ textAlign: 'center' }}>
-            <a href="https://pdxfreshfoods.com/account" className="button">
+            <a href="https://drinklonglife.com/account" className="button">
               View Order Status
             </a>
           </div>
         </div>
 
         <div className="footer">
-          <p>Questions? Contact us at support@pdxfreshfoods.com</p>
-          <p>Portland Fresh · Farm-Pressed Nutrition</p>
+          <p>Questions? Contact us at support@drinklonglife.com</p>
+          <p>Long Life · Cold-Pressed Wellness</p>
         </div>
       </div>
     </body>

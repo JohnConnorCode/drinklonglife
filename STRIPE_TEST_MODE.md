@@ -62,7 +62,7 @@ This method provides direct control through Vercel's dashboard.
 1. **Go to Vercel Dashboard**:
    Visit: https://vercel.com/dashboard
 
-2. **Select your project** (Portland Fresh)
+2. **Select your project** (DrinkLongLife)
 
 3. **Navigate to Settings → Environment Variables**
 

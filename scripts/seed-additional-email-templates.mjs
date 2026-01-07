@@ -91,7 +91,7 @@ const templates = [
     template_name: 'shipping_notification',
     category: 'orders',
     description: 'Shipping Notification - Order Shipped',
-    subject_template: 'Your Portland Fresh order has shipped! 📦',
+    subject_template: 'Your Long Life order has shipped! 📦',
     data_schema: {
       orderNumber: 'string',
       customerName: 'string',
@@ -125,12 +125,12 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">Portland Fresh</div>
+      <div class="logo">Long Life</div>
     </div>
     <div class="content">
       <h1>Your order is on the way!</h1>
       <p>Hi {{customerName}},</p>
-      <p>Great news! Your Portland Fresh order #{{orderNumber}} has shipped and is headed your way.</p>
+      <p>Great news! Your Long Life order #{{orderNumber}} has shipped and is headed your way.</p>
 
       <div class="tracking-box">
         <p style="margin: 0; color: #6b7280;">Carrier: <strong>{{carrier}}</strong></p>
@@ -141,11 +141,11 @@ const templates = [
 
       <p>We'll send you another email when your package is delivered.</p>
 
-      <p>Cheers,<br>The Portland Fresh Team</p>
+      <p>Cheers,<br>The Long Life Team</p>
     </div>
     <div class="footer">
-      <p>Portland Fresh - Fresh cold-pressed sauce delivered to your door</p>
-      <p><a href="https://pdxfreshfoods.com">pdxfreshfoods.com</a></p>
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
     </div>
   </body>
 </html>
@@ -156,7 +156,7 @@ const templates = [
     template_name: 'refund_confirmation',
     category: 'orders',
     description: 'Refund Confirmation',
-    subject_template: 'Refund Processed - Portland Fresh Order #{{orderNumber}}',
+    subject_template: 'Refund Processed - Long Life Order #{{orderNumber}}',
     data_schema: {
       orderNumber: 'string',
       customerName: 'string',
@@ -188,7 +188,7 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">Portland Fresh</div>
+      <div class="logo">Long Life</div>
     </div>
     <div class="content">
       <h1>Refund Processed</h1>
@@ -207,11 +207,11 @@ const templates = [
 
       <p>If you have any questions, please don't hesitate to reach out to us.</p>
 
-      <p>Thank you for your understanding,<br>The Portland Fresh Team</p>
+      <p>Thank you for your understanding,<br>The Long Life Team</p>
     </div>
     <div class="footer">
-      <p>Portland Fresh - Fresh cold-pressed sauce delivered to your door</p>
-      <p><a href="https://pdxfreshfoods.com">pdxfreshfoods.com</a></p>
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
     </div>
   </body>
 </html>
@@ -221,7 +221,7 @@ const templates = [
     template_name: 'subscription_canceled',
     category: 'subscriptions',
     description: 'Subscription Canceled Confirmation',
-    subject_template: 'Your Portland Fresh subscription has been canceled',
+    subject_template: 'Your Long Life subscription has been canceled',
     data_schema: {
       customerName: 'string',
       planName: 'string',
@@ -245,12 +245,12 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">Portland Fresh</div>
+      <div class="logo">Long Life</div>
     </div>
     <div class="content">
       <h1>Subscription Canceled</h1>
       <p>Hi {{customerName}},</p>
-      <p>We're sorry to see you go. Your Portland Fresh subscription has been canceled.</p>
+      <p>We're sorry to see you go. Your Long Life subscription has been canceled.</p>
 
       <div class="cancel-box">
         <p><strong>Plan:</strong> {{planName}}</p>
@@ -267,14 +267,14 @@ const templates = [
       <p>You can reactivate your subscription anytime from your account dashboard.</p>
 
       <div style="text-align: center;">
-        <a href="https://pdxfreshfoods.com/account" class="button">Manage Account</a>
+        <a href="https://drinklonglife.com/account" class="button">Manage Account</a>
       </div>
 
-      <p>Thank you for being a Portland Fresh customer,<br>The Portland Fresh Team</p>
+      <p>Thank you for being a Long Life customer,<br>The Long Life Team</p>
     </div>
     <div class="footer">
-      <p>Portland Fresh - Fresh cold-pressed sauce delivered to your door</p>
-      <p><a href="https://pdxfreshfoods.com">pdxfreshfoods.com</a></p>
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
     </div>
   </body>
 </html>
@@ -284,7 +284,7 @@ const templates = [
     template_name: 'review_request',
     category: 'marketing',
     description: 'Product Review Request',
-    subject_template: 'How was your Portland Fresh order? ⭐',
+    subject_template: 'How was your Long Life order? ⭐',
     data_schema: {
       customerName: 'string',
       orderNumber: 'string',
@@ -314,12 +314,12 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">Portland Fresh</div>
+      <div class="logo">Long Life</div>
     </div>
     <div class="content">
       <h1>How did we do?</h1>
       <p>Hi {{customerName}},</p>
-      <p>You received your Portland Fresh order #{{orderNumber}} {{daysSinceOrder}} days ago. We'd love to hear what you think!</p>
+      <p>You received your Long Life order #{{orderNumber}} {{daysSinceOrder}} days ago. We'd love to hear what you think!</p>
 
       <div class="review-box">
         <div class="stars">⭐⭐⭐⭐⭐</div>
@@ -327,15 +327,15 @@ const templates = [
         <a href="{{reviewUrl}}" class="button">Leave a Review</a>
       </div>
 
-      <p>Your feedback helps other customers discover the benefits of cold-pressed sauce, and helps us continue improving.</p>
+      <p>Your feedback helps other customers discover the benefits of cold-pressed juice, and helps us continue improving.</p>
 
       <p>It only takes 30 seconds, and we truly appreciate it!</p>
 
-      <p>Cheers,<br>The Portland Fresh Team</p>
+      <p>Cheers,<br>The Long Life Team</p>
     </div>
     <div class="footer">
-      <p>Portland Fresh - Fresh cold-pressed sauce delivered to your door</p>
-      <p><a href="https://pdxfreshfoods.com">pdxfreshfoods.com</a></p>
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
     </div>
   </body>
 </html>
@@ -345,7 +345,7 @@ const templates = [
     template_name: 'welcome_new_customer',
     category: 'account',
     description: 'Welcome Email - First Purchase',
-    subject_template: 'Welcome to Portland Fresh! 🌿',
+    subject_template: 'Welcome to Long Life! 🌿',
     data_schema: {
       customerName: 'string',
       referralCode: 'string',
@@ -399,7 +399,7 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">Portland Fresh</div>
+      <div class="logo">Long Life</div>
     </div>
     <div class="content">
       <div class="welcome-banner">
@@ -407,14 +407,14 @@ const templates = [
       </div>
 
       <p>Hi {{customerName}},</p>
-      <p>Thank you for your first order! We're thrilled to have you as part of the Portland Fresh community.</p>
+      <p>Thank you for your first order! We're thrilled to have you as part of the Long Life community.</p>
 
       <h2>What to expect</h2>
       <div class="benefit">
         <span class="benefit-icon">🧊</span>
         <div>
           <strong>Cold-pressed freshness</strong><br>
-          <span style="color: #6b7280;">Our sauces are made fresh and delivered cold to preserve nutrients</span>
+          <span style="color: #6b7280;">Our juices are made fresh and delivered cold to preserve nutrients</span>
         </div>
       </div>
       <div class="benefit">
@@ -439,13 +439,13 @@ const templates = [
         <a href="{{referralUrl}}" class="button">Share Your Link</a>
       </div>
 
-      <p>If you have any questions about your order or our sauces, we're always here to help!</p>
+      <p>If you have any questions about your order or our juices, we're always here to help!</p>
 
-      <p>To your health,<br>The Portland Fresh Team</p>
+      <p>To your health,<br>The Long Life Team</p>
     </div>
     <div class="footer">
-      <p>Portland Fresh - Fresh cold-pressed sauce delivered to your door</p>
-      <p><a href="https://pdxfreshfoods.com">pdxfreshfoods.com</a></p>
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
     </div>
   </body>
 </html>
@@ -487,12 +487,12 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">Portland Fresh</div>
+      <div class="logo">Long Life</div>
     </div>
     <div class="content">
       <h1>Payment Failed</h1>
       <p>Hi {{customerName}},</p>
-      <p>We were unable to process your payment for your Portland Fresh subscription.</p>
+      <p>We were unable to process your payment for your Long Life subscription.</p>
 
       <div class="warning-box">
         <p style="margin: 0; color: #6b7280;">Amount Due</p>
@@ -504,16 +504,16 @@ const templates = [
       <p>We'll automatically retry your payment on <strong>{{retryDate}}</strong>. To avoid any interruption to your subscription, please update your payment method before then.</p>
 
       <div style="text-align: center;">
-        <a href="https://pdxfreshfoods.com/account/billing" class="button">Update Payment Method</a>
+        <a href="https://drinklonglife.com/account/billing" class="button">Update Payment Method</a>
       </div>
 
       <p>If you have any questions or need assistance, please don't hesitate to reach out.</p>
 
-      <p>Thank you,<br>The Portland Fresh Team</p>
+      <p>Thank you,<br>The Long Life Team</p>
     </div>
     <div class="footer">
-      <p>Portland Fresh - Fresh cold-pressed sauce delivered to your door</p>
-      <p><a href="https://pdxfreshfoods.com">pdxfreshfoods.com</a></p>
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
     </div>
   </body>
 </html>

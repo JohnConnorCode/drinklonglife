@@ -149,14 +149,14 @@ export function CartEmptyState({ className = '' }: CartEmptyStateProps) {
       </h2>
 
       <p className="text-gray-600 max-w-md mb-8">
-        Looks like you haven't added any containers yet. Explore our fresh sauces and start building your order.
+        Looks like you haven't added any items to your cart yet. Explore our fresh, cold-pressed blends and start building your order.
       </p>
 
       <Link
         href="/blends"
         className="px-8 py-3 bg-accent-primary text-white rounded-full font-medium hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
       >
-        Shop Our Sauces
+        Shop Our Blends
       </Link>
     </div>
   );
@@ -190,7 +190,7 @@ export function OrdersEmptyState({ className = '' }: { className?: string }) {
       </h2>
 
       <p className="text-gray-600 max-w-md mb-8">
-        You haven't placed any orders with us yet. Stock your pantry with our small-batch sauces and pestos.
+        You haven't placed any orders with us yet. Start your wellness journey today with our cold-pressed blends.
       </p>
 
       <Link

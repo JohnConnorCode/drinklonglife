@@ -184,7 +184,7 @@ async function seedProducts() {
         is_active: true,
         display_order: 1,
         published_at: new Date().toISOString(),
-        meta_title: 'Yellow Bomb - Turmeric Wellness Shot | Portland Fresh',
+        meta_title: 'Yellow Bomb - Turmeric Wellness Shot | Long Life',
         meta_description: 'Powerful anti-inflammatory turmeric shot with ginger and black pepper. Support your immune system naturally.',
       },
       {
@@ -197,7 +197,7 @@ async function seedProducts() {
             {
               type: 'paragraph',
               content: [
-                { type: 'text', text: 'Energize your day with our vibrant beet-based blend. Packed with nitrates that improve blood flow and oxygen delivery to your muscles, this sauce is perfect for athletes and anyone looking for sustained natural energy.' }
+                { type: 'text', text: 'Energize your day with our vibrant beet-based blend. Packed with nitrates that improve blood flow and oxygen delivery to your muscles, this juice is perfect for athletes and anyone looking for sustained natural energy.' }
               ]
             },
             {
@@ -215,8 +215,8 @@ async function seedProducts() {
         is_active: true,
         display_order: 2,
         published_at: new Date().toISOString(),
-        meta_title: 'Red Bomb - Beet Energy Sauce | Portland Fresh',
-        meta_description: 'Natural beet sauce for sustained energy and improved circulation. Perfect pre-workout fuel.',
+        meta_title: 'Red Bomb - Beet Energy Juice | Long Life',
+        meta_description: 'Natural beet juice for sustained energy and improved circulation. Perfect pre-workout fuel.',
       },
       {
         name: 'Green Bomb',
@@ -246,8 +246,8 @@ async function seedProducts() {
         is_active: true,
         display_order: 3,
         published_at: new Date().toISOString(),
-        meta_title: 'Green Bomb - Detox Green Sauce | Portland Fresh',
-        meta_description: 'Alkalizing green sauce with celery, cucumber, and spinach. Ultimate hydration and detox support.',
+        meta_title: 'Green Bomb - Detox Green Juice | Long Life',
+        meta_description: 'Alkalizing green juice with celery, cucumber, and spinach. Ultimate hydration and detox support.',
       },
     ];
 

@@ -1,14 +1,13 @@
 import { Section } from '@/components/Section';
 import Link from 'next/link';
-import Image from 'next/image';
 import { FadeIn, StaggerContainer } from '@/components/animations';
 
 export const revalidate = 60;
 
 export async function generateMetadata() {
   return {
-    title: 'Join the Movement | Portland Fresh Ambassadors',
-    description: 'Be part of something bigger. Join the Portland Fresh Ambassador movement and help spread wellness while earning rewards.',
+    title: 'Join the Movement | Long Life Ambassadors',
+    description: 'Be part of something bigger. Join the Long Life Ambassador movement and help spread wellness while earning rewards.',
   };
 }
 
@@ -17,19 +16,8 @@ export default async function AmbassadorPage() {
     <>
       {/* Hero Section - Dark, Bold, Movement-focused */}
       <section className="relative min-h-[90vh] flex items-center bg-black overflow-hidden">
-        {/* Hero imagery */}
-        <div className="absolute inset-0">
-          <Image
-            src="/portland-fresh-new-13.jpg"
-            alt="Portland Fresh ambassador sampling sauces"
-            fill
-            priority
-            quality={90}
-            sizes="100vw"
-            className="object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/90 to-black" />
-        </div>
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
 
         {/* Ambient orbs */}
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-red-500/20 via-transparent to-transparent rounded-full blur-3xl animate-pulse" />
@@ -56,16 +44,17 @@ export default async function AmbassadorPage() {
               You Don&apos;t Just
               <br />
               <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-green-400 bg-clip-text text-transparent">
-                Share Sauce.
+                Share Juice.
               </span>
               <br />
-              <span className="text-white/60">You Feed Portland.</span>
+              <span className="text-white/60">You Spread Wellness.</span>
             </h1>
           </FadeIn>
 
           <FadeIn direction="up" delay={0.3}>
             <p className="text-xl sm:text-2xl text-white/50 leading-relaxed max-w-2xl mx-auto mb-10">
-              Join a crew of chefs, grocers, and home cooks who earn rewards by introducing Portland to vibrant pestos, salsa, zhug, and chimichurri made weekly.
+              Join a community of health advocates earning rewards while helping others
+              discover the power of real, functional beverages.
             </p>
           </FadeIn>
 
@@ -134,7 +123,7 @@ export default async function AmbassadorPage() {
               <span className="text-accent-primary">wellness is the default.</span>
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
-              Every time you share Portland Fresh, you&apos;re not just recommending a product.
+              Every time you share Long Life, you&apos;re not just recommending a product.
               You&apos;re inviting someone into a movement that prioritizes real ingredients,
               real benefits, and real change.
             </p>
@@ -180,7 +169,7 @@ export default async function AmbassadorPage() {
               <div className="pt-4">
                 <h3 className="font-heading text-2xl font-bold mb-4">Share the Movement</h3>
                 <p className="text-white/60 leading-relaxed">
-                  Tell your friends, family, and community about Portland Fresh. Every share plants a seed for better health.
+                  Tell your friends, family, and community about Long Life. Every share plants a seed for better health.
                 </p>
               </div>
             </div>
@@ -266,13 +255,13 @@ export default async function AmbassadorPage() {
                   <svg className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-gray-700">Access to our premium sauces, pestos, and salsa</span>
+                  <span className="text-gray-700">Access to premium cold-pressed juices</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-gray-700">Welcome to the Portland Fresh community</span>
+                  <span className="text-gray-700">Welcome to the Long Life community</span>
                 </li>
               </ul>
             </div>

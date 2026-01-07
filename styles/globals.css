@@ -10,14 +10,13 @@
 @import './typography.css';
 
 :root {
-  --bg: #f8f4ed;
-  --fg: #0f1f1a;
-  --muted: #5c6a60;
-  --accent-primary: #1f5b4c;
-  --accent-yellow: #f2a93b;
-  --accent-green: #8ecfbc;
-  --accent-cream: #fdf1da;
-  --accent-secondary: #f28d6d;
+  --bg: #ffffff;
+  --fg: #000000;
+  --muted: #6b7280;
+  --accent-primary: #0f5348;
+  --accent-yellow: #d7f25c;
+  --accent-green: #8cbfa4;
+  --accent-cream: #f0ecea;
 }
 
 * {
@@ -29,11 +28,9 @@ html {
 }
 
 body {
-  @apply text-black;
+  @apply bg-white text-black;
   color: var(--fg);
-  background: radial-gradient(circle at top left, rgba(242, 169, 59, 0.1), transparent 55%),
-    radial-gradient(circle at 30% 20%, rgba(142, 207, 188, 0.15), transparent 45%),
-    var(--bg);
+  background-color: var(--bg);
 }
 
 /* Prose styles for rich text */

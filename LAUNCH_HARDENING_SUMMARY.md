@@ -1,4 +1,4 @@
-# Portland Fresh - Launch Hardening Summary
+# Long Life - Launch Hardening Summary
 
 **Status**: 🟢 **Ready for Final Testing & Deployment**
 **Date**: November 10, 2024

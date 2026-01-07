@@ -41,7 +41,7 @@ This document describes the refactor from Prisma + NextAuth to Supabase for auth
 1. Go to [supabase.com](https://supabase.com) and sign up/login
 2. Click **New Project**
 3. Fill in:
-   - **Name**: pdxfresh (or your choice)
+   - **Name**: drinklonglife (or your choice)
    - **Database Password**: (save this securely)
    - **Region**: Choose closest to your users
 4. Wait for project to be created (~2 minutes)

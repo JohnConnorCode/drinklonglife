@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test';
  * Tests the complete checkout process without user authentication
  */
 
-const PRODUCTION_URL = 'https://pdxfreshfoods.com';
+const PRODUCTION_URL = 'https://drinklonglife.com';
 
 test.describe('Guest Checkout - Add to Cart and Proceed', () => {
   test.beforeEach(async ({ page }) => {

@@ -12,7 +12,7 @@ dotenv.config({ path: '.env.local' });
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_PRODUCTION);
 
-const WEBHOOK_URL = 'https://pdxfreshfoods.com/api/stripe/webhook';
+const WEBHOOK_URL = 'https://drinklonglife.com/api/stripe/webhook';
 const EVENTS = [
   'checkout.session.completed',
   'payment_intent.succeeded',
@@ -44,7 +44,7 @@ async function resetWebhook() {
   const webhook = await stripe.webhookEndpoints.create({
     url: WEBHOOK_URL,
     enabled_events: EVENTS,
-    description: 'Portland Fresh production webhook',
+    description: 'Long Life production webhook',
   });
 
   console.log('\n✅ New webhook created!');

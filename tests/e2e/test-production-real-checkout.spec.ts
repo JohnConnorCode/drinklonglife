@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test('Production checkout - real flow', async ({ page }) => {
   console.log('Step 1: Going to production site...');
-  await page.goto('https://pdxfreshfoods.com');
+  await page.goto('https://drinklonglife.com');
   await page.waitForLoadState('networkidle');
 
   console.log('Step 2: Navigating to blends page...');
-  await page.goto('https://pdxfreshfoods.com/blends');
+  await page.goto('https://drinklonglife.com/blends');
   await page.waitForLoadState('networkidle');
 
   console.log('Step 3: Clicking on first blend...');

@@ -81,7 +81,7 @@ const templates = [
     template_name: 'order_confirmation',
     category: 'orders',
     description: 'Order Confirmation Email',
-    subject_template: 'Order Confirmation - Portland Fresh #{{orderNumber}}',
+    subject_template: 'Order Confirmation - Long Life #{{orderNumber}}',
     data_schema: {
       orderNumber: 'string',
       customerName: 'string',
@@ -146,7 +146,7 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">🥤 Portland Fresh</div>
+      <div class="logo">🥤 Long Life</div>
       <p>Cold-Pressed Wellness Delivered</p>
     </div>
 
@@ -154,7 +154,7 @@ const templates = [
       <h1>Thank You for Your Order!</h1>
       <p>Hi {{customerName}},</p>
       <p>
-        We're excited to confirm your order. Your fresh cold-pressed sauce is being prepared
+        We're excited to confirm your order. Your fresh cold-pressed juice is being prepared
         with care and will be on its way to you soon.
       </p>
 
@@ -180,19 +180,19 @@ const templates = [
       <ul>
         <li>We'll send you a shipping confirmation with tracking information</li>
         <li>Your order typically arrives within 3-5 business days</li>
-        <li>Keep your sauce refrigerated upon arrival</li>
+        <li>Keep your juice refrigerated upon arrival</li>
       </ul>
 
       <div style="text-align: center;">
-        <a href="https://pdxfreshfoods.com/account" class="button">
+        <a href="https://drinklonglife.com/account" class="button">
           View Order Status
         </a>
       </div>
     </div>
 
     <div class="footer">
-      <p>Questions? Contact us at support@pdxfreshfoods.com</p>
-      <p>© ${new Date().getFullYear()} Portland Fresh. All rights reserved.</p>
+      <p>Questions? Contact us at support@drinklonglife.com</p>
+      <p>© ${new Date().getFullYear()} Long Life. All rights reserved.</p>
       <p>
         <a href="{{unsubscribeUrl}}">Unsubscribe</a> |
         <a href="{{preferencesUrl}}">Email Preferences</a>
@@ -207,7 +207,7 @@ const templates = [
     template_name: 'subscription_confirmation',
     category: 'subscriptions',
     description: 'Subscription Confirmation Email',
-    subject_template: 'Welcome to Your Subscription - Portland Fresh',
+    subject_template: 'Welcome to Your Subscription - Long Life',
     data_schema: {
       customerName: 'string',
       customerEmail: 'string',
@@ -240,7 +240,7 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">🥤 Portland Fresh</div>
+      <div class="logo">🥤 Long Life</div>
       <p>Cold-Pressed Wellness Delivered</p>
     </div>
 
@@ -248,7 +248,7 @@ const templates = [
       <h1>Welcome to Your Subscription!</h1>
       <p>Hi {{customerName}},</p>
       <p>
-        Thank you for subscribing to Portland Fresh! You've just taken an important step
+        Thank you for subscribing to Long Life! You've just taken an important step
         toward consistent wellness and vitality.
       </p>
 
@@ -277,15 +277,15 @@ const templates = [
       </ul>
 
       <div style="text-align: center;">
-        <a href="https://pdxfreshfoods.com/account" class="button">
+        <a href="https://drinklonglife.com/account" class="button">
           Manage Subscription
         </a>
       </div>
     </div>
 
     <div class="footer">
-      <p>Questions? Contact us at support@pdxfreshfoods.com</p>
-      <p>© ${new Date().getFullYear()} Portland Fresh. All rights reserved.</p>
+      <p>Questions? Contact us at support@drinklonglife.com</p>
+      <p>© ${new Date().getFullYear()} Long Life. All rights reserved.</p>
       <p>
         <a href="{{unsubscribeUrl}}">Unsubscribe</a> |
         <a href="{{preferencesUrl}}">Email Preferences</a>
@@ -300,7 +300,7 @@ const templates = [
     template_name: 'newsletter_welcome',
     category: 'marketing',
     description: 'Newsletter Welcome Email',
-    subject_template: 'Welcome to Portland Fresh! 🌱',
+    subject_template: 'Welcome to Long Life! 🌱',
     data_schema: {
       email: 'string',
     },
@@ -358,7 +358,7 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <h1>Welcome to Portland Fresh! 🌱</h1>
+      <h1>Welcome to Long Life! 🌱</h1>
     </div>
 
     <div class="content">
@@ -376,19 +376,19 @@ const templates = [
         <li>Early access to new products</li>
       </ul>
       <p>
-        <a href="https://pdxfreshfoods.com/blends" class="button">
+        <a href="https://drinklonglife.com/blends" class="button">
           Explore Our Blends
         </a>
       </p>
     </div>
 
     <div class="footer">
-      <p>You're receiving this because you signed up at pdxfreshfoods.com</p>
+      <p>You're receiving this because you signed up at drinklonglife.com</p>
       <p>
         <a href="{{unsubscribeUrl}}">Unsubscribe</a> |
-        <a href="https://pdxfreshfoods.com">Visit our website</a>
+        <a href="https://drinklonglife.com">Visit our website</a>
       </p>
-      <p>Portland Fresh · Cold-Pressed Wellness</p>
+      <p>Long Life · Cold-Pressed Wellness</p>
     </div>
   </body>
 </html>

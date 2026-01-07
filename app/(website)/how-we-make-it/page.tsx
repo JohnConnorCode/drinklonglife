@@ -23,8 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const processPage = await getProcessPage();
 
   return {
-    title: processPage?.seo?.metaTitle || 'How We Make It | Portland Fresh',
-    description: processPage?.seo?.metaDescription || 'Handmade sauces blended within 48 hours of harvest. Learn how Portland Fresh ferments, roasts, and packs every batch into reusable containers.',
+    title: processPage?.seo?.metaTitle || 'How We Make It | Long Life',
+    description: processPage?.seo?.metaDescription || 'Cold-pressed, same-day bottled, no shortcuts. Learn about our process and commitment to quality.',
   };
 }
 
@@ -65,7 +65,7 @@ export default async function HowWeMakeItPage() {
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Desktop Image */}
           <Image
-            src="/portland-fresh-new-11.jpg"
+            src="/slider-desktop-2.png"
             alt="How We Make It"
             fill
             className="object-cover hidden md:block scale-110 animate-ken-burns"
@@ -75,7 +75,7 @@ export default async function HowWeMakeItPage() {
           />
           {/* Mobile Image */}
           <Image
-            src="/portland-fresh-new-12.jpg"
+            src="/slider-mobile-2.png"
             alt="How We Make It"
             fill
             className="object-cover md:hidden scale-110 animate-ken-burns"
@@ -98,7 +98,7 @@ export default async function HowWeMakeItPage() {
           </FadeIn>
           <FadeIn direction="up" delay={0.4}>
             <p className="text-xl text-white/90 leading-relaxed">
-              {heroSubheading || 'Fire-roasted, blended, and packed fresh in reusable containers—no shortcuts.'}
+              {heroSubheading || 'Cold-pressed, same-day bottled, no shortcuts.'}
             </p>
           </FadeIn>
         </div>
@@ -112,10 +112,10 @@ export default async function HowWeMakeItPage() {
               {processSteps.map((step: any, idx: number) => {
                 // Default step images from /public - fallback if no Sanity image
                 const defaultStepImages = [
-                  '/portland-fresh-new-7.jpg',
-                  '/portland-fresh-new-8.jpg',
-                  '/portland-fresh-new-9.jpg',
-                  '/portland-fresh-new-11.jpg',
+                  '/step1.png',
+                  '/step2.png',
+                  '/step3.png',
+                  '/step4.png',
                 ];
 
                 return (

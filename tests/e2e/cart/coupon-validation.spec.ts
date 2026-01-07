@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
  * E2E tests for coupon validation and discount application
  */
 
-const PRODUCTION_URL = 'https://pdxfreshfoods.com';
+const PRODUCTION_URL = 'https://drinklonglife.com';
 
 test.describe('Coupon Validation', () => {
   test.beforeEach(async ({ page }) => {

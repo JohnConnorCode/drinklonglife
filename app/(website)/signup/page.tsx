@@ -10,8 +10,8 @@ import { getReferralByCode } from '@/lib/referral-utils';
 import { isFeatureEnabled, getFeatureValue } from '@/lib/feature-flags';
 
 export const metadata: Metadata = {
-  title: 'Sign Up | Portland Fresh',
-  description: 'Create your Portland Fresh account',
+  title: 'Sign Up | Long Life',
+  description: 'Create your Long Life account',
 };
 
 export default async function SignupPage({
@@ -57,7 +57,7 @@ export default async function SignupPage({
               {/* Header */}
               <div className="text-center mb-8">
                 <h1 className="font-heading text-4xl font-bold mb-3">
-                  Join Portland Fresh
+                  Join Long Life
                 </h1>
                 <p className="text-gray-600">
                   Create your account to get started

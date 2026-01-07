@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-Your Portland Fresh production e-commerce system has been **comprehensively validated** using automated tests that created and immediately expired Stripe checkout sessions (zero risk of charges).
+Your DrinkLongLife production e-commerce system has been **comprehensively validated** using automated tests that created and immediately expired Stripe checkout sessions (zero risk of charges).
 
 ### Overall Assessment: **99% PRODUCTION READY**
 
@@ -136,13 +136,13 @@ Your Portland Fresh production e-commerce system has been **comprehensively vali
 
 ### Vercel
 - **Status:** ✅ Deployed (7 minutes ago)
-- **URL:** https://pdxfreshfoods.com
+- **URL:** https://drinklonglife.com
 - **Build:** Ready
 - **Environment Variables:** All configured
 
 ### Stripe Dashboard
 - **Mode:** 🔴 Production (LIVE)
-- **Products:** 5 total (3 Portland Fresh products + 2 others)
+- **Products:** 5 total (3 DrinkLongLife products + 2 others)
 - **Active Prices:** 9+ prices
 - **Webhooks:** ⚠️ NOT CONFIGURED (manual step required)
 
@@ -199,7 +199,7 @@ Your Portland Fresh production e-commerce system has been **comprehensively vali
 ### Manual Steps Required ⚠️
 - [x] **Configure webhook in Stripe Dashboard** ✅ COMPLETED
   - Webhook ID: `we_1SStRsCu8SiOGapKCo1P7VhD`
-  - URL: `https://pdxfreshfoods.com/api/stripe/webhook`
+  - URL: `https://drinklonglife.com/api/stripe/webhook`
   - Status: enabled
   - Events: 7 registered (checkout.session.completed, payment_intent.succeeded, customer.subscription.*, invoice.paid, invoice.payment_failed)
   - Registered via API using `scripts/register-production-webhook.ts`
@@ -287,8 +287,8 @@ Safe, automated testing using the Stripe API without processing real payments.
 ## Support Resources
 
 - **Stripe Dashboard:** https://dashboard.stripe.com
-- **Sanity Studio:** https://pdxfreshfoods.sanity.studio
-- **Admin Panel:** https://pdxfreshfoods.com/admin/stripe
+- **Sanity Studio:** https://drinklonglife.sanity.studio
+- **Admin Panel:** https://drinklonglife.com/admin/stripe
 - **Production Tests:** Run `npx playwright test tests/e2e/production/`
 
 ---

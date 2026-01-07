@@ -17,7 +17,7 @@ import { waitForOrder } from '../../helpers/database';
 
 // Admin test user credentials (must be set up in database with is_admin=true)
 const ADMIN_USER = {
-  email: process.env.ADMIN_TEST_EMAIL || 'admin@pdxfreshfoods.com',
+  email: process.env.ADMIN_TEST_EMAIL || 'admin@drinklonglife.com',
   password: process.env.ADMIN_TEST_PASSWORD || 'AdminTest123!',
 };
 

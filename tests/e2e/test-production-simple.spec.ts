@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('Does production checkout redirect to Stripe?', async ({ page }) => {
-  console.log('Going to https://pdxfreshfoods.com...');
-  await page.goto('https://pdxfreshfoods.com');
+  console.log('Going to https://drinklonglife.com...');
+  await page.goto('https://drinklonglife.com');
   await page.waitForLoadState('networkidle');
 
   // Find and click Reserve Now or Subscribe button

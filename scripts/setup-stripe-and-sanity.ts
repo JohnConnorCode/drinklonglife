@@ -80,7 +80,7 @@ async function createStripeProducts(): Promise<Map<string, StripeProductData>> {
 
     // Create Stripe product
     const product = await stripe.products.create({
-      name: `${blend.name} - Cold-Pressed Sauce`,
+      name: `${blend.name} - Cold-Pressed Juice`,
       description: blend.description,
       metadata: {
         tier_key: blend.tierKey,
@@ -163,7 +163,7 @@ async function createSanityDocuments(productMap: Map<string, StripeProductData>)
       await sanityClient.createOrReplace({
         _id: `stripe-product-${blend.slug}`,
         _type: 'stripeProduct',
-        title: `${blend.name} - Cold-Pressed Sauce`,
+        title: `${blend.name} - Cold-Pressed Juice`,
         slug: {
           _type: 'slug',
           current: blend.slug,
@@ -259,7 +259,7 @@ async function createCoupons() {
 
 async function main() {
   console.log('═══════════════════════════════════════════════════════');
-  console.log('   PORTLAND FRESH E-COMMERCE SETUP');
+  console.log('   DRINKLONGLIFE E-COMMERCE SETUP');
   console.log('   Stripe Test Mode + Sanity CMS Configuration');
   console.log('═══════════════════════════════════════════════════════');
 

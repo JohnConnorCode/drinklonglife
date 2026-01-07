@@ -29,7 +29,7 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
               />
             </div>
             <p className="text-sm text-muted mb-6">
-              {siteSettings?.tagline || 'Small-batch sauces, pestos, and salsa born from Portland markets.'}
+              {siteSettings?.tagline || 'Real juice. Real people.'}
             </p>
             <div className="flex gap-4">
               {social.instagram && (
@@ -95,7 +95,7 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
                   href="/blends"
                   className="group text-sm text-muted hover:text-black transition-colors relative inline-block"
                 >
-                  Sauces
+                  Blends
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-primary group-hover:w-full transition-all duration-300" />
                 </Link>
               </li>
@@ -221,7 +221,7 @@ export function Footer({ siteSettings, navigation }: FooterProps) {
         <FadeIn direction="up" delay={0.6}>
           <div className="border-t border-gray-200 pt-8 text-center text-sm text-muted">
             <p>
-              © {new Date().getFullYear()} {siteSettings?.title || 'Portland Fresh'}. All rights reserved.
+              © {new Date().getFullYear()} {siteSettings?.title || 'Long Life'}. All rights reserved.
             </p>
           </div>
         </FadeIn>

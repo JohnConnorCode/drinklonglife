@@ -156,14 +156,14 @@ export default function CartPage() {
             <ShoppingBag className="mx-auto h-24 w-24 text-gray-300 mb-4" />
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
             <p className="text-gray-600 mb-8">
-              Add some delicious sauces and pestos to get started!
+              Add some delicious juice blends to get started!
             </p>
             <Link
               href="/blends"
               className="inline-flex items-center gap-2 px-8 py-3 bg-accent-primary text-white rounded-full font-semibold hover:opacity-90 transition-all"
             >
               <ArrowLeft className="w-5 h-5" />
-              Browse Sauces
+              Browse Blends
             </Link>
           </div>
         </div>
@@ -259,7 +259,7 @@ export default function CartPage() {
                         )}
                         {checkoutError.contactSupport && (
                           <a
-                            href="mailto:hello@pdxfreshfoods.com?subject=Checkout%20Issue"
+                            href="mailto:hello@drinklonglife.com?subject=Checkout%20Issue"
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
                           >
                             <Mail className="w-3.5 h-3.5" />
@@ -271,8 +271,8 @@ export default function CartPage() {
                       {retryCount >= 3 && (
                         <p className="mt-3 text-xs text-red-500">
                           Still having issues? Email us at{' '}
-                          <a href="mailto:hello@pdxfreshfoods.com" className="underline">
-                            hello@pdxfreshfoods.com
+                          <a href="mailto:hello@drinklonglife.com" className="underline">
+                            hello@drinklonglife.com
                           </a>{' '}
                           and we&apos;ll help you complete your order.
                         </p>
@@ -304,15 +304,15 @@ export default function CartPage() {
                 <div className="text-sm text-gray-600 space-y-2">
                   <p className="flex items-center gap-2">
                     <span className="text-green-600">✓</span>
-                    Pickup at our Buckman kitchen or partner markets
+                    Free shipping on orders over $50
                   </p>
                   <p className="flex items-center gap-2">
                     <span className="text-green-600">✓</span>
-                    Bike + EV delivery available inside the Portland core
+                    Secure checkout
                   </p>
                   <p className="flex items-center gap-2">
                     <span className="text-green-600">✓</span>
-                    Flavor guarantee—if a batch misses, we remake it
+                    30-day money-back guarantee
                   </p>
                 </div>
               </div>

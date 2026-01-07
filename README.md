@@ -1,6 +1,6 @@
-# Portland Fresh — Next.js + Sanity CMS
+# Long Life — Next.js + Sanity CMS
 
-A production-ready, fully-editable marketing and e-commerce foundation for **Portland Fresh** cold-pressed juices. Built with **Next.js 14** (App Router) and **Sanity CMS v3**.
+A production-ready, fully-editable marketing and e-commerce foundation for **Long Life** cold-pressed juices. Built with **Next.js 14** (App Router) and **Sanity CMS v3**.
 
 ## Features
 
@@ -91,7 +91,7 @@ A production-ready, fully-editable marketing and e-commerce foundation for **Por
 
 ```bash
 git clone <repo-url>
-cd Portland Fresh
+cd DrinkLongLife
 npm install
 ```
 
@@ -213,7 +213,7 @@ Each page uses Next.js `metadata` export:
 
 ```typescript
 export const metadata: Metadata = {
-  title: 'Blends | Portland Fresh',
+  title: 'Blends | Long Life',
   description: 'Our cold-pressed juice blends...',
 };
 ```
@@ -584,4 +584,4 @@ Proprietary. All rights reserved.
 
 ---
 
-**Built with ❤️ for Portland Fresh**
+**Built with ❤️ for Long Life**

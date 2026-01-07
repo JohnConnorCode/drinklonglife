@@ -11,8 +11,8 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   process.exit(1);
 }
 
-const LOGO_URL = 'https://pdxfreshfoods.com/long-life-logo.png';
-const SITE_URL = 'https://pdxfreshfoods.com';
+const LOGO_URL = 'https://drinklonglife.com/long-life-logo.png';
+const SITE_URL = 'https://drinklonglife.com';
 
 const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Portland Fresh</title>
+  <title>Long Life</title>
   <style>
     body, table, td, p, a, li { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
     table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
@@ -41,7 +41,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
         <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);" class="mobile-full-width">
           <tr>
             <td align="center" style="background-color: #0f5348; padding: 32px 40px;">
-              <img src="${LOGO_URL}" alt="Portland Fresh" width="160" style="display: block; width: 160px; max-width: 100%;">
+              <img src="${LOGO_URL}" alt="Long Life" width="160" style="display: block; width: 160px; max-width: 100%;">
             </td>
           </tr>
           <tr>
@@ -54,7 +54,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
               <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="center" style="padding-bottom: 16px;">
-                    <a href="${SITE_URL}" style="color: #0f5348; text-decoration: none; font-weight: 600; font-size: 16px;">Portland Fresh</a>
+                    <a href="${SITE_URL}" style="color: #0f5348; text-decoration: none; font-weight: 600; font-size: 16px;">Long Life</a>
                     <span style="color: #999; margin: 0 12px;">|</span>
                     <a href="${SITE_URL}/blends" style="color: #666; text-decoration: none; font-size: 14px;">Shop</a>
                     <span style="color: #999; margin: 0 12px;">|</span>
@@ -64,7 +64,7 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
                 <tr>
                   <td align="center" style="color: #999; font-size: 12px; line-height: 1.6;">
                     <p style="margin: 0;">Cold-Pressed Wellness</p>
-                    <p style="margin: 8px 0 0 0;">&copy; 2025 Portland Fresh. All rights reserved.</p>
+                    <p style="margin: 8px 0 0 0;">&copy; 2025 Long Life. All rights reserved.</p>
                   </td>
                 </tr>
               </table>
@@ -79,14 +79,14 @@ const emailWrapper = (content, preheader = '') => `<!DOCTYPE html>
 
 const templates = {
   order_confirmation: {
-    subject: 'Your Portland Fresh Order #{{orderNumber}} is Confirmed!',
-    preheader: 'Thank you for your order! Your fresh sauces are being prepared.',
+    subject: 'Your Long Life Order #{{orderNumber}} is Confirmed!',
+    preheader: 'Thank you for your order! Your fresh juices are being prepared.',
     html: emailWrapper(`
       <h1 style="color: #0f5348; font-size: 28px; font-weight: 700; margin: 0 0 8px 0;">Order Confirmed!</h1>
       <p style="color: #666; font-size: 16px; margin: 0 0 24px 0;">Order #{{orderNumber}}</p>
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
         Hi {{customerName}},<br><br>
-        Thank you for your order! We're preparing your fresh, cold-pressed sauces with care. You'll receive a shipping confirmation once your order is on its way.
+        Thank you for your order! We're preparing your fresh, cold-pressed juices with care. You'll receive a shipping confirmation once your order is on its way.
       </p>
       <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;">
       <h2 style="color: #0f5348; font-size: 18px; font-weight: 600; margin: 0 0 16px 0;">Order Summary</h2>
@@ -104,20 +104,20 @@ const templates = {
         </tr>
       </table>
       <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 24px 0 0 0;">
-        Questions? Reply to this email or contact <a href="mailto:hello@pdxfreshfoods.com" style="color: #0f5348;">hello@pdxfreshfoods.com</a>
+        Questions? Reply to this email or contact <a href="mailto:hello@drinklonglife.com" style="color: #0f5348;">hello@drinklonglife.com</a>
       </p>
     `, 'Thank you for your order!')
   },
 
   subscription_confirmation: {
     subject: 'Welcome to Your {{planName}} Subscription!',
-    preheader: 'Your subscription is active. Fresh sauces on their way!',
+    preheader: 'Your subscription is active. Fresh juices on their way!',
     html: emailWrapper(`
       <div style="text-align: center; margin-bottom: 32px;">
         <div style="display: inline-block; background-color: #d7f25c; border-radius: 50%; width: 64px; height: 64px; line-height: 64px; font-size: 32px;">🎉</div>
       </div>
       <h1 style="color: #0f5348; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; text-align: center;">Subscription Active!</h1>
-      <p style="color: #666; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Welcome to the Portland Fresh family</p>
+      <p style="color: #666; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Welcome to the Long Life family</p>
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
         Hi {{customerName}},<br><br>
         Your <strong>{{planName}}</strong> subscription is now active! Fresh, cold-pressed wellness delivered to your door.
@@ -140,17 +140,17 @@ const templates = {
   },
 
   welcome: {
-    subject: 'Welcome to Portland Fresh, {{customerName}}!',
+    subject: 'Welcome to Long Life, {{customerName}}!',
     preheader: 'Your journey to wellness starts here.',
     html: emailWrapper(`
       <div style="text-align: center; margin-bottom: 32px;">
         <div style="display: inline-block; background-color: #8cbfa4; border-radius: 50%; width: 64px; height: 64px; line-height: 64px; font-size: 32px;">🌱</div>
       </div>
-      <h1 style="color: #0f5348; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; text-align: center;">Welcome to Portland Fresh!</h1>
+      <h1 style="color: #0f5348; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; text-align: center;">Welcome to Long Life!</h1>
       <p style="color: #666; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Your wellness journey starts now</p>
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
         Hi {{customerName}},<br><br>
-        Welcome to the Portland Fresh community! We're thrilled to have you join us on your journey to better health through cold-pressed nutrition.
+        Welcome to the Long Life community! We're thrilled to have you join us on your journey to better health through cold-pressed nutrition.
       </p>
       <div style="background-color: #f8f7f6; border-radius: 12px; padding: 24px; margin: 24px 0;">
         <h3 style="color: #0f5348; font-size: 16px; font-weight: 600; margin: 0 0 16px 0;">What's Next?</h3>
@@ -170,7 +170,7 @@ const templates = {
   },
 
   newsletter_welcome: {
-    subject: "You're In! Welcome to the Portland Fresh Newsletter 🌱",
+    subject: "You're In! Welcome to the Long Life Newsletter 🌱",
     preheader: 'Get exclusive wellness tips, recipes, and offers.',
     html: emailWrapper(`
       <div style="text-align: center; margin-bottom: 32px;">
@@ -179,7 +179,7 @@ const templates = {
       <h1 style="color: #0f5348; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; text-align: center;">You're on the List!</h1>
       <p style="color: #666; font-size: 16px; margin: 0 0 32px 0; text-align: center;">Welcome to our wellness community</p>
       <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
-        Thanks for subscribing to the Portland Fresh newsletter! You'll be the first to know about:
+        Thanks for subscribing to the Long Life newsletter! You'll be the first to know about:
       </p>
       <div style="background-color: #f8f7f6; border-radius: 12px; padding: 24px; margin: 24px 0;">
         <p style="padding: 8px 0; margin: 0;">✨ <strong>Exclusive offers</strong> and early access</p>

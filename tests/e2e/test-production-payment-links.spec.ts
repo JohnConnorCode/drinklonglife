@@ -4,7 +4,7 @@ test('Production checkout with Payment Links - Yellow Bomb Shot', async ({ page 
   console.log('🧪 Testing Yellow Bomb checkout on production...');
 
   // Go to production Yellow Bomb page
-  await page.goto('https://pdxfreshfoods.com/blends/yellow-bomb');
+  await page.goto('https://drinklonglife.com/blends/yellow-bomb');
 
   // Wait for page to load
   await page.waitForLoadState('networkidle');
@@ -41,7 +41,7 @@ test('Production checkout subscription - Yellow Bomb Shot Monthly', async ({ pag
   console.log('🧪 Testing Yellow Bomb subscription checkout...');
 
   // Go to production Yellow Bomb page
-  await page.goto('https://pdxfreshfoods.com/blends/yellow-bomb');
+  await page.goto('https://drinklonglife.com/blends/yellow-bomb');
 
   // Wait for page to load
   await page.waitForLoadState('networkidle');

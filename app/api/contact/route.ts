@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Send notification email to admin
-    const adminEmail = process.env.ADMIN_EMAIL || 'hello@pdxfreshfoods.com';
+    const adminEmail = process.env.ADMIN_EMAIL || 'hello@drinklonglife.com';
 
     await sendEmail({
       to: adminEmail,

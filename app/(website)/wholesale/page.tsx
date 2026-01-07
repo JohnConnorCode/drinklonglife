@@ -21,8 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const page = await getWholesalePage();
 
   return {
-    title: page?.seo?.metaTitle || 'Wholesale & Teams | Portland Fresh',
-    description: page?.seo?.metaDescription || 'Partner with Portland Fresh for wholesale sauces, pestos, and salsa. Retail containers, food-service trays, grazing boards, and pop-up bars.',
+    title: page?.seo?.metaTitle || 'Wholesale & Teams | Long Life',
+    description: page?.seo?.metaDescription || 'Partner with Long Life for wholesale juice programs. Retail bottles, bulk jugs, team wellness fridges, and event bars.',
   };
 }
 
@@ -192,7 +192,7 @@ export default async function WholesalePage() {
           <div className="max-w-4xl mx-auto">
             <FadeIn direction="up" className="text-center mb-12">
               <h2 className="font-heading text-4xl sm:text-5xl font-bold mb-4 leading-tight-90">
-                {whyHeading || 'Why Partner With Portland Fresh'}
+                {whyHeading || 'Why Partner With Long Life'}
               </h2>
               <p className="text-xl text-gray-600">Built for businesses that care</p>
             </FadeIn>
@@ -278,7 +278,7 @@ export default async function WholesalePage() {
                   <option value="events">Event Bars & Pop-Ups</option>
                 </select>
                 <textarea
-                  placeholder="Tell us about your business and how you'd serve Portland Fresh..."
+                  placeholder="Tell us about your business and how you'd serve Long Life..."
                   rows={4}
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-accent-primary transition-colors resize-none"
                   required

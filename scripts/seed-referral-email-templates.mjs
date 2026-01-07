@@ -127,7 +127,7 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">Portland Fresh</div>
+      <div class="logo">Long Life</div>
     </div>
     <div class="content">
       <h1>You've earned a reward!</h1>
@@ -160,11 +160,11 @@ const templates = [
       </div>
 
       <p>Thank you for being an amazing ambassador!</p>
-      <p>Cheers,<br>The Portland Fresh Team</p>
+      <p>Cheers,<br>The Long Life Team</p>
     </div>
     <div class="footer">
-      <p>Portland Fresh - Fresh cold-pressed sauce delivered to your door</p>
-      <p><a href="https://pdxfreshfoods.com">pdxfreshfoods.com</a></p>
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
     </div>
   </body>
 </html>
@@ -200,7 +200,7 @@ const templates = [
   </head>
   <body>
     <div class="header">
-      <div class="logo">Portland Fresh</div>
+      <div class="logo">Long Life</div>
     </div>
     <div class="content">
       <h1>Your referral is growing!</h1>
@@ -209,7 +209,7 @@ const templates = [
 
       <div class="signup-box">
         <p style="font-size: 18px; margin: 0 0 10px 0;"><strong>{{refereeName}}</strong></p>
-        <p style="margin: 0; color: #16a34a;">Just joined Portland Fresh using your link!</p>
+        <p style="margin: 0; color: #16a34a;">Just joined Long Life using your link!</p>
       </div>
 
       <p><strong>What happens next?</strong></p>
@@ -226,11 +226,11 @@ const templates = [
       </div>
 
       <p>Keep spreading the word!</p>
-      <p>Cheers,<br>The Portland Fresh Team</p>
+      <p>Cheers,<br>The Long Life Team</p>
     </div>
     <div class="footer">
-      <p>Portland Fresh - Fresh cold-pressed sauce delivered to your door</p>
-      <p><a href="https://pdxfreshfoods.com">pdxfreshfoods.com</a></p>
+      <p>Long Life - Fresh cold-pressed juice delivered to your door</p>
+      <p><a href="https://drinklonglife.com">drinklonglife.com</a></p>
     </div>
   </body>
 </html>

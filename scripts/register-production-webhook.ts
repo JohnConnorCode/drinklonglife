@@ -11,7 +11,7 @@ import * as dotenv from 'dotenv';
 // Load environment variables
 dotenv.config({ path: '.env.local' });
 
-const PRODUCTION_WEBHOOK_URL = 'https://pdxfreshfoods.com/api/stripe/webhook';
+const PRODUCTION_WEBHOOK_URL = 'https://drinklonglife.com/api/stripe/webhook';
 const EXPECTED_WEBHOOK_SECRET = 'whsec_d9vvwSrAHjyCe7paqi4g2QP0aaD7J9ZU';
 
 const WEBHOOK_EVENTS = [
@@ -104,7 +104,7 @@ async function main() {
       const newWebhook = await stripe.webhookEndpoints.create({
         url: PRODUCTION_WEBHOOK_URL,
         enabled_events: WEBHOOK_EVENTS as any,
-        description: 'Production webhook for Portland Fresh e-commerce',
+        description: 'Production webhook for DrinkLongLife e-commerce',
       });
 
       console.log('✅ Webhook created successfully!\n');

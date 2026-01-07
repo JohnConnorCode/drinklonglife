@@ -6,7 +6,7 @@ test.describe('Homepage Content Visibility and Aesthetics', () => {
   });
 
   test('should load homepage without errors', async ({ page }) => {
-    await expect(page).toHaveTitle(/Portland Fresh/i);
+    await expect(page).toHaveTitle(/Long Life/i);
   });
 
   test('hero section should be visible and not overlapped', async ({ page }) => {

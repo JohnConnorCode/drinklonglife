@@ -1,4 +1,4 @@
-# Portland Fresh - Remaining Implementation Guide
+# DrinkLongLife - Remaining Implementation Guide
 
 This document outlines the remaining work to complete the site improvements.
 
@@ -39,14 +39,14 @@ This document outlines the remaining work to complete the site improvements.
 Add to `.env.local`:
 ```bash
 RESEND_API_KEY=re_your_api_key_here
-EMAIL_FROM="Portland Fresh <hello@pdxfreshfoods.com>"
+EMAIL_FROM="Long Life <hello@drinklonglife.com>"
 ```
 
 Add to `.env.example`:
 ```bash
 # Email (Resend)
 RESEND_API_KEY=
-EMAIL_FROM="Portland Fresh <hello@pdxfreshfoods.com>"
+EMAIL_FROM="Long Life <hello@drinklonglife.com>"
 ```
 
 #### Step 2: Update `lib/actions.ts`
@@ -67,7 +67,7 @@ export async function submitNewsletter(formData: FormData) {
     await resend.emails.send({
       from: EMAIL_CONFIG.from,
       to: validatedData.email,
-      subject: 'Welcome to Portland Fresh! 🌱',
+      subject: 'Welcome to Long Life! 🌱',
       react: NewsletterWelcomeEmail({ email: validatedData.email }),
     });
 
@@ -277,16 +277,16 @@ In `app/layout.tsx`, replace metadata (lines 12-15):
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com'),
   title: {
-    default: 'Portland Fresh | Cold-Pressed Wellness from Regenerative Farms',
-    template: '%s | Portland Fresh'
+    default: 'Long Life | Cold-Pressed Wellness from Regenerative Farms',
+    template: '%s | Long Life'
   },
   description: 'Cold-pressed juice blends made from organic, regenerative ingredients. Delivered fresh weekly. Support your immunity, energy, and longevity naturally.',
   keywords: ['cold-pressed juice', 'organic juice', 'wellness drinks', 'regenerative agriculture', 'health drinks', 'immunity boost'],
-  authors: [{ name: 'Portland Fresh' }],
-  creator: 'Portland Fresh',
-  publisher: 'Portland Fresh',
+  authors: [{ name: 'Long Life' }],
+  creator: 'Long Life',
+  publisher: 'Long Life',
   formatDetection: {
     email: false,
     address: false,
@@ -295,20 +295,20 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://pdxfreshfoods.com',
-    title: 'Portland Fresh | Cold-Pressed Wellness',
+    url: 'https://drinklonglife.com',
+    title: 'Long Life | Cold-Pressed Wellness',
     description: 'Cold-pressed juice blends from regenerative farms. Fresh, organic, delivered weekly.',
-    siteName: 'Portland Fresh',
+    siteName: 'Long Life',
     images: [{
       url: '/og-image.jpg',
       width: 1200,
       height: 630,
-      alt: 'Portland Fresh Cold-Pressed Juice',
+      alt: 'Long Life Cold-Pressed Juice',
     }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Portland Fresh | Cold-Pressed Wellness',
+    title: 'Long Life | Cold-Pressed Wellness',
     description: 'Cold-pressed juice blends from regenerative farms.',
     images: ['/og-image.jpg'],
   },
@@ -339,7 +339,7 @@ import { MetadataRoute } from 'next';
 import { getAllProducts } from '@/lib/supabase/queries/products';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com';
 
   // Get all products
   const products = await getAllProducts();
@@ -380,7 +380,7 @@ Create `app/robots.ts`:
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com';
 
   return {
     rules: [
@@ -410,7 +410,7 @@ function generateProductSchema(blend: any) {
     image: blend.image_url,
     brand: {
       '@type': 'Brand',
-      name: 'Portland Fresh',
+      name: 'Long Life',
     },
     offers: blend.variants?.map((variant: any) => ({
       '@type': 'Offer',
@@ -419,7 +419,7 @@ function generateProductSchema(blend: any) {
       availability: 'https://schema.org/InStock',
       seller: {
         '@type': 'Organization',
-        name: 'Portland Fresh',
+        name: 'Long Life',
       },
     })),
   };

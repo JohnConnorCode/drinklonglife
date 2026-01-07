@@ -165,22 +165,22 @@ const STANDARD_STYLES = `
 `;
 
 const STANDARD_HEADER = `
-  <div class="header">
-    <div class="logo">Portland Fresh</div>
-    <div class="tagline">Farm-Pressed Nutrition</div>
-  </div>
+<div class="header">
+  <div class="logo">Long Life</div>
+  <div class="tagline">Cold-Pressed Wellness</div>
+</div>
 `;
 
 const STANDARD_FOOTER = `
 <div class="footer">
   <div style="background-color: #ecfdf5; padding: 16px 20px; margin: 0 -20px 20px -20px; border-top: 2px solid #22c55e;">
-    <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #166534;">Love Portland Fresh? Become an Ambassador!</p>
+    <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #166534;">Love Long Life? Become an Ambassador!</p>
     <p style="margin: 0 0 12px 0; font-size: 13px; color: #15803d;">Earn rewards when you share the wellness with friends.</p>
-    <a href="https://pdxfreshfoods.com/ambassador" style="display: inline-block; background-color: #22c55e; color: #ffffff; padding: 8px 20px; text-decoration: none; border-radius: 20px; font-size: 13px; font-weight: 600;">Join the Movement</a>
+    <a href="https://drinklonglife.com/ambassador" style="display: inline-block; background-color: #22c55e; color: #ffffff; padding: 8px 20px; text-decoration: none; border-radius: 20px; font-size: 13px; font-weight: 600;">Join the Movement</a>
   </div>
-  <p style="margin: 0 0 8px 0;">Questions? Contact us at <a href="mailto:support@pdxfreshfoods.com" style="color: #22c55e;">support@pdxfreshfoods.com</a></p>
+  <p style="margin: 0 0 8px 0;">Questions? Contact us at <a href="mailto:support@drinklonglife.com" style="color: #22c55e;">support@drinklonglife.com</a></p>
   <p style="margin: 8px 0; font-size: 12px; color: #9ca3af;">
-    Portland Fresh, Inc.<br>
+    Long Life, Inc.<br>
     Los Angeles, CA
   </p>
   <p style="margin-top: 15px; font-size: 11px; color: #9ca3af;">

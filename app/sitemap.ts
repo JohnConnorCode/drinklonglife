@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getAllProducts } from '@/lib/supabase/queries/products';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com';
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch products from Supabase

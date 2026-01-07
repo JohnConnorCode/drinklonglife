@@ -1,4 +1,4 @@
-# 🚀 Portland Fresh - Deployment Status & Next Steps
+# 🚀 Long Life - Deployment Status & Next Steps
 
 **Date**: November 10, 2025
 **Status**: ✅ PRODUCTION DEPLOYED (Awaiting Env Config)
@@ -8,7 +8,7 @@
 ## What's Done
 
 ### ✅ Code & Infrastructure
-- **GitHub**: All code pushed to https://github.com/JohnConnorCode/pdxfresh
+- **GitHub**: All code pushed to https://github.com/JohnConnorCode/drinklonglife
 - **Build**: Production build passes all checks ✅
 - **Vercel**: Connected and deployed
 - **Commits**:
@@ -18,7 +18,7 @@
   - Build fixes and Vercel configuration
 
 ### ✅ Integrated PRs
-1. **Harden and launch Portland Fresh product** (PR #1)
+1. **Harden and launch Long Life product** (PR #1)
    - Seed script for content management
    - Design tokens & CSS system
    - Mobile navigation with hamburger menu
@@ -47,9 +47,9 @@
 
 | Resource | URL |
 |----------|-----|
-| **Production Site** | https://pdxfresh-m9f9xms0y-john-connors-projects-d9df1dfe.vercel.app |
-| **GitHub Repo** | https://github.com/JohnConnorCode/pdxfresh |
-| **Vercel Project** | https://vercel.com/john-connors-projects-d9df1dfe/pdxfresh |
+| **Production Site** | https://drinklonglife-m9f9xms0y-john-connors-projects-d9df1dfe.vercel.app |
+| **GitHub Repo** | https://github.com/JohnConnorCode/drinklonglife |
+| **Vercel Project** | https://vercel.com/john-connors-projects-d9df1dfe/drinklonglife |
 
 ---
 
@@ -58,7 +58,7 @@
 Your site is deployed but needs Sanity API credentials to fetch content.
 
 ### Step 1: Add Environment Variables
-Go to: https://vercel.com/john-connors-projects-d9df1dfe/pdxfresh/settings/environment-variables
+Go to: https://vercel.com/john-connors-projects-d9df1dfe/drinklonglife/settings/environment-variables
 
 Add these 3 variables (set target to "Production"):
 
@@ -83,8 +83,8 @@ SANITY_READ_TOKEN = skTSSQNTOHf9RiUVJ7gbhyILqfYOFD89nIxqigpmV875zLc9odZDACaZAmPh
 
 ### Step 3: Visit Your Site
 Once deployed, visit:
-- **Site**: https://pdxfresh-m9f9xms0y-john-connors-projects-d9df1dfe.vercel.app
-- **Studio**: https://pdxfresh-m9f9xms0y-john-connors-projects-d9df1dfe.vercel.app/studio
+- **Site**: https://drinklonglife-m9f9xms0y-john-connors-projects-d9df1dfe.vercel.app
+- **Studio**: https://drinklonglife-m9f9xms0y-john-connors-projects-d9df1dfe.vercel.app/studio
 
 ---
 
@@ -178,7 +178,7 @@ All guides are in the GitHub repo:
 ## Project Structure
 
 ```
-pdxfresh/
+drinklonglife/
 ├── app/                    # Next.js 14 routes
 ├── components/             # React components
 ├── lib/                    # Utilities (Sanity, image, forms, SEO)

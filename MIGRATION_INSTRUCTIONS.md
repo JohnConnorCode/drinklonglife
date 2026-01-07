@@ -101,5 +101,5 @@ If you encounter errors:
 
 ## Files Reference
 
-- Product migration: `/Users/johnconnor/Documents/GitHub/Portland Fresh/supabase/migrations/005_ecommerce_products.sql`
-- Admin setup: `/Users/johnconnor/Documents/GitHub/Portland Fresh/scripts/create-admin-simple.sql`
+- Product migration: `/Users/johnconnor/Documents/GitHub/DrinkLongLife/supabase/migrations/005_ecommerce_products.sql`
+- Admin setup: `/Users/johnconnor/Documents/GitHub/DrinkLongLife/scripts/create-admin-simple.sql`

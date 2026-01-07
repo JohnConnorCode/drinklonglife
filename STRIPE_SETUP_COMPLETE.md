@@ -71,7 +71,7 @@ All products created in **Test Mode**:
 2. **Configure Webhooks in Stripe Dashboard**
    - Test: Already configured
    - Production: Go to https://dashboard.stripe.com
-   - Add endpoint: `https://pdxfreshfoods.com/api/stripe/webhook`
+   - Add endpoint: `https://drinklonglife.com/api/stripe/webhook`
    - Select events: checkout.session.completed, payment_intent.succeeded, customer.subscription.*, invoice.paid
 
 3. **Switch Sanity stripeSettings**
@@ -119,7 +119,7 @@ git push origin main
 ## Support
 
 - Stripe Dashboard: https://dashboard.stripe.com
-- Sanity Studio: https://pdxfreshfoods.sanity.studio
+- Sanity Studio: https://drinklonglife.sanity.studio
 - Docs: https://stripe.com/docs
 
 ## Script for Future Use

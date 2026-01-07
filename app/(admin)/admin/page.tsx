@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Admin Dashboard | Portland Fresh',
+  title: 'Admin Dashboard | Long Life',
   description: 'Admin console for managing users and system health',
 };
 
@@ -53,7 +53,7 @@ export default async function AdminDashboard() {
               Welcome back
             </h1>
             <p className="text-gray-600">
-              Here's what's happening with Portland Fresh today.
+              Here's what's happening with Long Life today.
             </p>
           </div>
           <div className="flex gap-3">
@@ -182,7 +182,7 @@ export default async function AdminDashboard() {
                 Product Catalog
               </h2>
               <p className="text-sm text-gray-500 mt-1">
-                Manage your sauces, pricing, and inventory status
+                Manage your blends, pricing, and inventory status
               </p>
             </div>
             <Link

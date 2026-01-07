@@ -8,7 +8,7 @@ import { OpenPreviewAction } from './sanity/actions/OpenPreviewAction';
 
 const config: Config = defineConfig({
   name: 'default',
-  title: 'Portland Fresh',
+  title: 'Long Life',
   basePath: '/admin/studio',
 
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',

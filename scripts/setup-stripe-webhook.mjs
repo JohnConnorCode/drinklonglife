@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2024-11-20.acacia',
 });
 
-const WEBHOOK_URL = 'https://pdxfreshfoods.com/api/stripe/webhook';
+const WEBHOOK_URL = 'https://drinklonglife.com/api/stripe/webhook';
 
 const REQUIRED_EVENTS = [
   'checkout.session.completed',
@@ -47,7 +47,7 @@ async function setupWebhook() {
     const webhook = await stripe.webhookEndpoints.create({
       url: WEBHOOK_URL,
       enabled_events: REQUIRED_EVENTS,
-      description: 'Production webhook for Portland Fresh e-commerce',
+      description: 'Production webhook for DrinkLongLife e-commerce',
     });
 
     console.log('\n✅ Webhook created successfully!');

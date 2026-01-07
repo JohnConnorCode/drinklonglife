@@ -120,16 +120,16 @@ export const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({
       </head>
       <body>
         <div className="header">
-          <div className="logo">🥤 Portland Fresh</div>
-          <p>Farm-Pressed Nutrition for Portland</p>
+          <div className="logo">🥤 Long Life</div>
+          <p>Cold-Pressed Wellness Delivered</p>
         </div>
 
         <div className="content">
           <h1>Thank You for Your Order!</h1>
           <p>Hi {customerName || customerEmail},</p>
           <p>
-            We're excited to confirm your order. Your fresh sauces and pestos are being prepared
-            with care and will be on their way shortly.
+            We're excited to confirm your order. Your fresh cold-pressed juice is being prepared
+            with care and will be on its way to you soon.
           </p>
 
           <div className="order-number">
@@ -173,19 +173,19 @@ export const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({
           <ul>
             <li>We'll send you a shipping confirmation with tracking information</li>
             <li>Your order typically arrives within 3-5 business days</li>
-            <li>Refrigerate containers as soon as they arrive</li>
+            <li>Keep your juice refrigerated upon arrival</li>
           </ul>
 
           <div style={{ textAlign: 'center' }}>
-            <a href="https://pdxfreshfoods.com/account" className="button">
+            <a href="https://drinklonglife.com/account" className="button">
               View Order Status
             </a>
           </div>
         </div>
 
         <div className="footer">
-          <p>Questions? Contact us at support@pdxfreshfoods.com</p>
-          <p>© {new Date().getFullYear()} Portland Fresh. All rights reserved.</p>
+          <p>Questions? Contact us at support@drinklonglife.com</p>
+          <p>© {new Date().getFullYear()} Long Life. All rights reserved.</p>
         </div>
       </body>
     </html>
@@ -276,15 +276,15 @@ export const SubscriptionConfirmationEmail: React.FC<SubscriptionConfirmationEma
       </head>
       <body>
         <div className="header">
-          <div className="logo">🥤 Portland Fresh</div>
-          <p>Farm-Pressed Nutrition for Portland</p>
+          <div className="logo">🥤 Long Life</div>
+          <p>Cold-Pressed Wellness Delivered</p>
         </div>
 
         <div className="content">
           <h1>Welcome to Your Subscription!</h1>
           <p>Hi {customerName || customerEmail},</p>
           <p>
-            Thank you for subscribing to Portland Fresh! You've just taken an important step
+            Thank you for subscribing to Long Life! You've just taken an important step
             toward consistent wellness and vitality.
           </p>
 
@@ -315,15 +315,15 @@ export const SubscriptionConfirmationEmail: React.FC<SubscriptionConfirmationEma
           </ul>
 
           <div style={{ textAlign: 'center' }}>
-            <a href="https://pdxfreshfoods.com/account" className="button">
+            <a href="https://drinklonglife.com/account" className="button">
               Manage Subscription
             </a>
           </div>
         </div>
 
         <div className="footer">
-          <p>Questions? Contact us at support@pdxfreshfoods.com</p>
-          <p>© {new Date().getFullYear()} Portland Fresh. All rights reserved.</p>
+          <p>Questions? Contact us at support@drinklonglife.com</p>
+          <p>© {new Date().getFullYear()} Long Life. All rights reserved.</p>
         </div>
       </body>
     </html>

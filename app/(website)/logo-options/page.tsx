@@ -113,8 +113,8 @@ export default function LogoOptionsPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 py-6">
-          <h1 className="text-3xl font-bold mb-2">Portland Fresh Monogram Explorations</h1>
-          <p className="text-gray-600">Organic infinity loops inspired by rivers, roots, and bike paths.</p>
+          <h1 className="text-3xl font-bold mb-2">Long Life Logo - Fresh Start</h1>
+          <p className="text-gray-600">Simple circles forming infinity</p>
         </div>
       </div>
 

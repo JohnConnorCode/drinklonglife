@@ -15,7 +15,7 @@ Complete guide for admins to manage blends and enable e-commerce through Sanity 
 
 ## System Overview
 
-The Drink Portland Fresh e-commerce system uses a **dual-document approach** for maximum flexibility:
+The Drink Long Life e-commerce system uses a **dual-document approach** for maximum flexibility:
 
 ### 1. **Stripe Products** (Primary E-Commerce System)
 - Hosted in Stripe dashboard

@@ -6,7 +6,7 @@
 import React from 'react';
 import type { Thing, WithContext } from 'schema-dts';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://longlife.com';
 
 /**
  * Organization Schema
@@ -16,7 +16,7 @@ export function getOrganizationSchema(siteSettings: any): WithContext<Thing> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: siteSettings?.title || 'Portland Fresh',
+    name: siteSettings?.title || 'Long Life',
     description: siteSettings?.description || '',
     url: SITE_URL,
     logo: siteSettings?.logo
@@ -40,8 +40,8 @@ export function getOrganizationSchema(siteSettings: any): WithContext<Thing> {
     address: siteSettings?.address
       ? {
           '@type': 'PostalAddress',
-          addressLocality: 'Portland',
-          addressRegion: 'OR',
+          addressLocality: 'Los Angeles',
+          addressRegion: 'CA',
           addressCountry: 'US',
         }
       : undefined,
@@ -64,7 +64,7 @@ export function getProductSchema(blend: any, siteSettings: any): WithContext<Thi
     image: imageUrl,
     brand: {
       '@type': 'Brand',
-      name: siteSettings?.title || 'Portland Fresh',
+      name: siteSettings?.title || 'Long Life',
     },
     offers: price
       ? {
@@ -100,11 +100,11 @@ export function getBlogPostingSchema(post: any, siteSettings: any): WithContext<
     dateModified: post._updatedAt || post.publishedAt,
     author: {
       '@type': 'Organization',
-      name: post.author || siteSettings?.title || 'Portland Fresh',
+      name: post.author || siteSettings?.title || 'Long Life',
     },
     publisher: {
       '@type': 'Organization',
-      name: siteSettings?.title || 'Portland Fresh',
+      name: siteSettings?.title || 'Long Life',
       logo: siteSettings?.logo
         ? {
             '@type': 'ImageObject',

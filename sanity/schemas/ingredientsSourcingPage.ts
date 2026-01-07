@@ -144,7 +144,7 @@ export default defineType({
       title: 'Transparency Text',
       type: 'text',
       rows: 3,
-      initialValue: 'Have questions about where an ingredient came from, how it was grown, or why we chose it? Ask. We\'ll tell you. This level of traceability is rare in the sauce industry—we think it should be the norm.',
+      initialValue: 'Have questions about where an ingredient came from, how it was grown, or why we chose it? Ask. We\'ll tell you. This level of traceability is rare in the juice industry—we think it should be the norm.',
     }),
 
     defineField({

@@ -237,7 +237,7 @@ export async function trackReferral(
           refereeName: refereeProfile?.full_name || refereeProfile?.name || refereeProfile?.email?.split('@')[0] || 'Someone',
           referralCode: referralCode.toUpperCase(),
           totalSignups: totalSignups || 1,
-          dashboardUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com'}/account`,
+          dashboardUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com'}/account`,
         },
         userId: referral.referrer_id,
       });
@@ -367,7 +367,7 @@ async function issueReferralRewards(
             discountCode: referrerCoupon.id,
             totalReferrals: stats.totalReferrals,
             totalEarned: stats.issuedRewards,
-            dashboardUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://pdxfreshfoods.com'}/account`,
+            dashboardUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://drinklonglife.com'}/account`,
           },
           userId: referrerId,
         });

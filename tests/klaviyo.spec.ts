@@ -69,7 +69,7 @@ test.describe('Signup Klaviyo Integration', () => {
     await page.goto('/signup');
 
     // Check signup form exists
-    await expect(page.locator('text=Join Portland Fresh')).toBeVisible();
+    await expect(page.locator('text=Join Long Life')).toBeVisible();
     await expect(page.locator('input[type="email"]')).toBeVisible();
     await expect(page.locator('input[name="fullName"]')).toBeVisible();
     await expect(page.locator('button:has-text("Create account")')).toBeVisible();
@@ -128,7 +128,7 @@ test.describe('Welcome Page', () => {
     await page.goto('/welcome');
 
     // Check for action cards
-  await expect(page.locator('text=Explore Sauces')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=Explore Blends')).toBeVisible({ timeout: 10000 });
     await expect(page.locator('text=Start a Subscription')).toBeVisible();
     await expect(page.locator('text=Manage Account')).toBeVisible();
   });

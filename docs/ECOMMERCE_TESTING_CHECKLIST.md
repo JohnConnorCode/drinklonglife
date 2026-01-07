@@ -1,6 +1,6 @@
 # E-Commerce Testing Checklist
 
-Complete end-to-end testing guide for the Drink Portland Fresh e-commerce system.
+Complete end-to-end testing guide for the Drink Long Life e-commerce system.
 
 ## Pre-Testing Setup
 
@@ -313,4 +313,4 @@ If you encounter issues during testing:
 3. Verify all environment variables are set
 4. Check Stripe API keys are correct
 5. Review troubleshooting section above
-6. Contact support@pdxfreshfoods.com for production issues
+6. Contact support@drinklonglife.com for production issues

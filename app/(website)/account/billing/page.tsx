@@ -11,7 +11,7 @@ import { SignOutButton } from '@/components/auth/SignOutButton';
 import { AccountUpsellSection } from '@/components/upsells/AccountUpsellSection';
 
 export const metadata: Metadata = {
-  title: 'Billing & Invoices | Portland Fresh',
+  title: 'Billing & Invoices | Long Life',
   description: 'Manage your billing and view invoices',
 };
 
@@ -42,7 +42,7 @@ export default async function BillingPage() {
                 No Billing History Yet
               </h1>
               <p className="text-gray-600 mb-8">
-                You haven't made any purchases yet. Start your journey with Portland Fresh today!
+                You haven't made any purchases yet. Start your journey with Long Life today!
               </p>
               <Link
                 href="/pricing"
@@ -303,7 +303,7 @@ export default async function BillingPage() {
               Have questions about your invoices or payment methods?
             </p>
             <a
-              href="mailto:billing@pdxfreshfoods.com"
+              href="mailto:billing@longlife.com"
               className="inline-block px-6 py-3 bg-white text-accent-primary rounded-full font-semibold hover:shadow-lg transition-all"
             >
               Contact Billing Support

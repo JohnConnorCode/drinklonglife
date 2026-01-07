@@ -66,7 +66,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: post.seo?.metaTitle || `${post.title} | Portland Fresh Journal`,
+    title: post.seo?.metaTitle || `${post.title} | Long Life Journal`,
     description: post.seo?.metaDescription || post.excerpt,
     openGraph: {
       title: post.seo?.metaTitle || post.title,
@@ -123,7 +123,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 {post.title}
               </h1>
               <div className="flex items-center gap-4 text-sm text-gray-500 border-b border-gray-200 pb-6">
-                <span className="font-medium text-gray-700">{post.author || 'Portland Fresh'}</span>
+                <span className="font-medium text-gray-700">{post.author || 'Long Life'}</span>
                 {post.publishedAt && (
                   <>
                     <span className="w-1 h-1 bg-gray-400 rounded-full" />
@@ -204,7 +204,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   )}
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-3 text-xs text-gray-500">
-                      <span>{otherPost.author || 'Portland Fresh'}</span>
+                      <span>{otherPost.author || 'Long Life'}</span>
                       {otherPost.publishedAt && (
                         <>
                           <span>•</span>

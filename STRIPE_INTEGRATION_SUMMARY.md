@@ -152,7 +152,7 @@ To complete production setup:
 
 2. **Set up Production Webhook:**
    - Go to Stripe Dashboard → Developers → Webhooks
-   - Add endpoint: `https://pdxfreshfoods.com/api/stripe/webhook`
+   - Add endpoint: `https://drinklonglife.com/api/stripe/webhook`
    - Select events:
      - `checkout.session.completed`
      - `payment_intent.succeeded`

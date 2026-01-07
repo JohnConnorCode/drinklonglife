@@ -5,8 +5,8 @@ import { Section } from '@/components/Section';
 import { FadeIn } from '@/components/animations';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Portland Fresh',
-  description: 'Learn how Portland Fresh collects, uses, and protects your personal information when you use our website and services.',
+  title: 'Privacy Policy | Long Life',
+  description: 'Learn how Long Life collects, uses, and protects your personal information when you use our website and services.',
 };
 
 export default function PrivacyPage() {
@@ -18,25 +18,23 @@ export default function PrivacyPage() {
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Desktop Image */}
           <Image
-            src="/portland-fresh-new-9.jpg"
-            alt="Fresh Portland Fresh sauces arranged for packaging"
+            src="/slider-desktop-3.png"
+            alt="Privacy Policy"
             fill
             className="object-cover hidden md:block scale-110 animate-ken-burns"
             priority
             quality={90}
             sizes="100vw"
-            style={{ objectPosition: 'center 35%' }}
           />
           {/* Mobile Image */}
           <Image
-            src="/portland-fresh-new-10.jpg"
-            alt="Closeup of hand-stirred salsa in the Portland Fresh kitchen"
+            src="/slider-mobile-3.png"
+            alt="Privacy Policy"
             fill
             className="object-cover md:hidden scale-110 animate-ken-burns"
             priority
             quality={90}
             sizes="100vw"
-            style={{ objectPosition: 'center 45%' }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-accent-cream/90 via-accent-yellow/70 to-accent-green/70" />
         </div>
@@ -67,7 +65,7 @@ export default function PrivacyPage() {
 
               <div className="bg-gradient-to-br from-accent-yellow/10 to-accent-green/10 p-8 rounded-2xl mb-12 border-2 border-accent-yellow/30">
                 <p className="text-lg mb-0">
-                  At Portland Fresh, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or make a purchase.
+                  At Long Life, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or make a purchase.
                 </p>
               </div>
 
@@ -133,7 +131,7 @@ export default function PrivacyPage() {
 
               <h3>3.3 Business Transfers</h3>
               <p>
-                If Portland Fresh is involved in a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction.
+                If Long Life is involved in a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction.
               </p>
 
               <h2>4. Data Security</h2>
@@ -254,14 +252,14 @@ export default function PrivacyPage() {
               <div className="bg-gradient-to-br from-accent-primary/10 to-accent-green/10 p-6 rounded-xl my-6 not-prose">
                 <p className="mb-2">
                   <strong className="text-gray-900">Email:</strong>{' '}
-                  <a href="mailto:privacy@pdxfreshfoods.com" className="text-accent-primary hover:underline">
-                    privacy@pdxfreshfoods.com
+                  <a href="mailto:privacy@drinklonglife.com" className="text-accent-primary hover:underline">
+                    privacy@drinklonglife.com
                   </a>
                 </p>
                 <p className="mb-2">
                   <strong className="text-gray-900">General Inquiries:</strong>{' '}
-                  <a href="mailto:hello@pdxfreshfoods.com" className="text-accent-primary hover:underline">
-                    hello@pdxfreshfoods.com
+                  <a href="mailto:hello@drinklonglife.com" className="text-accent-primary hover:underline">
+                    hello@drinklonglife.com
                   </a>
                 </p>
                 <p className="mb-0">

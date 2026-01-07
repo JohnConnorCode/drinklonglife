@@ -24,7 +24,7 @@ export default function NotFound() {
             href="/blends"
             className="inline-flex items-center justify-center px-8 py-3 border-2 border-black text-black font-medium rounded-full hover:bg-gray-50 transition-colors"
           >
-            Shop Sauces
+            Shop Blends
           </Link>
         </div>
       </div>

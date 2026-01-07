@@ -1,13 +1,13 @@
 import { chromium } from 'playwright';
 
 (async () => {
-  console.log('🧪 Testing production checkout at https://pdxfreshfoods.com');
+  console.log('🧪 Testing production checkout at https://drinklonglife.com');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
   try {
-    console.log('\n1️⃣  Navigating to https://pdxfreshfoods.com/blends...');
-    await page.goto('https://pdxfreshfoods.com/blends', { waitUntil: 'networkidle', timeout: 30000 });
+    console.log('\n1️⃣  Navigating to https://drinklonglife.com/blends...');
+    await page.goto('https://drinklonglife.com/blends', { waitUntil: 'networkidle', timeout: 30000 });
 
     console.log('2️⃣  Finding first blend...');
     const blendCard = page.locator('a[href^="/blends/"]').first();

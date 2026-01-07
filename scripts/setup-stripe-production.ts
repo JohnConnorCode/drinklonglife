@@ -80,7 +80,7 @@ async function createProductionStripeProducts(): Promise<Map<string, StripeProdu
 
     // Create Stripe product in PRODUCTION
     const product = await stripe.products.create({
-      name: `${blend.name} - Cold-Pressed Sauce`,
+      name: `${blend.name} - Cold-Pressed Juice`,
       description: blend.description,
       metadata: {
         tier_key: blend.tierKey,
@@ -243,7 +243,7 @@ async function switchToProductionMode() {
 
 async function main() {
   console.log('═══════════════════════════════════════════════════════');
-  console.log('   PORTLAND FRESH PRODUCTION SETUP');
+  console.log('   DRINKLONGLIFE PRODUCTION SETUP');
   console.log('   ⚠️  LIVE MODE - REAL CHARGES WILL BE PROCESSED');
   console.log('═══════════════════════════════════════════════════════');
 

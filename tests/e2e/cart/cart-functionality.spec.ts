@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test';
  * Tests cart operations, persistence, and UI interactions
  */
 
-const PRODUCTION_URL = 'https://www.pdxfreshfoods.com';
+const PRODUCTION_URL = 'https://www.drinklonglife.com';
 
 test.describe('Shopping Cart - Add to Cart', () => {
   test.beforeEach(async ({ page }) => {
@@ -133,7 +133,7 @@ test.describe('Shopping Cart - Cart Page', () => {
 
     // Verify cart is empty
     await expect(page.locator('h2:has-text("Your cart is empty")')).toBeVisible();
-    await expect(page.locator('a:has-text("Browse Sauces")')).toBeVisible();
+    await expect(page.locator('a:has-text("Browse Blends")')).toBeVisible();
   });
 
   test('should clear cart', async ({ page }) => {
@@ -252,8 +252,8 @@ test.describe('Shopping Cart - Empty State', () => {
 
     await page.goto(`${PRODUCTION_URL}/cart`);
     await expect(page.locator('h2:has-text("Your cart is empty")')).toBeVisible();
-    await expect(page.locator('text=Add some delicious sauces and pestos to get started')).toBeVisible();
-    await expect(page.locator('a:has-text("Browse Sauces")')).toBeVisible();
+    await expect(page.locator('text=Add some delicious juice blends to get started')).toBeVisible();
+    await expect(page.locator('a:has-text("Browse Blends")')).toBeVisible();
   });
 
   test('should navigate to blends from empty cart', async ({ page }) => {
@@ -261,7 +261,7 @@ test.describe('Shopping Cart - Empty State', () => {
     await page.evaluate(() => localStorage.clear());
 
     await page.goto(`${PRODUCTION_URL}/cart`);
-    await page.locator('a:has-text("Browse Sauces")').click();
+    await page.locator('a:has-text("Browse Blends")').click();
 
     await expect(page).toHaveURL(`${PRODUCTION_URL}/blends`);
   });

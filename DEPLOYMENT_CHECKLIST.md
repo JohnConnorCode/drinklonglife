@@ -67,13 +67,13 @@ vercel deploy --prod
 
 ### 1. Admin Access Verification
 - [ ] Sign in with admin email (jt.connor88@gmail.com)
-- [ ] Navigate to https://pdxfreshfoods.com/admin
+- [ ] Navigate to https://drinklonglife.com/admin
 - [ ] Verify NOT redirected to /unauthorized
 - [ ] Verify admin dashboard loads correctly
 - [ ] Check for any console errors
 
 ### 2. Admin Orders Functionality
-- [ ] Navigate to https://pdxfreshfoods.com/admin/orders
+- [ ] Navigate to https://drinklonglife.com/admin/orders
 - [ ] Verify orders list displays
 - [ ] Test order filtering by status
 - [ ] Test order search functionality

@@ -94,7 +94,7 @@ export function NewsletterForm({ listId = DEFAULT_LIST_ID, className = '' }: New
             disabled={status === 'loading'}
             className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-accent-primary text-white rounded-xl font-bold hover:bg-accent-primary/90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-base sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            {status === 'loading' ? 'Joining...' : 'Get the Dispatch'}
+            {status === 'loading' ? 'Entering...' : 'Enter Long Life Mode'}
           </button>
         </div>
 
